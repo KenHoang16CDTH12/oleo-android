@@ -7,7 +7,7 @@ import com.google.firebase.database.ValueEventListener
 
 interface MesssagesDataSource {
 
-    fun getMessageId(userId: String, boxId: String):String
+    fun getMessageId(userId: String, boxId: String): String
 
     fun getMessage(userId: String, roomId: String, childEventListener: ChildEventListener)
 
@@ -15,5 +15,9 @@ interface MesssagesDataSource {
 
     fun sendMessage(userId: String, boxId: String, messageId: String, message: Message)
 
-    fun getImageProfile(userId: String,valueEventListener: ValueEventListener)
+    fun getImageProfile(userId: String, valueEventListener: ValueEventListener)
+
+    fun getListBoxChat(userId: String, childEventListener: ChildEventListener)
+
+    fun getLastMessage(userId: String, roomId: String, childEventListener: ChildEventListener)
 }

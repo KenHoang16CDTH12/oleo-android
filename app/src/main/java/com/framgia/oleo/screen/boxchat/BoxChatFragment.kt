@@ -4,29 +4,17 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.lifecycle.Observer
 import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseFragment
 import com.framgia.oleo.data.source.model.BoxChat
 import com.framgia.oleo.databinding.FragmentBoxchatBinding
 import com.framgia.oleo.screen.main.MainActivity
-import com.framgia.oleo.utils.Index
 import com.framgia.oleo.utils.extension.goBackFragment
 import com.framgia.oleo.utils.liveData.autoCleared
-import kotlinx.android.synthetic.main.fragment_boxchat.buttonSend
-import kotlinx.android.synthetic.main.fragment_boxchat.editSendMessage
-import kotlinx.android.synthetic.main.fragment_boxchat.recyclerViewBoxChat
-import kotlinx.android.synthetic.main.fragment_boxchat.swipeRefreshBoxChat
-import kotlinx.android.synthetic.main.fragment_boxchat.textTitleChatBox
-import kotlinx.android.synthetic.main.fragment_boxchat.toolbarBoxChat
+import kotlinx.android.synthetic.main.fragment_boxchat.*
 
 @Suppress("DEPRECATION")
 class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
@@ -35,9 +23,8 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
     private var binding by autoCleared<FragmentBoxchatBinding>()
     private lateinit var boxChat: BoxChat
     private lateinit var adapter: BoxChatAdapter
-    private lateinit var recyclerView: RecyclerView
     private var onMessageOptionListener: OnMessageOptionListener? = null
-    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private var isSendable = false
 
     override fun createView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewModel = BoxChatViewModel.create(this, viewModelFactory)
@@ -64,22 +51,13 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
         (activity as MainActivity).supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_back)
         (activity as MainActivity).supportActionBar!!.title = ""
         adapter = BoxChatAdapter()
-        recyclerView = recyclerViewBoxChat
-        swipeRefreshLayout = swipeRefreshBoxChat
-        recyclerView.adapter = adapter
-
-        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                super.onItemRangeInserted(positionStart, itemCount)
-                swipeRefreshLayout.isEnabled = true
-                if (positionStart != Index.POSITION_ZERO)
-                    recyclerView.smoothScrollToPosition(adapter.itemCount)
-            }
-        })
-        swipeRefreshLayout.isEnabled = false
-        viewModel.setAdapter(adapter)
+        recyclerViewBoxChat.adapter = adapter
+        adapter.setUser(viewModel.getUserId()!!)
+        swipeRefreshBoxChat.isEnabled = false
         swipeRefreshBoxChat.setOnRefreshListener {
-            viewModel.loadOldMessage(boxChat.id!!)
+            viewModel.loadOldMessage(boxChat.id!!).observe(this, Observer { messagesList ->
+                adapter.updateOldData(messagesList)
+            })
             swipeRefreshBoxChat.isRefreshing = false
         }
         editSendMessage.addTextChangedListener(this)
@@ -88,8 +66,14 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
 
     override fun bindView() {
         boxChat = arguments!!.getParcelable(ARGUMENT_ROOM_ID)!!
-        viewModel.getFriendImageProfile(boxChat.userFriendId!!)
-        viewModel.getMessage(boxChat.id!!)
+        viewModel.getFriendImageProfile(boxChat.userFriendId!!).observe(this, Observer { imageProfile ->
+            adapter.setUserFriendImage(imageProfile)
+        })
+        viewModel.getMessage(boxChat.id!!).observe(this, Observer { message ->
+            adapter.updateData(message)
+            recyclerViewBoxChat.smoothScrollToPosition(adapter.itemCount)
+            swipeRefreshBoxChat.isEnabled = true
+        })
         textTitleChatBox.text = boxChat.userFriendName
     }
 
@@ -107,7 +91,7 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
     }
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        onSetEnableButtonSend(s.toString())
+        isSendable = onSetEnableButtonSend(s.toString())
     }
 
     override fun afterTextChanged(s: Editable?) {}
@@ -117,23 +101,27 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.buttonSend -> {
-                viewModel.sendMessage(
-                    editSendMessage.text.toString(),
-                    boxChat.id.toString(),
-                    boxChat.userFriendId.toString()
-                )
-                editSendMessage.text.clear()
+                if (isSendable) {
+                    viewModel.sendMessage(
+                        editSendMessage.text.toString(),
+                        boxChat.id.toString(),
+                        boxChat.userFriendId.toString()
+                    )
+                    editSendMessage.text.clear()
+                }
             }
         }
     }
 
-    private fun onSetEnableButtonSend(textPhone: String) {
-        if (textPhone.isNotBlank()) {
+    private fun onSetEnableButtonSend(textPhone: String): Boolean {
+        return if (textPhone.isNotBlank()) {
             buttonSend.isEnabled = true
             buttonSend.backgroundTintList = resources.getColorStateList(R.color.colorMessageBackground)
+            true
         } else {
             buttonSend.isEnabled = false
             buttonSend.backgroundTintList = resources.getColorStateList(R.color.colorGrey400)
+            false
         }
     }
 

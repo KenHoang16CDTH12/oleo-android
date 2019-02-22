@@ -28,8 +28,8 @@
           android:id="@+id/imageProfile"
           android:layout_width="@dimen/dp_50"
           android:layout_height="@dimen/dp_50"
-          android:layout_marginStart="@dimen/sp_16"
-          android:imageUrl="@{viewModel.user.image}"
+          android:layout_marginStart="@dimen/dp_16"
+          android:imageUrl="@{viewModel.image}"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent"/>
 
@@ -50,7 +50,6 @@
           android:id="@+id/textMessage"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="@{viewModel.message.message}"
           android:textSize="@dimen/sp_14"
           app:layout_constraintBottom_toBottomOf="@id/imageProfile"
           app:layout_constraintStart_toStartOf="@id/textFriendName"
@@ -60,7 +59,6 @@
           android:id="@+id/textTime"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="@{viewModel.message.time}"
           android:textSize="@dimen/sp_12"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toEndOf="@id/textFriendName"
