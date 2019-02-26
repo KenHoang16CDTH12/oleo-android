@@ -1,7 +1,6 @@
 package com.framgia.oleo.screen.signup
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,83 +8,50 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
 import com.framgia.oleo.R
+import com.framgia.oleo.base.BaseFragment
 import com.framgia.oleo.data.source.model.User
 import com.framgia.oleo.databinding.FragmentSignupBinding
 import com.framgia.oleo.utils.Constant.MIN_CHARACTER_INPUT_PASSWORD
-import com.framgia.oleo.utils.di.Injectable
 import com.framgia.oleo.utils.extension.*
 import com.framgia.oleo.utils.liveData.autoCleared
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.fragment_signup.buttonClose
-import kotlinx.android.synthetic.main.fragment_signup.buttonSignUp
-import kotlinx.android.synthetic.main.fragment_signup.textInputConfirmPassword
-import kotlinx.android.synthetic.main.fragment_signup.textInputEmail
-import kotlinx.android.synthetic.main.fragment_signup.textInputPassword
-import kotlinx.android.synthetic.main.fragment_signup.textInputPhoneNumber
-import kotlinx.android.synthetic.main.fragment_signup.textInputUserName
-import kotlinx.android.synthetic.main.fragment_signup.textLayoutConfirmPassword
-import kotlinx.android.synthetic.main.fragment_signup.textLayoutEmail
-import kotlinx.android.synthetic.main.fragment_signup.textLayoutPassword
-import kotlinx.android.synthetic.main.fragment_signup.textLayoutPhoneNumber
-import kotlinx.android.synthetic.main.fragment_signup.textLayoutUserName
-import kotlinx.android.synthetic.main.fragment_signup.textMessageSignUp
-import javax.inject.Inject
+import kotlinx.android.synthetic.main.fragment_signup.*
 
-class SignUpFragment : DialogFragment(), Injectable, View.OnClickListener {
+class SignUpFragment : BaseFragment(), View.OnClickListener {
 
-    @Inject
-    internal lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: SignUpViewModel
-    private lateinit var fireBase: FirebaseAuth
     private var isSignUp = false
-
     private var binding by autoCleared<FragmentSignupBinding>()
 
     var onResultWhenLoginSuccess: ((phoneNumber: String, password: String) -> Unit)? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-        return binding.root
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val inflater: LayoutInflater = activity!!.layoutInflater
+    override fun createView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewModel = SignUpViewModel.create(this, viewModelFactory)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_signup, null, false)
         binding.viewModel = viewModel
         binding.setLifecycleOwner(this)
-
-        val dialog = createDialog(context!!, binding.root)
-        dialog.setCanceledOnTouchOutside(false)
-        return dialog
+        return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setUpView()
-    }
-
-    private fun setUpView() {
+    override fun bindView() {
         onCheckTextChanged()
         buttonClose.setOnClickListener(this)
         buttonSignUp.setOnClickListener(this)
     }
 
+    override fun setUpView() {
+    }
+
     override fun onClick(view: View?) {
         when (view!!.id) {
-            R.id.buttonClose -> if (isCheckMultiClick()) dismiss() // Todo dismiss diaLog Fragment
+            R.id.buttonClose -> if (isCheckMultiClick()) goBackFragment()
             R.id.buttonSignUp -> if (isCheckMultiClick()) {
                 textMessageSignUp.text = ""
                 onCheckValidateFormAndSignUp()
@@ -134,7 +100,7 @@ class SignUpFragment : DialogFragment(), Injectable, View.OnClickListener {
                         textInputPhoneNumber.text.toString(),
                         textInputPassword.text.toString()
                     )
-                    dismiss()
+                    goBackFragment()
                 }, OnFailureListener {
                     activity?.showToast(getString(R.string.sign_up_fail))
                 })

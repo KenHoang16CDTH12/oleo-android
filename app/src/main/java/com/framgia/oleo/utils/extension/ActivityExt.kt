@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import com.framgia.oleo.utils.AnimateType
 
 fun AppCompatActivity.replaceFragmentInActivity(@IdRes containerId: Int, fragment: Fragment,
-                                                addToBackStack: Boolean = true, tag: String = fragment::class.java.simpleName,
+                                                addToBackStack: Boolean = false, tag: String = fragment::class.java.simpleName,
                                                 animateType: AnimateType = AnimateType.FADE) {
     supportFragmentManager.transact({
         if (addToBackStack) {
@@ -33,7 +33,7 @@ fun AppCompatActivity.addFragmentToActivity(@IdRes containerId: Int, fragment: F
 }
 
 fun AppCompatActivity.goBackFragment(): Boolean {
-    val isShowPreviousPage = supportFragmentManager.backStackEntryCount > 1
+    val isShowPreviousPage = supportFragmentManager.backStackEntryCount > 0
     if (isShowPreviousPage) {
         supportFragmentManager.popBackStackImmediate()
     }
