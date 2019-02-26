@@ -50,18 +50,21 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnLogOut
         viewModel.getUserLocal()
     }
 
-    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> if (currentFocus!! is EditText) {
-                currentFocus!!.clearFocus()
-                inputMethodManager.hideSoftInputFromWindow(
-                    currentFocus!!.windowToken,
-                    InputMethodManager.HIDE_NOT_ALWAYS
-                )
-            }
-        }
-        return super.dispatchTouchEvent(event)
-    }
+    //Todo edit later
+//    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+//        when (event.action) {
+//            MotionEvent.ACTION_DOWN -> if (currentFocus!! is EditText) {
+//                currentFocus!!.clearFocus()
+//                inputMethodManager.hideSoftInputFromWindow(
+//                    currentFocus!!.windowToken,
+//                    InputMethodManager.HIDE_NOT_ALWAYS
+//                )
+//            }else{
+//
+//            }
+//        }
+//        return super.dispatchTouchEvent(event)
+//    }
 
     override fun onBackPressed() {
         if (goBackFragment()) return
