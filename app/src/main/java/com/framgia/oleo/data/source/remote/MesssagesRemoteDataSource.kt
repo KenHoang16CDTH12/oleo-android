@@ -29,7 +29,7 @@ class MesssagesRemoteDataSource : MesssagesDataSource {
     }
 
     override fun getOldMessage(userId: String, roomId: String, oldMessageId: String,
-                               valueEventListener: ValueEventListener) {
+        valueEventListener: ValueEventListener) {
         firebaseDatabase.reference.child(Constant.PATH_STRING_USER).child(userId)
             .child(Constant.PATH_STRING_BOX).child(roomId).child(Constant.PATH_STRING_MESSAGE)
             .limitToLast(BoxChatViewModel.LIMIT_DATA).endAt(oldMessageId).orderByKey()

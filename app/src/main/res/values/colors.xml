@@ -25,4 +25,5 @@
     <color name="colorGrey200">#EEEEEE</color>
     <color name="colorGrey900">#212121</color>
     <color name="colorBlackTranslate40">#66000000</color>
+    <color name="colorBlackDark">#0A0A0A</color>
 </resources>

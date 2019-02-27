@@ -62,4 +62,15 @@
     <string name="option">Tùy Chọn</string>
     <string name="add_friend"> Thêm bạn</string>
     <string name="follow">Theo dõi</string>
+    <string name="msg_on_add_friend_request_success">Đã gửi lời mời kết ban!</string>
+    <string name="msg_on_add_friend_request_failed">Có lỗi xảy ra ! Bạn vui lòng thử lại sau !</string>
+    <string name="msg_defaut_friend_request_prefix">Xin chào mình là </string>
+    <string name="msg_defaut_friend_request_postfix">. Thêm mình vào Oleo bạn nhé!</string>
+    <string name="friend_requests">Yêu cầu kết bạn</string>
+    <string name="confirm">Đồng ý</string>
+    <string name="delete">Xóa yêu cầu</string>
+    <string name="msg_on_add_friend_success">Thêm bạn thành công! </string>
+    <string name="msg_on_delete_friend_request">Đã xóa yêu cầu kết bạn !</string>
+    <string name="msg_on_add_friend_failed">Có lỗi xảy ra ! Bạn vui lòng thử lại sau !</string>
+    <string name="mutual_friends">mutual friends</string>
 </resources>

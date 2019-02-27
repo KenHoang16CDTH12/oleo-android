@@ -11,17 +11,18 @@ import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseActivity
 import com.framgia.oleo.databinding.ActivityMainBinding
 import com.framgia.oleo.screen.boxchat.BoxChatFragment.OnMessageOptionListener
+import com.framgia.oleo.screen.friendrequest.FriendRequestsFragment
 import com.framgia.oleo.screen.home.HomeFragment
 import com.framgia.oleo.screen.login.LoginFragment
 import com.framgia.oleo.screen.messages.MessageOptionFragment
 import com.framgia.oleo.screen.messages.MessagesFragment
 import com.framgia.oleo.screen.search.SearchFragment
-import com.framgia.oleo.screen.setting.SettingFragment.OnLogOutListener
+import com.framgia.oleo.screen.setting.SettingFragment.OnSettingListener
 import com.framgia.oleo.utils.Constant
 import com.framgia.oleo.utils.extension.*
 
 
-class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnLogOutListener, OnMessageOptionListener {
+class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettingListener, OnMessageOptionListener {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var currentFragment: Fragment
@@ -29,6 +30,7 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnLogOut
     private val loginFragment = LoginFragment.newInstance()
     private val homeFragment = HomeFragment.newInstance()
     private val searchFragment = SearchFragment.newInstance()
+    private val friendRequestsFragment = FriendRequestsFragment.newInstance()
     private lateinit var inputMethodManager: InputMethodManager
     override fun onCreateView(savedInstanceState: Bundle?) {
         viewModel = MainViewModel.create(this, viewModelFactory)
@@ -75,12 +77,16 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnLogOut
     }
 
     override fun onSearchClick() {
-        addFragmentToActivity(R.id.containerMain, searchFragment)
+        replaceFragmentInActivity(R.id.containerMain, searchFragment, true)
     }
 
     override fun onLogOutClick() {
         clearAllFragment()
         replaceFragmentInActivity(R.id.containerMain, loginFragment, false)
+    }
+
+    override fun onFriendRequestClick() {
+        replaceFragmentInActivity(R.id.containerMain, friendRequestsFragment, true)
     }
 
     override fun onMessageOptionClick(userFriendName: String) {
