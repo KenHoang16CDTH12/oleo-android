@@ -1,6 +1,7 @@
 package com.framgia.oleo.utils.di.module
 
 import com.framgia.oleo.screen.boxchat.BoxChatFragment
+import com.framgia.oleo.screen.friendrequest.FriendRequestsFragment
 import com.framgia.oleo.screen.home.HomeFragment
 import com.framgia.oleo.screen.location.LocationFragment
 import com.framgia.oleo.screen.login.LoginFragment
@@ -41,4 +42,7 @@ abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributeMessageOptionFragment(): MessageOptionFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeFriendRequestsFragment(): FriendRequestsFragment
 }

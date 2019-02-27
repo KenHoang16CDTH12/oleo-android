@@ -10,11 +10,11 @@ import com.framgia.oleo.databinding.AdapterSearchBindingImpl
 
 class SearchAdapter : RecyclerView.Adapter<SearchAdapter.Companion.ViewHolder>() {
     private var users: MutableList<User> = arrayListOf()
-
+    private lateinit var onItemViewListener: OnItemViewListener
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding: AdapterSearchBindingImpl =
             DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.adapter_search, parent, false)
-        return ViewHolder(binding)
+        return ViewHolder(binding, onItemViewListener)
     }
 
     override fun getItemCount(): Int {
@@ -31,10 +31,27 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.Companion.ViewHolder>()
         notifyDataSetChanged()
     }
 
+    fun setOnItemViewListener(onItemViewListener: OnItemViewListener) {
+        this.onItemViewListener = onItemViewListener
+    }
+
+    interface OnItemViewListener {
+        fun onImageSendMessageClicked(user: User)
+
+        fun onImageAddFriendClicked(user: User)
+
+        fun onImageUserProfileClicked(user: User)
+    }
+
     companion object {
         class ViewHolder(
-            private val binding: AdapterSearchBindingImpl
+            private val binding: AdapterSearchBindingImpl,
+            onItemViewListener: OnItemViewListener
         ) : RecyclerView.ViewHolder(binding.root) {
+
+            init {
+                binding.listener = onItemViewListener
+            }
 
             fun bindData(user: User) {
                 binding.user = user

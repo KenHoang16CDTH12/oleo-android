@@ -1,6 +1,5 @@
 package com.framgia.oleo.utils
 
-
 object Constant {
     const val BASE_URL = ""
 
@@ -14,4 +13,9 @@ object Constant {
     const val PATH_STRING_PLACE = "Place"
     const val BASE_FB_PICTURE = "http://graph.facebook.com/"
     const val PICTURE_TYPE = "/picture?type=large"
+    const val PATH_STRING_FRIEND_REQUEST = "FriendRequest"
+    const val PATH_STRING_FRIEND = "Friend"
+
+    const val CONFIRM_FRIEND_REQUEST = 1
+    const val DELETE_FRIEND_REQUEST = 2
 }

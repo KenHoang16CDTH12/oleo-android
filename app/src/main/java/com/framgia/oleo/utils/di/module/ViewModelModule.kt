@@ -7,6 +7,7 @@ import com.framgia.oleo.screen.login.LoginViewModel
 import com.framgia.oleo.screen.main.MainViewModel
 import com.framgia.oleo.screen.messages.MessagesViewModel
 import com.framgia.oleo.screen.boxchat.BoxChatViewModel
+import com.framgia.oleo.screen.friendrequest.FriendRequestsViewModel
 import com.framgia.oleo.screen.search.SearchViewModel
 import com.framgia.oleo.screen.location.LocationViewModel
 import com.framgia.oleo.screen.setting.SettingViewModel
@@ -66,4 +67,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(SearchViewModel::class)
     abstract fun bindSearchViewModel(searchViewModel: SearchViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FriendRequestsViewModel::class)
+    abstract fun bindFriendRequestsViewModel(friendRequestViewModel: FriendRequestsViewModel): ViewModel
 }

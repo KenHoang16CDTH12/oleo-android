@@ -9,11 +9,9 @@
             type="com.framgia.oleo.screen.search.SearchViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         tools:ignore="ContentDescription">
 
         <androidx.appcompat.widget.Toolbar
@@ -22,56 +20,32 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@drawable/actionbar_background"
             app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/imageBack"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_8"
-                    android:src="@drawable/ic_back"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/searchView"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <androidx.appcompat.widget.SearchView
                     android:id="@+id/searchView"
+                    style="@style/SearchTheme"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginTop="@dimen/dp_10"
                     android:layout_marginBottom="@dimen/dp_10"
-                    android:paddingStart="@dimen/dp_6"
-                    android:paddingEnd="@dimen/dp_6"
-                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_10"
                     android:background="@drawable/search_bar_background"
                     android:fontFamily="serif"
                     android:maxLength="30"
-                    style="@style/SearchTheme"
-                    android:theme="@style/SearchTheme"
+                    android:paddingEnd="@dimen/dp_6"
+                    android:paddingStart="@dimen/dp_6"
                     android:shadowColor="@color/colorGrey100"
+                    android:theme="@style/SearchTheme"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/imageNewMessage"
-                    app:layout_constraintStart_toEndOf="@id/imageBack"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
-
-                <ImageView
-                    android:id="@+id/imageNewMessage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/dp_10"
-                    android:src="@drawable/ic_add"
-                    android:layout_margin="@dimen/dp_2"
-                    app:layout_constraintBottom_toBottomOf="@id/searchView"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/searchView"
-                    app:layout_constraintTop_toTopOf="@id/searchView" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
 

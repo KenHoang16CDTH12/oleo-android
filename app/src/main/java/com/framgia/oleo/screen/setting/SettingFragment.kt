@@ -21,9 +21,7 @@ import com.facebook.login.LoginManager
 import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseFragment
 import com.framgia.oleo.databinding.FragmentSettingBinding
-import com.framgia.oleo.screen.login.LoginFragment
 import com.framgia.oleo.utils.extension.isCheckMultiClick
-import com.framgia.oleo.utils.extension.replaceFragment
 import com.framgia.oleo.utils.extension.showSnackBar
 import com.framgia.oleo.utils.extension.showToast
 import com.framgia.oleo.utils.liveData.autoCleared
@@ -35,7 +33,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class SettingFragment : BaseFragment(), View.OnClickListener, LocationListener {
-    private var listener: OnLogOutListener? = null
+    private var listener: OnSettingListener? = null
     private lateinit var viewModel: SettingViewModel
     private var binding by autoCleared<FragmentSettingBinding>()
     private lateinit var googleSignInClient: GoogleSignInClient
@@ -55,7 +53,7 @@ class SettingFragment : BaseFragment(), View.OnClickListener, LocationListener {
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        if (context is OnLogOutListener) {
+        if (context is OnSettingListener) {
             listener = context
         }
     }
@@ -69,6 +67,7 @@ class SettingFragment : BaseFragment(), View.OnClickListener, LocationListener {
         disableView()
         initCheckPermission()
         textViewLogOut.setOnClickListener(this)
+        textFriendRequest.setOnClickListener(this)
         locationManager = context!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }
 
@@ -79,6 +78,7 @@ class SettingFragment : BaseFragment(), View.OnClickListener, LocationListener {
         when (v!!.id) {
             R.id.textViewLogOut -> if (isCheckMultiClick()) logOut()
             R.id.textViewWatchList -> if (isCheckMultiClick()) getLocation()
+            R.id.textFriendRequest-> listener?.onFriendRequestClick()
         }
     }
 
@@ -179,6 +179,7 @@ class SettingFragment : BaseFragment(), View.OnClickListener, LocationListener {
     }
 
     private fun logOut() {
+        locationManager = context!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val builder = AlertDialog.Builder(activity!!, R.style.alertDialog)
         builder.setMessage(getString(R.string.validate_log_out)).setTitle(getString(R.string.log_out))
         builder.setPositiveButton(getString(R.string.ok)) { dialog, id ->
@@ -241,8 +242,9 @@ class SettingFragment : BaseFragment(), View.OnClickListener, LocationListener {
         }
     }
 
-    interface OnLogOutListener {
+    interface OnSettingListener {
         fun onLogOutClick()
+        fun onFriendRequestClick()
     }
 
     companion object {

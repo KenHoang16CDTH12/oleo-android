@@ -20,7 +20,7 @@ class MessagesRepository(private val messsagesDataSource: MesssagesDataSource) :
     }
 
     override fun getOldMessage(userId: String, roomId: String, oldMessageId: String,
-                               valueEventListener: ValueEventListener) {
+        valueEventListener: ValueEventListener) {
         messsagesDataSource.getOldMessage(userId, roomId, oldMessageId, valueEventListener)
     }
 
@@ -33,5 +33,4 @@ class MessagesRepository(private val messsagesDataSource: MesssagesDataSource) :
     override fun sendMessage(userId: String, boxId: String, messageId: String, message: Message) {
         messsagesDataSource.sendMessage(userId, boxId, messageId, message)
     }
-
 }

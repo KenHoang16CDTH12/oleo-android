@@ -61,4 +61,15 @@
     <string name="option">Option</string>
     <string name="add_friend"> Add friend</string>
     <string name="follow">Follow</string>
+    <string name="msg_on_add_friend_request_success">Friend request sent</string>
+    <string name="msg_on_add_friend_request_failed">An unknown error has occurred, please try again !</string>
+    <string name="msg_defaut_friend_request_prefix">Hi, I\'m</string>
+    <string name="msg_defaut_friend_request_postfix">. Add me to your Oleo, please!</string>
+    <string name="friend_requests">Friend Requests</string>
+    <string name="confirm">Confirm</string>
+    <string name="delete">Delete</string>
+    <string name="msg_on_add_friend_success">Add friend success!</string>
+    <string name="msg_on_delete_friend_request">Delete friend request success!</string>
+    <string name="msg_on_add_friend_failed">An unknown error has occurred, please try again !</string>
+    <string name="mutual_friends">mutual friends</string>
 </resources>
