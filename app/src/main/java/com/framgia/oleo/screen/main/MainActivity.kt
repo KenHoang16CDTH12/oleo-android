@@ -3,9 +3,7 @@ package com.framgia.oleo.screen.main
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,10 +18,8 @@ import com.framgia.oleo.screen.messages.MessagesFragment
 import com.framgia.oleo.screen.search.SearchFragment
 import com.framgia.oleo.screen.setting.SettingFragment.OnLogOutListener
 import com.framgia.oleo.utils.Constant
-import com.framgia.oleo.utils.extension.clearAllFragment
-import com.framgia.oleo.utils.extension.goBackFragment
-import com.framgia.oleo.utils.extension.replaceFragmentInActivity
-import com.framgia.oleo.utils.extension.showToast
+import com.framgia.oleo.utils.extension.*
+
 
 class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnLogOutListener, OnMessageOptionListener {
 
@@ -33,7 +29,6 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnLogOut
     private val loginFragment = LoginFragment.newInstance()
     private val homeFragment = HomeFragment.newInstance()
     private val searchFragment = SearchFragment.newInstance()
-    private val messageOptionFragment = MessageOptionFragment.newInstance()
     private lateinit var inputMethodManager: InputMethodManager
     override fun onCreateView(savedInstanceState: Bundle?) {
         viewModel = MainViewModel.create(this, viewModelFactory)
@@ -80,7 +75,7 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnLogOut
     }
 
     override fun onSearchClick() {
-        replaceFragmentInActivity(R.id.containerMain, searchFragment)
+        addFragmentToActivity(R.id.containerMain, searchFragment)
     }
 
     override fun onLogOutClick() {
@@ -88,8 +83,8 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnLogOut
         replaceFragmentInActivity(R.id.containerMain, loginFragment, false)
     }
 
-    override fun onMessageOptionClick() {
-        replaceFragmentInActivity(R.id.containerMain, messageOptionFragment)
+    override fun onMessageOptionClick(userFriendName: String) {
+        addFragmentToActivity(R.id.containerMain, MessageOptionFragment.newInstance(userFriendName))
     }
 
     private fun registerIsCheckUserData() {
@@ -99,7 +94,7 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnLogOut
                 currentFragment = homeFragment
                 supportActionBar?.show()
             } else {
-                replaceFragmentInActivity(R.id.containerMain, loginFragment, false)
+                replaceFragmentInActivity(R.id.containerMain, loginFragment)
                 currentFragment = loginFragment
                 supportActionBar?.hide()
             }
