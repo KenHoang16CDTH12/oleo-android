@@ -8,15 +8,20 @@ import androidx.databinding.DataBindingUtil
 import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseFragment
 import com.framgia.oleo.databinding.FragmentLocationBinding
+import com.framgia.oleo.utils.extension.goBackFragment
 import com.framgia.oleo.utils.liveData.autoCleared
-import kotlinx.android.synthetic.main.fragment_location.*
+import kotlinx.android.synthetic.main.fragment_location.locationToolbar
+import kotlinx.android.synthetic.main.fragment_location.textViewNameFriend
 
-class LocationFragment : BaseFragment() {
+class LocationFragment : BaseFragment(), View.OnClickListener {
+
     private lateinit var viewModel: LocationViewModel
     private var binding by autoCleared<FragmentLocationBinding>()
     private var locationAdapter = LocationAdapter()
 
-    override fun createView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun createView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         viewModel = LocationViewModel.create(this, viewModelFactory)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_location, container, false)
         binding.viewModel = viewModel
@@ -26,16 +31,27 @@ class LocationFragment : BaseFragment() {
 
     override fun setUpView() {
         viewModel.setAdapter(locationAdapter)
-        locationToolbar.setNavigationIcon(R.drawable.ic_back)
+        locationToolbar.setOnClickListener(this)
     }
 
     override fun bindView() {
         viewModel.getListLocation()
+        textViewNameFriend.text = arguments?.getString(ARGUMENT_NAME_FRIEND)
+    }
+
+    override fun onClick(view: View?) {
+        when (view!!.id) {
+            R.id.locationToolbar -> goBackFragment()
+        }
     }
 
     companion object {
-        fun newInstance() = LocationFragment().apply {
+
+        private const val ARGUMENT_NAME_FRIEND = "ARGUMENT_NAME_FRIEND"
+
+        fun newInstance(nameFriend: String) = LocationFragment().apply {
             val bundle = Bundle()
+            bundle.putString(ARGUMENT_NAME_FRIEND, nameFriend)
             arguments = bundle
         }
     }

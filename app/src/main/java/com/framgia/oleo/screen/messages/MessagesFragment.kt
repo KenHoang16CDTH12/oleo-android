@@ -17,6 +17,7 @@ import com.framgia.oleo.screen.boxchat.BoxChatFragment
 import com.framgia.oleo.screen.main.MainActivity
 import com.framgia.oleo.utils.OnItemRecyclerViewClick
 import com.framgia.oleo.utils.extension.addFragmentToActivity
+import com.framgia.oleo.utils.extension.isCheckMultiClick
 import com.framgia.oleo.utils.liveData.autoCleared
 import kotlinx.android.synthetic.main.fragment_messages.recyclerViewMessages
 import kotlinx.android.synthetic.main.fragment_messages.textSearchMessage
@@ -29,8 +30,7 @@ class MessagesFragment : BaseFragment(), OnItemRecyclerViewClick<BoxChat>, View.
     private var messagesAdapter by autoCleared<MessagesAdapter>()
 
     override fun createView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         viewModel = MessagesViewModel.create(this, viewModelFactory)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_messages, container, false)
@@ -70,15 +70,15 @@ class MessagesFragment : BaseFragment(), OnItemRecyclerViewClick<BoxChat>, View.
 
     override fun onItemClickListener(data: BoxChat) {
         //Open Chat Screen
-        (activity!! as MainActivity).addFragmentToActivity(R.id.containerMain, BoxChatFragment
-            .newInstance(data))
+        if (isCheckMultiClick()) (activity!! as MainActivity).addFragmentToActivity(
+            R.id.containerMain, BoxChatFragment.newInstance(data)
+        )
     }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
-            R.id.textSearchMessage -> {
-                listener?.onSearchClick()
-            }
+            R.id.textSearchMessage -> if (isCheckMultiClick()) listener?.onSearchClick()
+
         }
     }
 
