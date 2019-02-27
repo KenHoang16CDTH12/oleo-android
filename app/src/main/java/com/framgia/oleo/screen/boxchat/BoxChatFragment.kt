@@ -24,7 +24,7 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
     private lateinit var boxChat: BoxChat
     private lateinit var adapter: BoxChatAdapter
     private var onMessageOptionListener: OnMessageOptionListener? = null
-    private var isSendable = false
+    private var isEnable = false
 
     override fun createView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewModel = BoxChatViewModel.create(this, viewModelFactory)
@@ -79,6 +79,7 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
+        menu?.clear()
         inflater?.inflate(R.menu.option_message, menu)
     }
 
@@ -91,7 +92,7 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
     }
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        isSendable = onSetEnableButtonSend(s.toString())
+        isEnable = onSetEnableButtonSend(s.toString())
     }
 
     override fun afterTextChanged(s: Editable?) {}
@@ -101,7 +102,7 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.buttonSend -> {
-                if (isSendable) {
+                if (isEnable) {
                     viewModel.sendMessage(
                         editSendMessage.text.toString(),
                         boxChat.id.toString(),

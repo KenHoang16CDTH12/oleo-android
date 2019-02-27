@@ -8,42 +8,61 @@ import android.view.ViewGroup
 import com.framgia.oleo.R
 import com.framgia.oleo.R.string
 import com.framgia.oleo.base.BaseFragment
+import com.framgia.oleo.screen.location.LocationFragment
 import com.framgia.oleo.screen.main.MainActivity
 import com.framgia.oleo.utils.extension.goBackFragment
+import com.framgia.oleo.utils.extension.gone
+import com.framgia.oleo.utils.extension.replaceFragment
+import kotlinx.android.synthetic.main.fragment_option_message.textViewWatchList
 import kotlinx.android.synthetic.main.fragment_option_message.toolbarOption
 import kotlinx.android.synthetic.main.fragment_option_message_header.textViewNameUser
+import kotlinx.android.synthetic.main.toolbar.imageToolbar
 import kotlinx.android.synthetic.main.toolbar.view.textTitleToolbar
 import kotlinx.android.synthetic.main.toolbar.view.toolbarCustom
 
-class MessageOptionFragment : BaseFragment() {
-    override fun createView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+class MessageOptionFragment : BaseFragment(), View.OnClickListener {
+
+    override fun createView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.fragment_option_message, container, false)
     }
 
     override fun setUpView() {
+        imageToolbar.gone()
         setupActionBar()
         setHasOptionsMenu(true)
     }
 
     override fun bindView() {
         textViewNameUser.text = arguments?.getString(ARGUMENT_USER_NAME)
+        textViewWatchList.setOnClickListener(this)
+    }
+
+    override fun onClick(view: View?) {
+        when (view!!.id) {
+            R.id.textViewWatchList -> replaceFragment(
+                R.id.containerMain, LocationFragment.newInstance(
+                    textViewNameUser.text.toString()
+                ), true
+            )
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
-            android.R.id.home -> (activity!! as MainActivity).goBackFragment()
+            android.R.id.home -> goBackFragment()
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun setupActionBar() {
-        var toolbar = toolbarOption.toolbarCustom
-        toolbar.textTitleToolbar.text= activity!!.getString(string.option)
+        val toolbar = toolbarOption.toolbarCustom
+        toolbar.textTitleToolbar.text = activity!!.getString(string.option)
         (activity as MainActivity).setSupportActionBar(toolbar)
         (activity as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         (activity as MainActivity).supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_back)
         (activity as MainActivity).supportActionBar!!.setDisplayShowTitleEnabled(false)
-
     }
 
     companion object {
