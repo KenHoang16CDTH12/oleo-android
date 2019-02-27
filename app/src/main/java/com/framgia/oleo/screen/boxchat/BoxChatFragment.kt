@@ -85,7 +85,7 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             android.R.id.home -> (activity!! as MainActivity).goBackFragment()
-            R.id.menu_option -> onMessageOptionListener?.onMessageOptionClick()
+            R.id.menu_option -> onMessageOptionListener?.onMessageOptionClick(textTitleChatBox.text.toString())
         }
         return super.onOptionsItemSelected(item)
     }
@@ -126,7 +126,7 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
     }
 
     interface OnMessageOptionListener {
-        fun onMessageOptionClick()
+        fun onMessageOptionClick(userFriendName: String)
     }
 
     companion object {

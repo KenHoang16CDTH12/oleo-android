@@ -1,15 +1,13 @@
 package com.framgia.oleo.screen.messages
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseFragment
-import com.framgia.oleo.screen.main.MainActivity
-import kotlinx.android.synthetic.main.toolbar.imageToolbar
-import kotlinx.android.synthetic.main.toolbar.toolbarCustom
+import kotlinx.android.synthetic.main.fragment_option_message_header.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 class MessageOptionFragment : BaseFragment() {
     override fun createView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -21,11 +19,16 @@ class MessageOptionFragment : BaseFragment() {
     }
 
     override fun bindView() {
+        textViewNameUser.text = arguments?.getString(ARGUMENT_USER_NAME)
     }
 
     companion object {
-        fun newInstance() = MessageOptionFragment().apply {
+
+        private const val ARGUMENT_USER_NAME = "ARGUMENT_USER_NAME"
+
+        fun newInstance(name: String) = MessageOptionFragment().apply {
             val bundle = Bundle()
+            bundle.putString(ARGUMENT_USER_NAME, name)
             arguments = bundle
         }
     }
