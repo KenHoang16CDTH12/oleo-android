@@ -1,49 +1,53 @@
 package com.framgia.oleo.screen.messages
 
 import androidx.databinding.BaseObservable
+import androidx.databinding.Bindable
+import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.MutableLiveData
+import com.framgia.oleo.data.source.MessagesRepository
 import com.framgia.oleo.data.source.model.Message
 import com.framgia.oleo.data.source.model.User
-import com.framgia.oleo.utils.Constant
-import com.google.firebase.database.*
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 
-class MessagesAdapterViewModel : BaseObservable() {
+class MessagesAdapterViewModel(
+    private val messagesRepository: MessagesRepository
+) : BaseObservable() {
 
-    private val fireBaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
-    private var liveMessage: MutableLiveData<Message> = MutableLiveData()
-    private var user: MutableLiveData<User> = MutableLiveData()
+    private var message = MutableLiveData<Message>()
 
-    fun setMessage(userId: String, roomId: String) {
-        fireBaseDatabase.reference.child(Constant.PATH_STRING_USER).child(userId)
-            .child(Constant.PATH_STRING_BOX).child(roomId).child(Constant.PATH_STRING_MESSAGE)
-            .addChildEventListener(object : ChildEventListener {
+    private var image = ""
 
-                override fun onCancelled(databaseError: DatabaseError) {}
+    fun setMessage(userId: String, boxId: String): MutableLiveData<Message> {
+        messagesRepository.getLastMessage(userId, boxId, object : ChildEventListener {
+            override fun onCancelled(dataSnapshot: DatabaseError) {}
 
-                override fun onChildMoved(dataSnapshot: DataSnapshot, p1: String?) {}
+            override fun onChildMoved(dataSnapshot: DataSnapshot, p1: String?) {}
 
-                override fun onChildChanged(dataSnapshot: DataSnapshot, p1: String?) {}
+            override fun onChildChanged(dataSnapshot: DataSnapshot, p1: String?) {}
 
-                override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {
-                    liveMessage.value = dataSnapshot.getValue(Message::class.java)
-                }
+            override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {
+                message.value = dataSnapshot.getValue(Message::class.java)!!
+            }
 
-                override fun onChildRemoved(p0: DataSnapshot) {}
-            })
+            override fun onChildRemoved(p0: DataSnapshot) {}
+        })
+        return message
     }
 
-    fun setUser(userId: String) {
-        fireBaseDatabase.reference.child(Constant.PATH_STRING_USER).child(userId)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onCancelled(databaseError: DatabaseError) {}
+    fun setImageProfile(userId: String) {
+        messagesRepository.getImageProfile(userId, object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {}
 
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    user.value = dataSnapshot.getValue(User::class.java)
-                }
-            })
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                image = dataSnapshot.getValue(User::class.java)!!.image
+                notifyPropertyChanged(BR.image)
+            }
+        })
     }
 
-    fun getMessage() = liveMessage.value
-
-    fun getUser() = user.value
+    @Bindable
+    fun getImage() = image
 }
