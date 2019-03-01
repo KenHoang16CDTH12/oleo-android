@@ -1,5 +1,7 @@
 package com.framgia.oleo.utils.extension
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Handler
 import android.os.SystemClock
 import android.widget.Button
@@ -27,4 +29,10 @@ fun isCheckClickableImageButtonClick(imageButton: ImageButton) {
     Handler().postDelayed({
         imageButton.isClickable = true
     }, VALUE_MAX_TIME_CLICK.toLong())
+}
+
+fun isCheckedInternetConnected(context: Context?): Boolean {
+    val connectManager =
+        context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    return connectManager.activeNetworkInfo != null
 }

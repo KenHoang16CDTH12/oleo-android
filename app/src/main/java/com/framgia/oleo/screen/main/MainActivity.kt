@@ -1,6 +1,7 @@
 package com.framgia.oleo.screen.main
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.inputmethod.InputMethodManager
@@ -9,20 +10,26 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseActivity
+import com.framgia.oleo.data.service.LocationService
 import com.framgia.oleo.databinding.ActivityMainBinding
 import com.framgia.oleo.screen.boxchat.BoxChatFragment.OnMessageOptionListener
 import com.framgia.oleo.screen.friendrequest.FriendRequestsFragment
 import com.framgia.oleo.screen.home.HomeFragment
+import com.framgia.oleo.screen.home.HomeFragment.OnCallBackLocationListener
 import com.framgia.oleo.screen.login.LoginFragment
 import com.framgia.oleo.screen.messages.MessageOptionFragment
 import com.framgia.oleo.screen.messages.MessagesFragment
 import com.framgia.oleo.screen.search.SearchFragment
 import com.framgia.oleo.screen.setting.SettingFragment.OnSettingListener
 import com.framgia.oleo.utils.Constant
-import com.framgia.oleo.utils.extension.*
+import com.framgia.oleo.utils.extension.addFragmentToActivity
+import com.framgia.oleo.utils.extension.clearAllFragment
+import com.framgia.oleo.utils.extension.goBackFragment
+import com.framgia.oleo.utils.extension.replaceFragmentInActivity
+import com.framgia.oleo.utils.extension.showToast
 
-
-class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettingListener, OnMessageOptionListener {
+class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettingListener,
+    OnMessageOptionListener, OnCallBackLocationListener {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var currentFragment: Fragment
@@ -32,9 +39,12 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
     private val searchFragment = SearchFragment.newInstance()
     private val friendRequestsFragment = FriendRequestsFragment.newInstance()
     private lateinit var inputMethodManager: InputMethodManager
+    private var isCheckPermissionLocation = false
+
     override fun onCreateView(savedInstanceState: Bundle?) {
         viewModel = MainViewModel.create(this, viewModelFactory)
-        val binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+        val binding =
+            DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
         binding.viewModel = viewModel
     }
 
@@ -48,20 +58,20 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
     }
 
     //Todo edit later
-//    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-//        when (event.action) {
-//            MotionEvent.ACTION_DOWN -> if (currentFocus!! is EditText) {
-//                currentFocus!!.clearFocus()
-//                inputMethodManager.hideSoftInputFromWindow(
-//                    currentFocus!!.windowToken,
-//                    InputMethodManager.HIDE_NOT_ALWAYS
-//                )
-//            }else{
-//
-//            }
-//        }
-//        return super.dispatchTouchEvent(event)
-//    }
+    //    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+    //        when (event.action) {
+    //            MotionEvent.ACTION_DOWN -> if (currentFocus!! is EditText) {
+    //                currentFocus!!.clearFocus()
+    //                inputMethodManager.hideSoftInputFromWindow(
+    //                    currentFocus!!.windowToken,
+    //                    InputMethodManager.HIDE_NOT_ALWAYS
+    //                )
+    //            }else{
+    //
+    //            }
+    //        }
+    //        return super.dispatchTouchEvent(event)
+    //    }
 
     override fun onBackPressed() {
         if (goBackFragment()) return
@@ -71,9 +81,10 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
         }
         isDoubleTapBack = true
         showToast(getString(R.string.click_again))
-        Handler().postDelayed({
-            isDoubleTapBack = false
-        }, Constant.MAX_TIME_DOUBLE_CLICK_EXIT.toLong())
+        Handler().postDelayed(
+            { isDoubleTapBack = false },
+            Constant.MAX_TIME_DOUBLE_CLICK_EXIT.toLong()
+        )
     }
 
     override fun onSearchClick() {
@@ -81,6 +92,8 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
     }
 
     override fun onLogOutClick() {
+        LocationService.isCheckLogout = true
+        stopService(Intent(applicationContext, LocationService::class.java))
         clearAllFragment()
         replaceFragmentInActivity(R.id.containerMain, loginFragment, false)
     }
@@ -91,6 +104,13 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
 
     override fun onMessageOptionClick(userFriendName: String) {
         addFragmentToActivity(R.id.containerMain, MessageOptionFragment.newInstance(userFriendName))
+    }
+
+    override fun onCallBackLocation(isCheckPermission: Boolean) {
+        isCheckPermissionLocation = if (isCheckPermission) {
+            startService(Intent(applicationContext, LocationService::class.java))
+            true
+        } else false
     }
 
     private fun registerIsCheckUserData() {

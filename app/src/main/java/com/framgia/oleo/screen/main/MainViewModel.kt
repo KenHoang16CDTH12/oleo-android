@@ -7,7 +7,9 @@ import com.framgia.oleo.base.BaseViewModel
 import com.framgia.oleo.data.source.UserRepository
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor(private val userRepository: UserRepository) : BaseViewModel() {
+class MainViewModel @Inject constructor(
+    private val userRepository: UserRepository
+) : BaseViewModel() {
 
     private var isCheckedUser = MutableLiveData<Boolean>()
 

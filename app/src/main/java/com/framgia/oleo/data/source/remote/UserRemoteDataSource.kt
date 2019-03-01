@@ -102,11 +102,10 @@ class UserRemoteDataSource : UserDataSource.Remote {
             .addValueEventListener(valueEventListener)
     }
 
-    override fun pushUserLocation(idUser: String, idPlace: String, place: Place) {
-        firebaseDatabase.getReference(Constant.PATH_STRING_USER)
+    override fun pushUserLocation(idUser: String, place: Place) {
+        firebaseDatabase.getReference(Constant.PATH_STRING_LOCATION)
             .child(idUser)
-            .child(Constant.PATH_STRING_PLACE)
-            .child(idPlace)
+            .child(place.id.toString())
             .setValue(place)
     }
 
