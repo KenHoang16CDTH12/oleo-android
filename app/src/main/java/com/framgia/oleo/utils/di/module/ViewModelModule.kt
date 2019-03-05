@@ -2,14 +2,18 @@ package com.framgia.oleo.utils.di.module
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.framgia.oleo.screen.boxchat.BoxChatViewModel
+import com.framgia.oleo.screen.follow.FollowListViewModel
+import com.framgia.oleo.screen.followed.FollowedViewModel
+import com.framgia.oleo.screen.followed.FollowingViewModel
+import com.framgia.oleo.screen.followed.WaitingViewModel
+import com.framgia.oleo.screen.friendrequest.FriendRequestsViewModel
 import com.framgia.oleo.screen.home.HomeViewModel
+import com.framgia.oleo.screen.location.LocationViewModel
 import com.framgia.oleo.screen.login.LoginViewModel
 import com.framgia.oleo.screen.main.MainViewModel
 import com.framgia.oleo.screen.messages.MessagesViewModel
-import com.framgia.oleo.screen.boxchat.BoxChatViewModel
-import com.framgia.oleo.screen.friendrequest.FriendRequestsViewModel
 import com.framgia.oleo.screen.search.SearchViewModel
-import com.framgia.oleo.screen.location.LocationViewModel
 import com.framgia.oleo.screen.setting.SettingViewModel
 import com.framgia.oleo.screen.signup.SignUpViewModel
 import com.framgia.oleo.utils.di.AppViewModelFactory
@@ -20,6 +24,7 @@ import dagger.multibindings.IntoMap
 
 @Module
 abstract class ViewModelModule {
+
     @Binds
     @IntoMap
     @ViewModelKey(MainViewModel::class)
@@ -72,4 +77,24 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(FriendRequestsViewModel::class)
     abstract fun bindFriendRequestsViewModel(friendRequestViewModel: FriendRequestsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FollowListViewModel::class)
+    abstract fun bindFollowListViewModel(followListViewModel: FollowListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FollowedViewModel::class)
+    abstract fun bindFollowedViewModel(followedViewModel: FollowedViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FollowingViewModel::class)
+    abstract fun bindFollowingViewModel(followingViewModel: FollowingViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(WaitingViewModel::class)
+    abstract fun bindWaitingViewModel(waitingViewModel: WaitingViewModel): ViewModel
 }
