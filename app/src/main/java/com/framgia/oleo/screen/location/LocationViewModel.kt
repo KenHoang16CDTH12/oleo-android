@@ -23,8 +23,7 @@ class LocationViewModel @Inject constructor(
 
     fun getAdapter() = locationAdapter
 
-    fun getListLocation() {
-        val id = userRepository.getUser()!!.id
+    fun getListLocation(id:String) {
         userRepository.getFriendLocation(id, object : ChildEventListener {
             override fun onCancelled(dataSnapshot: DatabaseError) {}
 

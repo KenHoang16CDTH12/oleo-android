@@ -100,7 +100,10 @@
             android:layout_marginTop="@dimen/dp_12"
             android:adapter="@{viewModel.adapter}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@id/layoutTop" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutTop"
+            app:reverseLayout="true"
+            app:stackFromEnd="true" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
