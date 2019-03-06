@@ -43,7 +43,8 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener {
         when (view!!.id) {
             R.id.textViewWatchList -> replaceFragment(
                 R.id.containerMain, LocationFragment.newInstance(
-                    textViewNameUser.text.toString()
+                    textViewNameUser.text.toString(),
+                    arguments?.getString(ARGUMENT_USER_ID)!!
                 ), true
             )
         }
@@ -68,10 +69,12 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener {
     companion object {
 
         private const val ARGUMENT_USER_NAME = "ARGUMENT_USER_NAME"
+        private const val ARGUMENT_USER_ID = "ARGUMENT_USER_ID"
 
-        fun newInstance(name: String) = MessageOptionFragment().apply {
+        fun newInstance(name: String, id: String) = MessageOptionFragment().apply {
             val bundle = Bundle()
             bundle.putString(ARGUMENT_USER_NAME, name)
+            bundle.putString(ARGUMENT_USER_ID, id)
             arguments = bundle
         }
     }

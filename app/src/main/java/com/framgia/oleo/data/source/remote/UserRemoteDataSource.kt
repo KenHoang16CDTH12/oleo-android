@@ -5,7 +5,6 @@ import com.framgia.oleo.data.source.model.Friend
 import com.framgia.oleo.data.source.model.FriendRequest
 import com.framgia.oleo.data.source.model.Place
 import com.framgia.oleo.data.source.model.User
-import com.framgia.oleo.screen.location.LocationViewModel
 import com.framgia.oleo.utils.Constant
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
@@ -128,10 +127,8 @@ class UserRemoteDataSource : UserDataSource.Remote {
     }
 
     override fun getFriendLocation(id: String, childEventListener: ChildEventListener) {
-        firebaseDatabase.getReference(Constant.PATH_STRING_USER)
+        firebaseDatabase.getReference(Constant.PATH_STRING_LOCATION)
             .child(id)
-            .child(Constant.PATH_STRING_PLACE)
-            .limitToLast(LocationViewModel.LIMIT_DATA)
             .addChildEventListener(childEventListener)
     }
 }

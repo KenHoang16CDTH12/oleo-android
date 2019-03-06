@@ -105,8 +105,8 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
         replaceFragmentInActivity(R.id.containerMain, friendRequestsFragment, true)
     }
 
-    override fun onMessageOptionClick(userFriendName: String) {
-        addFragmentToActivity(R.id.containerMain, MessageOptionFragment.newInstance(userFriendName))
+    override fun onMessageOptionClick(userFriendName: String, id: String) {
+        addFragmentToActivity(R.id.containerMain, MessageOptionFragment.newInstance(userFriendName, id))
     }
 
     override fun onCallBackLocation(isCheckPermission: Boolean) {

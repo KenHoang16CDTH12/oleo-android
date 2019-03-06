@@ -4,7 +4,12 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.framgia.oleo.R
@@ -14,7 +19,12 @@ import com.framgia.oleo.databinding.FragmentBoxchatBinding
 import com.framgia.oleo.screen.main.MainActivity
 import com.framgia.oleo.utils.extension.goBackFragment
 import com.framgia.oleo.utils.liveData.autoCleared
-import kotlinx.android.synthetic.main.fragment_boxchat.*
+import kotlinx.android.synthetic.main.fragment_boxchat.buttonSend
+import kotlinx.android.synthetic.main.fragment_boxchat.editSendMessage
+import kotlinx.android.synthetic.main.fragment_boxchat.recyclerViewBoxChat
+import kotlinx.android.synthetic.main.fragment_boxchat.swipeRefreshBoxChat
+import kotlinx.android.synthetic.main.fragment_boxchat.textTitleChatBox
+import kotlinx.android.synthetic.main.fragment_boxchat.toolbarBoxChat
 
 @Suppress("DEPRECATION")
 class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
@@ -86,7 +96,10 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             android.R.id.home -> (activity!! as MainActivity).goBackFragment()
-            R.id.menu_option -> onMessageOptionListener?.onMessageOptionClick(textTitleChatBox.text.toString())
+            R.id.menu_option -> onMessageOptionListener?.onMessageOptionClick(
+                textTitleChatBox.text.toString(),
+                boxChat.userFriendId.toString()
+            )
         }
         return super.onOptionsItemSelected(item)
     }
@@ -127,7 +140,7 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
     }
 
     interface OnMessageOptionListener {
-        fun onMessageOptionClick(userFriendName: String)
+        fun onMessageOptionClick(userFriendName: String, id: String)
     }
 
     companion object {
