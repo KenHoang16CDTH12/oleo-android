@@ -1,10 +1,12 @@
 package com.framgia.oleo.screen.location
 
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -12,11 +14,13 @@ import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseFragment
 import com.framgia.oleo.data.source.model.Place
 import com.framgia.oleo.databinding.FragmentLocationBinding
+import com.framgia.oleo.screen.follow.FollowListFragment.OnActionBarListener
 import com.framgia.oleo.utils.OnItemRecyclerViewClick
 import com.framgia.oleo.utils.extension.goBackFragment
 import com.framgia.oleo.utils.liveData.autoCleared
 import kotlinx.android.synthetic.main.fragment_location.locationToolbar
 import kotlinx.android.synthetic.main.fragment_location.textViewNameFriend
+import kotlinx.android.synthetic.main.toolbar.view.toolbarCustom
 import java.util.Locale
 
 class LocationFragment : BaseFragment(), View.OnClickListener, OnItemRecyclerViewClick<Place> {
@@ -24,6 +28,7 @@ class LocationFragment : BaseFragment(), View.OnClickListener, OnItemRecyclerVie
     private lateinit var viewModel: LocationViewModel
     private var binding by autoCleared<FragmentLocationBinding>()
     private var locationAdapter = LocationAdapter()
+    private var actionBarListener: OnActionBarListener? = null
 
     override fun createView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -36,6 +41,7 @@ class LocationFragment : BaseFragment(), View.OnClickListener, OnItemRecyclerVie
     }
 
     override fun setUpView() {
+        setupActionBar()
         viewModel.setAdapter(locationAdapter)
         locationAdapter.setListener(this)
         locationToolbar.setOnClickListener(this)
@@ -44,6 +50,18 @@ class LocationFragment : BaseFragment(), View.OnClickListener, OnItemRecyclerVie
     override fun bindView() {
         viewModel.getListLocation(arguments?.getString(ARGUMENT_ID_FRIEND)!!)
         textViewNameFriend.text = arguments?.getString(ARGUMENT_NAME_FRIEND)
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (context is OnActionBarListener) {
+            actionBarListener = context
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        actionBarListener = null
     }
 
     override fun onClick(view: View?) {
@@ -74,6 +92,17 @@ class LocationFragment : BaseFragment(), View.OnClickListener, OnItemRecyclerVie
             val unrestrictedIntent = Intent(Intent.ACTION_VIEW, Uri.parse(browserUri))
             startActivity(unrestrictedIntent)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item!!.itemId) {
+            android.R.id.home -> goBackFragment()
+        }
+        return true
+    }
+
+    private fun setupActionBar() {
+        actionBarListener!!.setupActionbar(locationToolbar.toolbarCustom, getString(R.string.location_list))
     }
 
     companion object {

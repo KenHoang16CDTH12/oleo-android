@@ -2,9 +2,13 @@ package com.framgia.oleo.screen.main
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
+import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -60,21 +64,21 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
         viewModel.getUserLocal()
     }
 
-    //Todo edit later
-    //    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-    //        when (event.action) {
-    //            MotionEvent.ACTION_DOWN -> if (currentFocus!! is EditText) {
-    //                currentFocus!!.clearFocus()
-    //                inputMethodManager.hideSoftInputFromWindow(
-    //                    currentFocus!!.windowToken,
-    //                    InputMethodManager.HIDE_NOT_ALWAYS
-    //                )
-    //            }else{
-    //
-    //            }
-    //        }
-    //        return super.dispatchTouchEvent(event)
-    //    }
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> if (currentFocus!! is EditText || currentFocus is SearchView) {
+                val rect = Rect()
+                currentFocus!!.getGlobalVisibleRect(rect)
+                if (!rect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+                    currentFocus!!.clearFocus()
+                    inputMethodManager.hideSoftInputFromWindow(
+                        currentFocus!!.windowToken, HIDE_INPUT_FLAG
+                    )
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event)
+    }
 
     override fun onBackPressed() {
         if (goBackFragment()) return
@@ -116,8 +120,8 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
         } else false
     }
 
-    override fun setupActionbar(toolbar: Toolbar) {
-        toolbar.textTitleToolbar.text = getString(R.string.follow_list)
+    override fun setupActionbar(toolbar: Toolbar, title: String) {
+        toolbar.textTitleToolbar.text = title
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -137,5 +141,9 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
                 supportActionBar?.hide()
             }
         })
+    }
+
+    companion object {
+        private const val HIDE_INPUT_FLAG = 0
     }
 }

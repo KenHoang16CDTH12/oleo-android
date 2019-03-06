@@ -12,6 +12,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseFragment
 import com.framgia.oleo.databinding.FragmentHomeBinding
@@ -23,8 +25,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_home.navigation
 import kotlinx.android.synthetic.main.fragment_home.viewPager
 
-class HomeFragment : BaseFragment(), BottomNavigationView.OnNavigationItemSelectedListener {
-
+class HomeFragment : BaseFragment(), BottomNavigationView.OnNavigationItemSelectedListener, OnPageChangeListener {
     private lateinit var viewModel: HomeViewModel
     private var binding by autoCleared<FragmentHomeBinding>()
     private var permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -62,10 +63,12 @@ class HomeFragment : BaseFragment(), BottomNavigationView.OnNavigationItemSelect
         // SetUp View
         val pagerAdapter = ViewPagerAdapter(childFragmentManager)
         pagerAdapter.addFragment(MessagesFragment.newInstance())
+        //Todo replace later
+        pagerAdapter.addFragment(Fragment())
+        pagerAdapter.addFragment(Fragment())
         pagerAdapter.addFragment(SettingFragment.newInstance())
         viewPager.adapter = pagerAdapter
-        // To disable swipe
-        viewPager.beginFakeDrag()
+        viewPager.addOnPageChangeListener(this)
         navigation.setOnNavigationItemSelectedListener(this)
         checkLocationListener?.onCallBackLocation(true)
     }
@@ -73,21 +76,35 @@ class HomeFragment : BaseFragment(), BottomNavigationView.OnNavigationItemSelect
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         when (p0.itemId) {
             R.id.navigation_messages -> {
-                viewPager.setCurrentItem(0, false)
+                viewPager.setCurrentItem(TAB_MESSAGES, false)
                 return true
             }
             R.id.navigation_contacts -> {
+                viewPager.setCurrentItem(TAB_CONTACTS, false)
                 return true
             }
             R.id.navigation_groups -> {
+                viewPager.setCurrentItem(TAB_GROUPS, false)
                 return true
             }
             R.id.navigation_more -> {
-                viewPager.setCurrentItem(1, false)
+                viewPager.setCurrentItem(TAB_MORE, false)
                 return true
             }
         }
         return true
+    }
+
+    override fun onPageScrollStateChanged(state: Int) {}
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+
+    override fun onPageSelected(position: Int) {
+        when (position) {
+            TAB_MESSAGES -> navigation.selectedItemId = R.id.navigation_messages
+            TAB_CONTACTS -> navigation.selectedItemId = R.id.navigation_contacts
+            TAB_GROUPS -> navigation.selectedItemId = R.id.navigation_groups
+            else -> navigation.selectedItemId = R.id.navigation_more
+        }
     }
 
     private fun onCheckPermissionLocation() {
@@ -139,7 +156,7 @@ class HomeFragment : BaseFragment(), BottomNavigationView.OnNavigationItemSelect
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_APP_DETAILS){
+        if (requestCode == REQUEST_APP_DETAILS) {
             onCheckPermissionLocation()
         }
     }
@@ -153,6 +170,10 @@ class HomeFragment : BaseFragment(), BottomNavigationView.OnNavigationItemSelect
         private const val REQUEST_APP_DETAILS = 99
         private const val PERMISSION_REQUEST = 10
         private const val PERMISSION_DENIED = "Permission denied"
+        private const val TAB_MESSAGES = 0
+        private const val TAB_CONTACTS = 1
+        private const val TAB_GROUPS = 2
+        private const val TAB_MORE = 3
 
         fun newInstance() = HomeFragment().apply {
             val bundle = Bundle()

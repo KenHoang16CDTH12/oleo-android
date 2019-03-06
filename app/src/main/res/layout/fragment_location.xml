@@ -16,23 +16,9 @@
         android:clickable="true"
         android:focusable="true">
 
-        <androidx.appcompat.widget.Toolbar
+        <include
             android:id="@+id/locationToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/actionbar_background"
-            app:contentInsetStart="0dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/ic_back">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="serif"
-                android:text="@string/list_location"
-                android:textColor="@color/colorDefault"
-                android:textSize="@dimen/sp_20" />
-        </androidx.appcompat.widget.Toolbar>
+            layout="@layout/toolbar" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/layoutTop"
