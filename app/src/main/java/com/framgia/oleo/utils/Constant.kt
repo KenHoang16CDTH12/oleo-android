@@ -8,6 +8,7 @@ object Constant {
 
     const val DEFAULT_ONE = 1
     const val PATH_STRING_USER = "User"
+    const val PATH_STRING_LOCATION = "Location"
     const val PATH_STRING_BOX = "BoxChat"
     const val PATH_STRING_MESSAGE = "Message"
     const val PATH_STRING_PLACE = "Place"
@@ -18,4 +19,6 @@ object Constant {
 
     const val CONFIRM_FRIEND_REQUEST = 1
     const val DELETE_FRIEND_REQUEST = 2
+
+    const val ACTION_RESTART_SERVICE = "ACTION_RESTART_SERVICE"
 }

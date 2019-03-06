@@ -21,7 +21,7 @@ interface UserDataSource {
     }
 
     interface Remote {
-        fun pushUserLocation(idUser: String, idPlace: String, place: Place)
+        fun pushUserLocation(idUser: String, place: Place)
 
         fun getUserByPhoneNumber(phoneNumber: String, valueEventListener: ValueEventListener)
 

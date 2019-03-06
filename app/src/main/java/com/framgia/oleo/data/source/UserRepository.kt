@@ -71,8 +71,8 @@ class UserRepository(
         remote.getUsers(valueEventListener)
     }
 
-    override fun pushUserLocation(idUser: String, idPlace: String, place: Place) {
-        remote.pushUserLocation(idUser, idPlace, place)
+    override fun pushUserLocation(idUser: String, place: Place) {
+        remote.pushUserLocation(idUser, place)
     }
 
     override fun registerUser(
