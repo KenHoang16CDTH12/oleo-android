@@ -17,7 +17,10 @@ import com.framgia.oleo.data.source.local.dao.UserDatabase
 import com.framgia.oleo.data.source.model.Place
 import com.framgia.oleo.utils.Constant
 import com.framgia.oleo.utils.extension.isCheckedInternetConnected
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -27,6 +30,7 @@ import java.util.Locale
 class LocationService : Service() {
 
     private var idUser = ""
+    private var isInsert = false
     private var isGPSEnable: Boolean = false
     private var isNetWorkEnable: Boolean = false
     private var broadcastResetService = RestartServiceLocation()
@@ -57,15 +61,13 @@ class LocationService : Service() {
         isNetWorkEnable = locationManager?.isProviderEnabled(LocationManager.NETWORK_PROVIDER)!!
 
         if (isCheckLocationPermission()) {
-            if (isNetWorkEnable) {
-                locationManager!!.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER,
-                    LOCATION_INTERVAL.toLong(),
-                    LOCATION_DISTANCE,
-                    locationListeners[1]
-                )
-            }
-            if (isGPSEnable) locationManager!!.requestLocationUpdates(
+            if (isNetWorkEnable) return locationManager!!.requestLocationUpdates(
+                LocationManager.NETWORK_PROVIDER,
+                LOCATION_INTERVAL.toLong(),
+                LOCATION_DISTANCE,
+                locationListeners[1]
+            )
+            if (isGPSEnable) return locationManager!!.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
                 LOCATION_INTERVAL.toLong(),
                 LOCATION_DISTANCE,
@@ -95,35 +97,36 @@ class LocationService : Service() {
     inner class LocationListener(provider: String) : android.location.LocationListener {
 
         var latitude = 0.0
-        var longtitude = 0.0
+        var longitude = 0.0
         private var lastLocation = Location(provider)
 
         override fun onLocationChanged(location: Location) {
             if (isCheckedInternetConnected(applicationContext)) {
-                if (latitude != location.latitude || longtitude != location.longitude) {
+                if (lastLocation.distanceTo(location) - location.accuracy > 0) {
                     lastLocation.set(location)
-                    latitude = lastLocation.latitude
-                    longtitude = lastLocation.longitude
+                    if (latitude != lastLocation.latitude || longitude != lastLocation.longitude) {
+                        latitude = lastLocation.latitude
+                        longitude = lastLocation.longitude
+                        try {
+                            val formatter = SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault())
+                            val calendar = Calendar.getInstance()
+                            geoCoder = Geocoder(applicationContext, Locale.getDefault())
+                            var address: MutableList<Address>? = null
+                            address?.clear()
+                            address = geoCoder?.getFromLocation(latitude, longitude, 1)!!
 
-                    try {
-                        val formatter = SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault())
-                        val calendar = Calendar.getInstance()
-                        geoCoder = Geocoder(applicationContext, Locale.getDefault())
-                        var address: MutableList<Address>? = null
-                        address?.clear()
-                        address = geoCoder?.getFromLocation(latitude, longtitude, 1)!!
-
-                        pushDataLocationUser(
-                            Place(
-                                fireBaseDatabase.getReference(Constant.PATH_STRING_USER).push().key.toString(),
-                                latitude.toString(),
-                                longtitude.toString(),
-                                address[0].getAddressLine(0).toString(),
-                                formatter.format(calendar.time)
+                            pushDataLocationUser(
+                                Place(
+                                    "",
+                                    latitude.toString(),
+                                    longitude.toString(),
+                                    address[0].getAddressLine(0).toString(),
+                                    formatter.format(calendar.time)
+                                )
                             )
-                        )
-                    } catch (ex: IOException) {
-                        ex.printStackTrace()
+                        } catch (ex: IOException) {
+                            ex.printStackTrace()
+                        }
                     }
                 }
             }
@@ -135,9 +138,23 @@ class LocationService : Service() {
     }
 
     fun pushDataLocationUser(place: Place) {
-        fireBaseDatabase.getReference(Constant.PATH_STRING_LOCATION)
-            .child(idUser)
-            .child(place.id.toString()).setValue(place)
+        place.id = fireBaseDatabase.getReference(Constant.PATH_STRING_USER).push().key.toString()
+        fireBaseDatabase.getReference(Constant.PATH_STRING_LOCATION).child(idUser)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {}
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        val data = snapshot.children.last().getValue(Place::class.java)
+                        isInsert =
+                            !(data!!.latitude == place.latitude && data.longitude == place.longitude)
+                    }
+                    if (isInsert) {
+                        fireBaseDatabase.getReference(Constant.PATH_STRING_LOCATION).child(idUser)
+                            .child(place.id.toString()).setValue(place)
+                    }
+                }
+            })
     }
 
     private fun isCheckLocationPermission(): Boolean {
