@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -13,6 +14,7 @@ import com.framgia.oleo.base.BaseActivity
 import com.framgia.oleo.data.service.LocationService
 import com.framgia.oleo.databinding.ActivityMainBinding
 import com.framgia.oleo.screen.boxchat.BoxChatFragment.OnMessageOptionListener
+import com.framgia.oleo.screen.follow.FollowListFragment.OnActionBarListener
 import com.framgia.oleo.screen.friendrequest.FriendRequestsFragment
 import com.framgia.oleo.screen.home.HomeFragment
 import com.framgia.oleo.screen.home.HomeFragment.OnCallBackLocationListener
@@ -27,9 +29,10 @@ import com.framgia.oleo.utils.extension.clearAllFragment
 import com.framgia.oleo.utils.extension.goBackFragment
 import com.framgia.oleo.utils.extension.replaceFragmentInActivity
 import com.framgia.oleo.utils.extension.showToast
+import kotlinx.android.synthetic.main.toolbar.view.textTitleToolbar
 
 class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettingListener,
-    OnMessageOptionListener, OnCallBackLocationListener {
+    OnMessageOptionListener, OnCallBackLocationListener, OnActionBarListener {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var currentFragment: Fragment
@@ -111,6 +114,15 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
             startService(Intent(applicationContext, LocationService::class.java))
             true
         } else false
+    }
+
+    override fun setupActionbar(toolbar: Toolbar) {
+        toolbar.textTitleToolbar.text = getString(R.string.follow_list)
+        setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayShowTitleEnabled(true)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_back)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
     }
 
     private fun registerIsCheckUserData() {
