@@ -144,7 +144,8 @@ class LocationService : Service() {
                 override fun onCancelled(error: DatabaseError) {}
 
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()) {
+                    if (snapshot.value == null) isInsert = true
+                    else if (snapshot.exists()) {
                         val data = snapshot.children.last().getValue(Place::class.java)
                         isInsert =
                             !(data!!.latitude == place.latitude && data.longitude == place.longitude)
@@ -166,7 +167,7 @@ class LocationService : Service() {
     companion object {
         var isCheckLogout = false
         var locationManager: LocationManager? = null
-        private const val LOCATION_INTERVAL = 10000
+        private const val LOCATION_INTERVAL = 10000 * 6 * 5
         private const val LOCATION_DISTANCE = 0f
         private const val DATE_TIME_FORMAT = "HH:mm-dd/MM/yyyy"
     }
