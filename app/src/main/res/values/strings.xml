@@ -73,6 +73,7 @@
     <string name="msg_on_add_friend_failed">An unknown error has occurred, please try again !</string>
     <string name="mutual_friends">mutual friends</string>
     <string name="follow_list">Follow list</string>
+    <string name="accept">Accept</string>
     <string-array name="tab_titles">
         <item>Followed</item>
         <item>Following</item>

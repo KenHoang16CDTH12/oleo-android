@@ -1,6 +1,7 @@
 package com.framgia.oleo.data.source.remote
 
 import com.framgia.oleo.data.source.UserDataSource
+import com.framgia.oleo.data.source.model.FollowRequest
 import com.framgia.oleo.data.source.model.Friend
 import com.framgia.oleo.data.source.model.FriendRequest
 import com.framgia.oleo.data.source.model.Place
@@ -14,6 +15,39 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class UserRemoteDataSource : UserDataSource.Remote {
+    override fun changeFollowStatus(userCurrent: User, userFriend: User, status: String) {
+        firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
+            .child(userCurrent.id)
+            .child(Constant.PATH_STRING_FOLLOW_REQUEST)
+            .child(userFriend.id)
+            .child(Constant.PATH_STRING_STATUS)
+            .setValue(status)
+    }
+
+    override fun getFollowRequestsOfUser(id: String, status: String, valueEventListener: ValueEventListener) {
+        firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
+            .child(id)
+            .child(Constant.PATH_STRING_FOLLOW_REQUEST)
+            .orderByChild(Constant.PATH_STRING_STATUS)
+            .equalTo(status)
+            .addValueEventListener(valueEventListener)
+    }
+
+    override fun getFollowRequestById(id: String, user: User, valueEventListener: ValueEventListener) {
+        firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
+            .child(id)
+            .child(Constant.PATH_STRING_FOLLOW_REQUEST)
+            .child(user.id)
+            .addValueEventListener(valueEventListener)
+    }
+
+    override fun addFollowRequest(user: User, userFriend: User) {
+        firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
+            .child(userFriend.id)
+            .child(Constant.PATH_STRING_FOLLOW_REQUEST)
+            .child(user.id)
+            .setValue(FollowRequest(user.id, Constant.STATUS_WAITING, System.currentTimeMillis()))
+    }
 
     override fun addFriend(
         user: User,

@@ -16,9 +16,15 @@ object Constant {
     const val PICTURE_TYPE = "/picture?type=large"
     const val PATH_STRING_FRIEND_REQUEST = "FriendRequest"
     const val PATH_STRING_FRIEND = "Friend"
+    const val PATH_STRING_FOLLOW_REQUEST = "FollowRequest"
+    const val PATH_STRING_FOLLOW = "Follow"
+    const val PATH_STRING_STATUS = "status"
 
     const val CONFIRM_FRIEND_REQUEST = 1
     const val DELETE_FRIEND_REQUEST = 2
+
+    const val STATUS_WAITING = "0"
+    const val STATUS_FOLLOWING = "1"
 
     const val ACTION_RESTART_SERVICE = "ACTION_RESTART_SERVICE"
 }
