@@ -78,7 +78,7 @@
                     android:fontFamily="serif"
                     android:hint="@string/user_name"
                     android:maxLength="30"
-                    android:maxLines="1"
+                    android:singleLine="true"
                     android:textColorHint="@color/colorGrey800Light"
                     android:textSize="@dimen/sp_14" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -106,7 +106,7 @@
                     android:fontFamily="serif"
                     android:hint="@string/email"
                     android:maxLength="35"
-                    android:maxLines="1"
+                    android:singleLine="true"
                     android:textColorHint="@color/colorGrey800Light"
                     android:textSize="@dimen/sp_14" />
             </com.google.android.material.textfield.TextInputLayout>

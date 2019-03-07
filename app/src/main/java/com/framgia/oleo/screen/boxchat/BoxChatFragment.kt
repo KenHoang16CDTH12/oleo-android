@@ -101,7 +101,7 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
                 boxChat.userFriendId.toString()
             )
         }
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {

@@ -34,7 +34,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_login.*
-import java.util.*
+import java.util.Arrays
 
 class LoginFragment : BaseFragment(), View.OnClickListener {
 
@@ -104,7 +104,9 @@ class LoginFragment : BaseFragment(), View.OnClickListener {
             override fun onSuccess(result: LoginResult?) {
                 if (result != null) {
                     viewModel.receiveDataUserFacebook(result)
-                    (activity!! as MainActivity).replaceFragmentInActivity(R.id.containerMain, HomeFragment.newInstance())
+                    (activity!! as MainActivity).replaceFragmentInActivity(
+                        R.id.containerMain, HomeFragment.newInstance()
+                    )
                 } else {
                     Toast.makeText(context, REQUEST_NULL, Toast.LENGTH_SHORT).show()
                 }
@@ -136,6 +138,8 @@ class LoginFragment : BaseFragment(), View.OnClickListener {
                 }
                 viewModel.insertUser(getUser(dataSnapshot))
                 (activity!! as MainActivity).replaceFragmentInActivity(R.id.containerMain, HomeFragment.newInstance())
+                editTextPassword.text!!.clear()
+                editTextPhoneNumber.text!!.clear()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -157,7 +161,10 @@ class LoginFragment : BaseFragment(), View.OnClickListener {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(data)
                 viewModel.receiveDataUserGoogle(task)
                 if (task.exception == null)
-                    (activity!! as MainActivity).replaceFragmentInActivity(R.id.containerMain, HomeFragment.newInstance())
+                    (activity!! as MainActivity).replaceFragmentInActivity(
+                        R.id.containerMain,
+                        HomeFragment.newInstance()
+                    )
             } catch (e: ApiException) {
                 when (e.statusCode) {
                     GoogleSignInStatusCodes.SIGN_IN_CANCELLED -> view!!.showSnackBar(GOOGLE_SIGN_CANCELLED)

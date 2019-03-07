@@ -13,13 +13,10 @@ import com.framgia.oleo.base.BaseFragment
 import com.framgia.oleo.databinding.FollowListFragmentBinding
 import com.framgia.oleo.screen.main.MainActivity
 import com.framgia.oleo.utils.extension.goBackFragment
-import com.framgia.oleo.utils.extension.gone
 import com.framgia.oleo.utils.liveData.autoCleared
 import kotlinx.android.synthetic.main.follow_list_fragment.tabLayoutFollowList
 import kotlinx.android.synthetic.main.follow_list_fragment.toolbarfollowList
 import kotlinx.android.synthetic.main.follow_list_fragment.viewPagerFollowList
-import kotlinx.android.synthetic.main.toolbar.view.imageToolbar
-import kotlinx.android.synthetic.main.toolbar.view.textTitleToolbar
 import kotlinx.android.synthetic.main.toolbar.view.toolbarCustom
 
 class FollowListFragment : BaseFragment() {
@@ -67,9 +64,10 @@ class FollowListFragment : BaseFragment() {
     }
 
     private fun setupActionBar() {
-        val toolbar = toolbarfollowList.toolbarCustom
-        toolbar.imageToolbar.gone()
-        listener!!.setupActionbar(toolbar = toolbarfollowList.toolbarCustom)
+        listener!!.setupActionbar(
+            toolbar = toolbarfollowList.toolbarCustom,
+            title = getString(R.string.follow_list)
+        )
     }
 
     private fun setupTabLayoutWithViewPager() {
@@ -79,7 +77,7 @@ class FollowListFragment : BaseFragment() {
     }
 
     interface OnActionBarListener {
-        fun setupActionbar(toolbar: Toolbar)
+        fun setupActionbar(toolbar: Toolbar, title: String)
     }
 
     companion object {

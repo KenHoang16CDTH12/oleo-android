@@ -1,12 +1,8 @@
 package com.framgia.oleo.screen.search
 
+import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.EditText
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -73,8 +69,8 @@ class SearchFragment : BaseFragment(), SearchView.OnQueryTextListener, OnItemVie
         (activity as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         (activity as MainActivity).supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_back)
         (activity as MainActivity).supportActionBar!!.setDisplayShowTitleEnabled(false)
-        searchView.setFocusable(true)
-        searchView.setIconified(false)
+        searchView.isFocusable = true
+        searchView.setIconifiedByDefault(false)
         searchView.requestFocusFromTouch()
         searchView.setOnQueryTextListener(this)
         val searchEditText = searchView
@@ -85,6 +81,7 @@ class SearchFragment : BaseFragment(), SearchView.OnQueryTextListener, OnItemVie
         searchEditText.setHintTextColor(
             ContextCompat.getColor(activity!!.applicationContext, R.color.colorGrey500)
         )
+        searchView.findViewById<View>(R.id.search_plate).setBackgroundColor(Color.TRANSPARENT)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
