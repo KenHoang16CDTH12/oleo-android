@@ -20,8 +20,8 @@ object Constant {
     const val PATH_STRING_FOLLOW = "Follow"
     const val PATH_STRING_STATUS = "status"
 
-    const val CONFIRM_FRIEND_REQUEST = 1
-    const val DELETE_FRIEND_REQUEST = 2
+    const val STATUS_FRIEND_WAITING = 0
+    const val STATUS_FRIEND_ACCEPT = 1
 
     const val STATUS_WAITING = "0"
     const val STATUS_FOLLOWING = "1"

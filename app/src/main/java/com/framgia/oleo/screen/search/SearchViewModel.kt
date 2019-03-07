@@ -27,9 +27,10 @@ class SearchViewModel @Inject constructor(
     val onAddFriendRequest: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
+    val userId = userRepository.getUser()!!.id
 
     fun addFriendRequest(user: User) {
-        var defautMessage = StringBuilder(
+        val defaultMessage = StringBuilder(
             application
                 .getString(string.msg_defaut_friend_request_prefix)
         )
@@ -42,7 +43,7 @@ class SearchViewModel @Inject constructor(
             .toString()
 
         userRepository.addFriendRequest(user.id,
-            userRepository.getUser()!!, defautMessage,
+            userRepository.getUser()!!, defaultMessage,
             OnSuccessListener {
                 onAddFriendRequest.value = application.getString(string.msg_on_add_friend_request_success)
             }, onFailureListener = OnFailureListener {
@@ -67,17 +68,17 @@ class SearchViewModel @Inject constructor(
         })
     }
 
-    fun getUserByPhoneNumber(phone: String) {
-        var seachResult = arrayListOf<User>()
-        when (phone.length != 0) {
+    fun searchByPhoneNumberOrName(query: String) {
+        val searchResult = arrayListOf<User>()
+        when (query.isNotEmpty()) {
             true -> for (user in users) {
-                if (user.phoneNumber.contains(phone)) {
-                    seachResult.add(user)
+                if (user.phoneNumber.contains(query) || user.userName.toLowerCase().contains(query)) {
+                    searchResult.add(user)
                 }
             }
-            false -> seachResult.clear()
+            false -> searchResult.clear()
         }
-        usersSeachResult.value = seachResult
+        usersSeachResult.value = searchResult
     }
 
     companion object {

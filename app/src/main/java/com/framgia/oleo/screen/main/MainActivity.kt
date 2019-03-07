@@ -120,10 +120,12 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
     override fun setupActionbar(toolbar: Toolbar, title: String) {
         toolbar.textTitleToolbar.text = title
         setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayShowTitleEnabled(true)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_back)
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
+        supportActionBar!!.apply {
+            setDisplayShowTitleEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_back)
+            setDisplayShowTitleEnabled(false)
+        }
     }
 
     private fun registerIsCheckUserData() {

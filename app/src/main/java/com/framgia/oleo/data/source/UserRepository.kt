@@ -48,18 +48,8 @@ class UserRepository(
         remote.deleteFriendRequest(user, friendRequest, onSuccessListener, onFailureListener)
     }
 
-    override fun changeStatusFriendRequest(
-        user: User,
-        friendRequest: FriendRequest,
-        status: Int,
-        onSuccessListener: OnSuccessListener<Void>,
-        onFailureListener: OnFailureListener
-    ) {
-        remote.changeStatusFriendRequest(user, friendRequest, status, onSuccessListener, onFailureListener)
-    }
-
-    override fun addFriend(user: User, friendRequest: FriendRequest) {
-        remote.addFriend(user, friendRequest)
+    override fun addFriend(userId: String, friendRequestId: String) {
+        remote.addFriend(userId, friendRequestId)
     }
 
     override fun getFriendRequests(userId: String, valueEventListener: ValueEventListener) {
