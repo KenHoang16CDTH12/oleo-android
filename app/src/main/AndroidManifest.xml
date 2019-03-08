@@ -31,7 +31,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".data.service.LocationService" />
+        <service
+            android:name=".data.service.LocationService"
+            android:enabled="true" />
         <receiver
             android:name=".data.service.RestartServiceLocation"
             android:permission="location">

@@ -1,6 +1,7 @@
 package com.framgia.oleo.data.service
 
 import android.annotation.SuppressLint
+import android.app.Notification
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -10,8 +11,10 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import androidx.core.app.NotificationCompat
 import androidx.room.Room
 import com.framgia.oleo.data.source.local.dao.UserDatabase
 import com.framgia.oleo.data.source.model.Place
@@ -45,11 +48,23 @@ class LocationService : Service() {
     override fun onBind(arg: Intent): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        super.onStartCommand(intent, flags, startId)
         return Service.START_STICKY
     }
 
     override fun onCreate() {
+
+        val notification: Notification
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val builder = Notification.Builder(this, CHANNEL_ID)
+            notification = builder.setOngoing(true)
+                .setCategory(Notification.CATEGORY_SERVICE).build()
+            startForeground(NOTIFICATION_ID, notification)
+        } else {
+            val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            notification = builder.build()
+        }
+        startForeground(NOTIFICATION_ID, notification)
+
         userDatabase = Room.databaseBuilder(
             applicationContext, UserDatabase::class.java, UserDatabase.DATABASE_NAME
         ).fallbackToDestructiveMigration().allowMainThreadQueries().build()
@@ -167,7 +182,9 @@ class LocationService : Service() {
     companion object {
         var isCheckLogout = false
         var locationManager: LocationManager? = null
-        private const val LOCATION_INTERVAL = 10000 * 6 * 5
+        private const val CHANNEL_ID = "LocationService"
+        private const val NOTIFICATION_ID = 95
+        private const val LOCATION_INTERVAL = 30000
         private const val LOCATION_DISTANCE = 0f
         private const val DATE_TIME_FORMAT = "HH:mm-dd/MM/yyyy"
     }
