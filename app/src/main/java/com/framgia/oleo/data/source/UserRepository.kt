@@ -5,14 +5,30 @@ import com.framgia.oleo.data.source.model.Place
 import com.framgia.oleo.data.source.model.User
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
-import com.google.firebase.database.ChildEventListener
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.ValueEventListener
 
 class UserRepository(
     private val local: UserDataSource.Local,
     private val remote: UserDataSource.Remote
 ) : UserDataSource.Local, UserDataSource.Remote {
+
+    override fun changeFollowStatus(userCurrent: User, userFriend: User, status: String) {
+        remote.changeFollowStatus(userCurrent, userFriend, status)
+    }
+
+    override fun getFollowRequestsOfUser(id: String, status: String, valueEventListener: ValueEventListener) {
+        remote.getFollowRequestsOfUser(id, status, valueEventListener)
+    }
+
+    override fun getFollowRequestById(id: String, user: User, valueEventListener: ValueEventListener) {
+        remote.getFollowRequestById(id, user, valueEventListener)
+    }
+
+    override fun addFollowRequest(userCurrent: User, userFriend: User) {
+        remote.addFollowRequest(userCurrent, userFriend)
+    }
 
     override fun confirmFriendRequest(
         user: User,

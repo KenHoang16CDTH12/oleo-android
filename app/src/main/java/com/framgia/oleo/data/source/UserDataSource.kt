@@ -23,6 +23,12 @@ interface UserDataSource {
     interface Remote {
         fun pushUserLocation(idUser: String, place: Place)
 
+        fun changeFollowStatus(userCurrent: User, userFriend: User,status:String)
+
+        fun getFollowRequestsOfUser(id: String, status: String, valueEventListener: ValueEventListener)
+
+        fun getFollowRequestById(id: String, user: User, valueEventListener: ValueEventListener)
+
         fun getUserByPhoneNumber(phoneNumber: String, valueEventListener: ValueEventListener)
 
         fun registerUser(
@@ -70,5 +76,7 @@ interface UserDataSource {
         )
 
         fun addFriend(user: User, friendRequest: FriendRequest)
+
+        fun addFollowRequest(userCurrent: User, userFriend: User)
     }
 }

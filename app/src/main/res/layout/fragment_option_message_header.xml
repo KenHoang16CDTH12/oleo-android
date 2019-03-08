@@ -1,65 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<layout>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/layoutTop"
+    <data>
+
+        <variable
+            name="user"
+            type="com.framgia.oleo.data.source.model.User" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardElevation="0dp"
-        app:layout_constraintBottom_toTopOf="@id/layoutCenter"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/layoutTop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white">
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toTopOf="@id/layoutCenter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageProfile"
-                android:layout_width="@dimen/dp_100"
-                android:layout_height="@dimen/dp_100"
-                android:layout_marginBottom="@dimen/dp_20"
-                android:layout_marginStart="@dimen/dp_16"
-                android:layout_marginTop="@dimen/dp_16"
-                android:src="@drawable/ic_avatar"
-                app:civ_border_color="@color/colorSwitchNotification"
-                app:civ_border_width="@dimen/dp_2"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <TextView
-                android:id="@+id/textViewNameUser"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
-                android:fontFamily="serif"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/sp_24"
-                app:layout_constraintStart_toEndOf="@+id/imageProfile"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:background="@android:color/white">
 
-            <TextView
-                android:id="@+id/textViewWatchInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp_8"
-                android:layout_marginTop="@dimen/dp_8"
-                android:text="@string/see_personal_information"
-                android:textColor="@color/colorGrey800Light"
-                android:textSize="@dimen/sp_16"
-                app:layout_constraintStart_toEndOf="@+id/imageProfile"
-                app:layout_constraintTop_toBottomOf="@+id/textViewNameUser" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imageProfile"
+                    android:layout_width="@dimen/dp_100"
+                    android:layout_height="@dimen/dp_100"
+                    android:layout_marginBottom="@dimen/dp_20"
+                    android:layout_marginStart="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:imageUrl="@{user.image}"
+                    android:src="@drawable/ic_avatar"
+                    app:civ_border_color="@color/colorSwitchNotification"
+                    app:civ_border_width="@dimen/dp_2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/textViewNameUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="32dp"
+                    android:fontFamily="serif"
+                    android:text="@{user.userName}"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/sp_24"
+                    app:layout_constraintStart_toEndOf="@+id/imageProfile"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/textViewWatchInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_8"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:text="@string/see_personal_information"
+                    android:textColor="@color/colorGrey800Light"
+                    android:textSize="@dimen/sp_16"
+                    app:layout_constraintStart_toEndOf="@+id/imageProfile"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewNameUser" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
