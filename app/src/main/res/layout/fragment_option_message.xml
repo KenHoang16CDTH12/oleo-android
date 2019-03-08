@@ -4,6 +4,10 @@
     <data>
 
         <variable
+            name="listener"
+            type="com.framgia.oleo.screen.messages.OnMessageOptionListener" />
+
+        <variable
             name="user"
             type="com.framgia.oleo.data.source.model.User" />
     </data>
@@ -86,6 +90,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:drawableStart="@drawable/ic_follower"
+                            android:onClick="@{()->listener.onFollowClick(user)}"
                             android:text="@string/follow"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -155,7 +160,7 @@
                         android:layout_height="wrap_content">
 
                         <TextView
-                            android:id="@+id/textViewWatchList"
+                            android:id="@+id/textViewLocationList"
                             style="@style/textViewOptionMessage"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"

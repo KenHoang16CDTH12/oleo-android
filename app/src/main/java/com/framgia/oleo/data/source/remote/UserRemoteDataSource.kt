@@ -43,12 +43,12 @@ class UserRemoteDataSource : UserDataSource.Remote {
             .addValueEventListener(valueEventListener)
     }
 
-    override fun addFollowRequest(user: User, userFriend: User) {
+    override fun addFollowRequest(userCurrent: User, userFriend: User) {
         firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
             .child(userFriend.id)
             .child(Constant.PATH_STRING_FOLLOW_REQUEST)
-            .child(user.id)
-            .setValue(FollowRequest(user.id, Constant.STATUS_WAITING, System.currentTimeMillis()))
+            .child(userCurrent.id)
+            .setValue(FollowRequest(userCurrent.id, Constant.STATUS_WAITING, System.currentTimeMillis()))
     }
 
     override fun addFriend(

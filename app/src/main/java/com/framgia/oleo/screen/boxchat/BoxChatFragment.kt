@@ -33,7 +33,7 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
     private var binding by autoCleared<FragmentBoxchatBinding>()
     private lateinit var boxChat: BoxChat
     private lateinit var adapter: BoxChatAdapter
-    private var onMessageOptionListener: OnMessageOptionListener? = null
+    private var onBoxChatListener: OnBoxChatListener? = null
     private var isEnable = false
 
     override fun createView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -45,12 +45,12 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
     }
 
     override fun onAttach(context: Context?) {
-        if (context is OnMessageOptionListener) onMessageOptionListener = context
+        if (context is OnBoxChatListener) onBoxChatListener = context
         super.onAttach(context)
     }
 
     override fun onDetach() {
-        onMessageOptionListener = null
+        onBoxChatListener = null
         super.onDetach()
     }
 
@@ -96,10 +96,7 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             android.R.id.home -> (activity!! as MainActivity).goBackFragment()
-            R.id.menu_option -> onMessageOptionListener?.onMessageOptionClick(
-                textTitleChatBox.text.toString(),
-                boxChat.userFriendId.toString()
-            )
+            R.id.menu_option -> onBoxChatListener?.onMessageOptionClick(userFriendId = boxChat.userFriendId!!)
         }
         return true
     }
@@ -139,8 +136,8 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
         }
     }
 
-    interface OnMessageOptionListener {
-        fun onMessageOptionClick(userFriendName: String, id: String)
+    interface OnBoxChatListener {
+        fun onMessageOptionClick(userFriendId: String)
     }
 
     companion object {

@@ -14,7 +14,7 @@ import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseFragment
 import com.framgia.oleo.data.source.model.Place
 import com.framgia.oleo.databinding.FragmentLocationBinding
-import com.framgia.oleo.screen.follow.FollowListFragment.OnActionBarListener
+import com.framgia.oleo.utils.OnActionBarListener
 import com.framgia.oleo.utils.OnItemRecyclerViewClick
 import com.framgia.oleo.utils.extension.goBackFragment
 import com.framgia.oleo.utils.liveData.autoCleared

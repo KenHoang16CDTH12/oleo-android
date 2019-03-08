@@ -17,8 +17,8 @@ import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseActivity
 import com.framgia.oleo.data.service.LocationService
 import com.framgia.oleo.databinding.ActivityMainBinding
-import com.framgia.oleo.screen.boxchat.BoxChatFragment.OnMessageOptionListener
-import com.framgia.oleo.screen.follow.FollowListFragment.OnActionBarListener
+import com.framgia.oleo.screen.boxchat.BoxChatFragment.OnBoxChatListener
+import com.framgia.oleo.screen.follow.FollowListFragment
 import com.framgia.oleo.screen.friendrequest.FriendRequestsFragment
 import com.framgia.oleo.screen.home.HomeFragment
 import com.framgia.oleo.screen.home.HomeFragment.OnCallBackLocationListener
@@ -28,11 +28,16 @@ import com.framgia.oleo.screen.messages.MessagesFragment
 import com.framgia.oleo.screen.search.SearchFragment
 import com.framgia.oleo.screen.setting.SettingFragment.OnSettingListener
 import com.framgia.oleo.utils.Constant
-import com.framgia.oleo.utils.extension.*
+import com.framgia.oleo.utils.OnActionBarListener
+import com.framgia.oleo.utils.extension.addFragmentToActivity
+import com.framgia.oleo.utils.extension.clearAllFragment
+import com.framgia.oleo.utils.extension.goBackFragment
+import com.framgia.oleo.utils.extension.replaceFragmentInActivity
+import com.framgia.oleo.utils.extension.showToast
 import kotlinx.android.synthetic.main.toolbar.view.textTitleToolbar
 
 class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettingListener,
-    OnMessageOptionListener, OnCallBackLocationListener, OnActionBarListener {
+    OnBoxChatListener, OnCallBackLocationListener, OnActionBarListener {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var currentFragment: Fragment
@@ -41,6 +46,7 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
     private val homeFragment = HomeFragment.newInstance()
     private val searchFragment = SearchFragment.newInstance()
     private val friendRequestsFragment = FriendRequestsFragment.newInstance()
+    private val followListFragment = FollowListFragment.newInstance()
     private lateinit var inputMethodManager: InputMethodManager
     private var isCheckPermissionLocation = false
 
@@ -106,8 +112,12 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
         replaceFragmentInActivity(R.id.containerMain, friendRequestsFragment, true)
     }
 
-    override fun onMessageOptionClick(userFriendName: String, id: String) {
-        addFragmentToActivity(R.id.containerMain, MessageOptionFragment.newInstance(userFriendName, id))
+    override fun onMessageOptionClick(userFriendId: String) {
+        addFragmentToActivity(R.id.containerMain, MessageOptionFragment.newInstance(userFriendId))
+    }
+
+    override fun onWatchListClick() {
+        replaceFragmentInActivity(R.id.containerMain, followListFragment, true)
     }
 
     override fun onCallBackLocation(isCheckPermission: Boolean) {

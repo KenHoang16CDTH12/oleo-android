@@ -21,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_setting.textFriendRequest
 import kotlinx.android.synthetic.main.fragment_setting.textViewLogOut
+import kotlinx.android.synthetic.main.fragment_setting.textViewWatchList
 
 class SettingFragment : BaseFragment(), View.OnClickListener {
     private var listener: OnSettingListener? = null
@@ -52,6 +53,7 @@ class SettingFragment : BaseFragment(), View.OnClickListener {
     override fun setUpView() {
         textViewLogOut.setOnClickListener(this)
         textFriendRequest.setOnClickListener(this)
+        textViewWatchList.setOnClickListener(this)
     }
 
     override fun bindView() {
@@ -61,6 +63,7 @@ class SettingFragment : BaseFragment(), View.OnClickListener {
         when (v!!.id) {
             R.id.textViewLogOut -> if (isCheckMultiClick()) logOut()
             R.id.textFriendRequest -> listener?.onFriendRequestClick()
+            R.id.textViewWatchList -> listener?.onWatchListClick()
         }
     }
 
@@ -85,10 +88,10 @@ class SettingFragment : BaseFragment(), View.OnClickListener {
             return //already logged out
         }
         GraphRequest(AccessToken.getCurrentAccessToken(),
-                     "/me/permissions/",
-                     null,
-                     HttpMethod.DELETE,
-                     GraphRequest.Callback { LoginManager.getInstance().logOut() }).executeAsync()
+            "/me/permissions/",
+            null,
+            HttpMethod.DELETE,
+            GraphRequest.Callback { LoginManager.getInstance().logOut() }).executeAsync()
     }
 
     private fun signOutGoogle() {
@@ -102,6 +105,7 @@ class SettingFragment : BaseFragment(), View.OnClickListener {
     interface OnSettingListener {
         fun onLogOutClick()
         fun onFriendRequestClick()
+        fun onWatchListClick()
     }
 
     companion object {
