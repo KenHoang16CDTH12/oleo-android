@@ -74,6 +74,9 @@
     <string name="mutual_friends">mutual friends</string>
     <string name="follow_list">Follow list</string>
     <string name="accept">Accept</string>
+    <string name="message_permission_denied">We need to access your location. Please turn on the permissions to continue !</string>
+    <string name="cancel_permission_dialog">Don\'t allow</string>
+    <string name="accept_permission_dialog">OK</string>
     <string-array name="tab_titles">
         <item>Followed</item>
         <item>Following</item>

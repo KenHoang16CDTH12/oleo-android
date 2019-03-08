@@ -28,11 +28,7 @@ import com.framgia.oleo.screen.messages.MessagesFragment
 import com.framgia.oleo.screen.search.SearchFragment
 import com.framgia.oleo.screen.setting.SettingFragment.OnSettingListener
 import com.framgia.oleo.utils.Constant
-import com.framgia.oleo.utils.extension.addFragmentToActivity
-import com.framgia.oleo.utils.extension.clearAllFragment
-import com.framgia.oleo.utils.extension.goBackFragment
-import com.framgia.oleo.utils.extension.replaceFragmentInActivity
-import com.framgia.oleo.utils.extension.showToast
+import com.framgia.oleo.utils.extension.*
 import kotlinx.android.synthetic.main.toolbar.view.textTitleToolbar
 
 class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettingListener,
@@ -66,16 +62,17 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         when (event.action) {
-            MotionEvent.ACTION_DOWN -> if (currentFocus!! is EditText || currentFocus is SearchView) {
-                val rect = Rect()
-                currentFocus!!.getGlobalVisibleRect(rect)
-                if (!rect.contains(event.rawX.toInt(), event.rawY.toInt())) {
-                    currentFocus!!.clearFocus()
-                    inputMethodManager.hideSoftInputFromWindow(
-                        currentFocus!!.windowToken, HIDE_INPUT_FLAG
-                    )
+            MotionEvent.ACTION_DOWN ->
+                if (currentFocus != null && (currentFocus is EditText || currentFocus is SearchView)) {
+                    val rect = Rect()
+                    currentFocus!!.getGlobalVisibleRect(rect)
+                    if (!rect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+                        inputMethodManager.hideSoftInputFromWindow(
+                            window.decorView.rootView.windowToken, HIDE_INPUT_FLAG
+                        )
+                        currentFocus!!.clearFocus()
+                    }
                 }
-            }
         }
         return super.dispatchTouchEvent(event)
     }

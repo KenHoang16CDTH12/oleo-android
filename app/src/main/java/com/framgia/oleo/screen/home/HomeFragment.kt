@@ -1,5 +1,6 @@
 package com.framgia.oleo.screen.home
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -19,7 +20,6 @@ import com.framgia.oleo.base.BaseFragment
 import com.framgia.oleo.databinding.FragmentHomeBinding
 import com.framgia.oleo.screen.messages.MessagesFragment
 import com.framgia.oleo.screen.setting.SettingFragment
-import com.framgia.oleo.utils.extension.showToast
 import com.framgia.oleo.utils.liveData.autoCleared
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_home.navigation
@@ -129,28 +129,13 @@ class HomeFragment : BaseFragment(), BottomNavigationView.OnNavigationItemSelect
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_REQUEST) {
-            var isCheckedPermission = true
             for (i in permissions.indices) {
                 if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                    isCheckedPermission = false
-                    val requestAgain =
-                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && shouldShowRequestPermissionRationale(
-                            permissions[i]
-                        )
-                    if (requestAgain) {
-                        context!!.showToast(PERMISSION_DENIED)
-                    } else {
-                        //Todo update later
-                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                        val uri = Uri.fromParts("package", activity?.packageName, null)
-                        intent.data = uri
-                        startActivityForResult(intent, REQUEST_APP_DETAILS)
-                    }
+                    showDenyPermissionDialog(permissions[i])
+                    return
                 }
             }
-            if (isCheckedPermission) {
-                initView()
-            }
+            initView()
         }
     }
 
@@ -159,6 +144,28 @@ class HomeFragment : BaseFragment(), BottomNavigationView.OnNavigationItemSelect
         if (requestCode == REQUEST_APP_DETAILS) {
             onCheckPermissionLocation()
         }
+    }
+
+    private fun showDenyPermissionDialog(permission: String) {
+        val dialog = AlertDialog.Builder(context!!, R.style.alertDialog).apply {
+            setMessage(getString(R.string.message_permission_denied))
+            setPositiveButton(getString(R.string.accept_permission_dialog)) { dialog, which ->
+                val requestAgain =
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && shouldShowRequestPermissionRationale(permission)
+                if (requestAgain) {
+                    onCheckPermissionLocation()
+                } else {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    val uri = Uri.fromParts("package", activity?.packageName, null)
+                    intent.data = uri
+                    startActivityForResult(intent, REQUEST_APP_DETAILS)
+                }
+            }
+            setNegativeButton(getString(R.string.cancel_permission_dialog)) { dialog, which -> activity!!.finish() }
+            setCancelable(false)
+        }.create()
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.show()
     }
 
     interface OnCallBackLocationListener {
