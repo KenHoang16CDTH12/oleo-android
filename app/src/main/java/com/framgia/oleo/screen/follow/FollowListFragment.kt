@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseFragment
 import com.framgia.oleo.databinding.FollowListFragmentBinding
 import com.framgia.oleo.screen.main.MainActivity
+import com.framgia.oleo.utils.OnActionBarListener
 import com.framgia.oleo.utils.extension.goBackFragment
 import com.framgia.oleo.utils.liveData.autoCleared
 import kotlinx.android.synthetic.main.follow_list_fragment.tabLayoutFollowList
@@ -74,10 +74,6 @@ class FollowListFragment : BaseFragment() {
         followPagerAdapter = FollowPagerAdapter(childFragmentManager, activity as MainActivity)
         viewPagerFollowList.adapter = followPagerAdapter
         tabLayoutFollowList.setupWithViewPager(viewPagerFollowList)
-    }
-
-    interface OnActionBarListener {
-        fun setupActionbar(toolbar: Toolbar, title: String)
     }
 
     companion object {

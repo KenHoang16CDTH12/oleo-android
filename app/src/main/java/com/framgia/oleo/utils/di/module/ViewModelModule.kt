@@ -12,6 +12,7 @@ import com.framgia.oleo.screen.home.HomeViewModel
 import com.framgia.oleo.screen.location.LocationViewModel
 import com.framgia.oleo.screen.login.LoginViewModel
 import com.framgia.oleo.screen.main.MainViewModel
+import com.framgia.oleo.screen.messages.MessageOptionViewModel
 import com.framgia.oleo.screen.messages.MessagesViewModel
 import com.framgia.oleo.screen.search.SearchViewModel
 import com.framgia.oleo.screen.setting.SettingViewModel
@@ -97,4 +98,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(WaitingViewModel::class)
     abstract fun bindWaitingViewModel(waitingViewModel: WaitingViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MessageOptionViewModel::class)
+    abstract fun bindMessageOptionViewModel(messageOptionViewModel: MessageOptionViewModel): ViewModel
 }

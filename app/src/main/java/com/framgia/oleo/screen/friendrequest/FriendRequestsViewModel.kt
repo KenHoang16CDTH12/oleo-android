@@ -83,7 +83,7 @@ class FriendRequestsViewModel @Inject constructor(
                 onAddFriendRequest.value = application.getString(string.msg_on_add_friend_success)
             },
             onFailureListener = OnFailureListener {
-                onAddFriendRequest.value = application.getString(string.msg_on_add_friend_failed)
+                onAddFriendRequest.value = application.getString(string.msg_on_get_waiting_failed)
             })
     }
 

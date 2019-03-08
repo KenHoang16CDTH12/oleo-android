@@ -47,7 +47,7 @@ class SearchViewModel @Inject constructor(
             OnSuccessListener {
                 onAddFriendRequest.value = application.getString(string.msg_on_add_friend_request_success)
             }, onFailureListener = OnFailureListener {
-                onAddFriendRequest.value = application.getString(string.msg_on_add_friend_request_failed)
+                onAddFriendRequest.value = application.getString(string.msg_on_get_waiting_failed)
             })
     }
 

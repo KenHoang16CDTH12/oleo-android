@@ -12,9 +12,9 @@ import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseFragment
 import com.framgia.oleo.data.source.model.FriendRequest
 import com.framgia.oleo.databinding.FriendRequestsFragmentBinding
-import com.framgia.oleo.screen.follow.FollowListFragment.OnActionBarListener
 import com.framgia.oleo.screen.friendrequest.FriendRequestAdapter.OnItemViewListener
 import com.framgia.oleo.screen.main.MainActivity
+import com.framgia.oleo.utils.OnActionBarListener
 import com.framgia.oleo.utils.extension.goBackFragment
 import com.framgia.oleo.utils.liveData.autoCleared
 import kotlinx.android.synthetic.main.friend_requests_fragment.recyclerViewFriendRequests
