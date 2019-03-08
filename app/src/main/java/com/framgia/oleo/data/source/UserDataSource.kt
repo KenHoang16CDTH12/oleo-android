@@ -67,15 +67,7 @@ interface UserDataSource {
             onFailureListener: OnFailureListener
         )
 
-        fun changeStatusFriendRequest(
-            user: User,
-            friendRequest: FriendRequest,
-            status: Int,
-            onSuccessListener: OnSuccessListener<Void>,
-            onFailureListener: OnFailureListener
-        )
-
-        fun addFriend(user: User, friendRequest: FriendRequest)
+        fun addFriend(userId: String, friendRequestId: String)
 
         fun addFollowRequest(userCurrent: User, userFriend: User)
     }

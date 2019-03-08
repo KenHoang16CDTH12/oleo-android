@@ -2,7 +2,12 @@ package com.framgia.oleo.screen.search
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -27,12 +32,12 @@ class SearchFragment : BaseFragment(), SearchView.OnQueryTextListener, OnItemVie
     private var searchAdapter by autoCleared<SearchAdapter>()
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        viewModel.getUserByPhoneNumber(query!!)
+        viewModel.searchByPhoneNumberOrName(query!!)
         return true
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        viewModel.getUserByPhoneNumber(newText!!)
+        viewModel.searchByPhoneNumberOrName(newText!!)
         return true
     }
 
@@ -44,6 +49,7 @@ class SearchFragment : BaseFragment(), SearchView.OnQueryTextListener, OnItemVie
 
     override fun bindView() {
         viewModel.getUsers()
+        searchAdapter.setUserId(viewModel.userId)
         viewModel.usersSeachResult.observe(this, Observer {
             searchAdapter.updateData(it)
         })
@@ -81,6 +87,7 @@ class SearchFragment : BaseFragment(), SearchView.OnQueryTextListener, OnItemVie
         searchEditText.setHintTextColor(
             ContextCompat.getColor(activity!!.applicationContext, R.color.colorGrey500)
         )
+        searchEditText.text.clear()
         searchView.findViewById<View>(R.id.search_plate).setBackgroundColor(Color.TRANSPARENT)
     }
 

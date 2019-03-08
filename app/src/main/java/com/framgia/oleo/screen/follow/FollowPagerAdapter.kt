@@ -13,10 +13,10 @@ class FollowPagerAdapter(fm: FragmentManager, context: Context) : FragmentPagerA
     private val tabTitles = context.resources.getStringArray(R.array.tab_titles)
 
     override fun getItem(position: Int): Fragment {
-        when (position) {
-            TAB_FOLLOW -> return FollowedFragment.newInstance()
-            TAB_FOLLOWING -> return FollowingFragment.newInstance()
-            else -> return WaitingFragment.newInstance()
+        return when (position) {
+            TAB_FOLLOW -> FollowedFragment.newInstance()
+            TAB_FOLLOWING -> FollowingFragment.newInstance()
+            else -> WaitingFragment.newInstance()
         }
     }
 

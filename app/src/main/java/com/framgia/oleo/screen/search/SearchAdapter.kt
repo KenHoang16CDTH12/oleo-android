@@ -7,10 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.framgia.oleo.R
 import com.framgia.oleo.data.source.model.User
 import com.framgia.oleo.databinding.AdapterSearchBindingImpl
+import com.framgia.oleo.utils.extension.hide
+import com.framgia.oleo.utils.extension.show
 
 class SearchAdapter : RecyclerView.Adapter<SearchAdapter.Companion.ViewHolder>() {
     private var users: MutableList<User> = arrayListOf()
     private lateinit var onItemViewListener: OnItemViewListener
+    private var userId:String? = ""
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding: AdapterSearchBindingImpl =
             DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.adapter_search, parent, false)
@@ -22,7 +26,7 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.Companion.ViewHolder>()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindData(users.get(position))
+        holder.bindData(users[position], userId!!)
     }
 
     fun updateData(users: List<User>) {
@@ -33,6 +37,10 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.Companion.ViewHolder>()
 
     fun setOnItemViewListener(onItemViewListener: OnItemViewListener) {
         this.onItemViewListener = onItemViewListener
+    }
+
+    fun setUserId(userId: String) {
+        this.userId = userId
     }
 
     interface OnItemViewListener {
@@ -53,7 +61,9 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.Companion.ViewHolder>()
                 binding.listener = onItemViewListener
             }
 
-            fun bindData(user: User) {
+            fun bindData(user: User, userId: String) {
+                if (user.id != userId) binding.imageAddFriend.show()
+                else binding.imageAddFriend.hide()
                 binding.user = user
             }
         }

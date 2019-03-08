@@ -1,5 +1,6 @@
 package com.framgia.oleo.screen.friendrequest
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -11,16 +12,22 @@ import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseFragment
 import com.framgia.oleo.data.source.model.FriendRequest
 import com.framgia.oleo.databinding.FriendRequestsFragmentBinding
+import com.framgia.oleo.screen.follow.FollowListFragment.OnActionBarListener
 import com.framgia.oleo.screen.friendrequest.FriendRequestAdapter.OnItemViewListener
 import com.framgia.oleo.screen.main.MainActivity
 import com.framgia.oleo.utils.extension.goBackFragment
 import com.framgia.oleo.utils.liveData.autoCleared
 import kotlinx.android.synthetic.main.friend_requests_fragment.recyclerViewFriendRequests
-import kotlinx.android.synthetic.main.friend_requests_fragment.toolbarFriendRequest
-import kotlinx.android.synthetic.main.toolbar.view.textTitleToolbar
+import kotlinx.android.synthetic.main.toolbar.toolbarCustom
 import kotlinx.android.synthetic.main.toolbar.view.toolbarCustom
 
 class FriendRequestsFragment : BaseFragment(), OnItemViewListener {
+
+    private lateinit var viewModel: FriendRequestsViewModel
+    private var binding by autoCleared<FriendRequestsFragmentBinding>()
+    private var friendRequestAdapter by autoCleared<FriendRequestAdapter>()
+    private var listener: OnActionBarListener? = null
+
     override fun onConFirmClick(friendRequest: FriendRequest) {
         viewModel.confirmFriendRequest(friendRequest)
     }
@@ -29,22 +36,24 @@ class FriendRequestsFragment : BaseFragment(), OnItemViewListener {
         viewModel.deleteFriendRequest(friendRequest)
     }
 
-    private lateinit var viewModel: FriendRequestsViewModel
-    private var binding by autoCleared<FriendRequestsFragmentBinding>()
-    private var friendRequestAdapter by autoCleared<FriendRequestAdapter>()
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        listener = (context as? OnActionBarListener)!!
+    }
+
     override fun setUpView() {
-        setupActionBar()
         setUpRecyclerView()
+        setupActionBar()
         setHasOptionsMenu(true)
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
+    }
+
     private fun setupActionBar() {
-        val toolbar = toolbarFriendRequest.toolbarCustom
-        toolbar.textTitleToolbar.text = activity!!.getString(R.string.friend_requests)
-        (activity as MainActivity).setSupportActionBar(toolbar)
-        (activity as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        (activity as MainActivity).supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_back)
-        (activity as MainActivity).supportActionBar!!.setDisplayShowTitleEnabled(false)
+        listener!!.setupActionbar(toolbarCustom.toolbarCustom, getString(R.string.friend_requests))
     }
 
     override fun bindView() {

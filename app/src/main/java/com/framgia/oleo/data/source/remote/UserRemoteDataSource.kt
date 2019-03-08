@@ -11,6 +11,8 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
@@ -50,31 +52,25 @@ class UserRemoteDataSource : UserDataSource.Remote {
     }
 
     override fun addFriend(
-        user: User,
-        friendRequest: FriendRequest
+        userId: String,
+        friendRequestId: String
     ) {
         firebaseDatabase.getReference(Constant.PATH_STRING_USER)
-            .child(user.id)
+            .child(userId)
             .child(Constant.PATH_STRING_FRIEND)
-            .child(friendRequest.id!!)
-            .setValue(Friend(friendRequest.id!!, System.currentTimeMillis()))
-    }
-
-    override fun changeStatusFriendRequest(
-        user: User,
-        friendRequest: FriendRequest,
-        status: Int,
-        onSuccessListener: OnSuccessListener<Void>,
-        onFailureListener: OnFailureListener
-    ) {
-        friendRequest.status = status
-        firebaseDatabase.getReference(Constant.PATH_STRING_USER)
-            .child(user.id)
-            .child(Constant.PATH_STRING_FRIEND_REQUEST)
-            .child(friendRequest.id!!)
-            .setValue(friendRequest)
-            .addOnSuccessListener(onSuccessListener)
-            .addOnFailureListener(onFailureListener)
+            .child(friendRequestId)
+            .setValue(Friend(friendRequestId, System.currentTimeMillis()))
+            .addOnSuccessListener {
+                firebaseDatabase.getReference(Constant.PATH_STRING_USER)
+                    .child(friendRequestId)
+                    .child(Constant.PATH_STRING_FRIEND)
+                    .child(userId)
+                    .setValue(Friend(friendRequestId, System.currentTimeMillis()))
+                firebaseDatabase.getReference(Constant.PATH_STRING_FRIEND_REQUEST)
+                    .child(friendRequestId)
+                    .child(userId)
+                    .ref.removeValue()
+            }
     }
 
     override fun confirmFriendRequest(
@@ -83,10 +79,11 @@ class UserRemoteDataSource : UserDataSource.Remote {
         onSuccessListener: OnSuccessListener<Void>,
         onFailureListener: OnFailureListener
     ) {
-        changeStatusFriendRequest(
-            user, friendRequest, Constant.CONFIRM_FRIEND_REQUEST,
-            onSuccessListener, onFailureListener
-        )
+        addFriend(user.id, friendRequest.id!!)
+        firebaseDatabase.getReference(Constant.PATH_STRING_FRIEND_REQUEST)
+            .child(user.id)
+            .child(friendRequest.id!!)
+            .ref.removeValue()
     }
 
     override fun deleteFriendRequest(
@@ -95,16 +92,15 @@ class UserRemoteDataSource : UserDataSource.Remote {
         onSuccessListener: OnSuccessListener<Void>,
         onFailureListener: OnFailureListener
     ) {
-        changeStatusFriendRequest(
-            user, friendRequest, Constant.DELETE_FRIEND_REQUEST,
-            onSuccessListener, onFailureListener
-        )
+        firebaseDatabase.getReference(Constant.PATH_STRING_FRIEND_REQUEST)
+            .child(user.id)
+            .child(friendRequest.id!!)
+            .ref.removeValue()
     }
 
     override fun getFriendRequests(userId: String, valueEventListener: ValueEventListener) {
-        firebaseDatabase.getReference(Constant.PATH_STRING_USER)
+        firebaseDatabase.getReference(Constant.PATH_STRING_FRIEND_REQUEST)
             .child(userId)
-            .child(Constant.PATH_STRING_FRIEND_REQUEST)
             .addValueEventListener(valueEventListener)
     }
 
@@ -123,11 +119,40 @@ class UserRemoteDataSource : UserDataSource.Remote {
         onSuccessListener: OnSuccessListener<Void>,
         onFailureListener: OnFailureListener
     ) {
-        firebaseDatabase.getReference(Constant.PATH_STRING_USER).child(reciveId)
-            .child(Constant.PATH_STRING_FRIEND_REQUEST)
-            .child(user.id).setValue(FriendRequest(user.id, message, 0, System.currentTimeMillis()))
-            .addOnSuccessListener(onSuccessListener)
-            .addOnFailureListener(onFailureListener)
+        firebaseDatabase.getReference(Constant.PATH_STRING_USER)
+            .child(user.id)
+            .child(Constant.PATH_STRING_FRIEND)
+            .child(reciveId)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError) {}
+
+                override fun onDataChange(data: DataSnapshot) {
+                    if (!data.exists())
+                        firebaseDatabase.getReference(Constant.PATH_STRING_FRIEND_REQUEST)
+                            .child(reciveId)
+                            .child(user.id)
+                            .addListenerForSingleValueEvent(object : ValueEventListener {
+                                override fun onCancelled(p0: DatabaseError) {}
+
+                                override fun onDataChange(snapShot: DataSnapshot) {
+                                    if (!snapShot.exists())
+                                        firebaseDatabase.getReference(Constant.PATH_STRING_FRIEND_REQUEST)
+                                            .child(reciveId)
+                                            .child(user.id)
+                                            .setValue(
+                                                FriendRequest(
+                                                    user.id,
+                                                    message,
+                                                    Constant.STATUS_FRIEND_WAITING,
+                                                    System.currentTimeMillis()
+                                                )
+                                            )
+                                            .addOnSuccessListener(onSuccessListener)
+                                            .addOnFailureListener(onFailureListener)
+                                }
+                            })
+                }
+            })
     }
 
     override fun getUsers(valueEventListener: ValueEventListener) {

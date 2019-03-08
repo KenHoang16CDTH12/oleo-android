@@ -56,9 +56,6 @@ class FriendRequestsViewModel @Inject constructor(
 
             override fun onDataChange(p0: DataSnapshot) {
                 val friendRequests = mutableListOf<FriendRequest>()
-                if (!p0.exists()) {
-                    return
-                }
                 for (datasnapshot in p0.children) {
                     val friendRequest = datasnapshot.getValue(FriendRequest::class.java)
                     if (friendRequest != null && friendRequest.status == 0) {
@@ -82,7 +79,7 @@ class FriendRequestsViewModel @Inject constructor(
             userRepository.getUser()!!,
             friendRequest,
             onSuccessListener = OnSuccessListener {
-                userRepository.addFriend(userRepository.getUser()!!, friendRequest)
+                userRepository.addFriend(userRepository.getUser()!!.id, friendRequest.id!!)
                 onAddFriendRequest.value = application.getString(string.msg_on_add_friend_success)
             },
             onFailureListener = OnFailureListener {
