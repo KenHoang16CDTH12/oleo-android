@@ -80,5 +80,11 @@ interface UserDataSource {
         fun addFollowRequest(userCurrent: User, userFriend: User)
 
         fun getContactsUser(userId : String, valueEventListener: ValueEventListener)
+
+        fun updatePassword(
+            userId: String, password: String,
+            onSuccessListener: OnSuccessListener<Void>,
+            onFailureListener: OnFailureListener
+        )
     }
 }

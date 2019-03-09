@@ -81,6 +81,23 @@
     <string name="msg_on_get_following_failed">Get following request failed!</string>
     <string name="msg_on_get_followed_failed">Get user followed failed!</string>
     <string name="search_contact_hint">Name, phone number…</string>
+    <string name="resend"><u>Resend</u></string>
+    <string name="not_receive_sms_code">\u2022 Don\'t receive the code?</string>
+    <string name="phone_number_not_exist">Your phone is not registered yet !</string>
+    <string name="sms_code_not_correct">The code is not correct!</string>
+    <string name="out_of_sms_request">Too many request. Please try again !</string>
+    <string name="sms_code_hint">Your code</string>
+    <string name="verify_phone_title">Verify your phone number</string>
+    <string name="verify_phone_description">An 6-digit code has been sent to you</string>
+    <string name="verify">Verify</string>
+    <string name="forgot_password_title">Forgot Password</string>
+    <string name="enter_phone_number">Enter your phone number here</string>
+    <string name="submit">Submit</string>
+    <string name="new_password">New password</string>
+    <string name="reset_password_failed">Reset password failed !</string>
+    <string name="password_reset_successful">Password reset successful !</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="invalid_sms_code">The code is invalid</string>
     <string-array name="tab_titles">
         <item>Followed</item>
         <item>Following</item>

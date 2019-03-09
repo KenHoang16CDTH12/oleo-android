@@ -5,6 +5,8 @@ import com.framgia.oleo.screen.contacts.ContactsFragment
 import com.framgia.oleo.screen.follow.FollowListFragment
 import com.framgia.oleo.screen.followed.FollowedFragment
 import com.framgia.oleo.screen.following.FollowingFragment
+import com.framgia.oleo.screen.forgotpassword.ForgotPasswordFragment
+import com.framgia.oleo.screen.forgotpassword.ResetPasswordFragment
 import com.framgia.oleo.screen.friendrequest.FriendRequestsFragment
 import com.framgia.oleo.screen.home.HomeFragment
 import com.framgia.oleo.screen.location.LocationFragment
@@ -65,4 +67,10 @@ abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributeContactsFragment(): ContactsFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeForgotPasswordFragment(): ForgotPasswordFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeResetPasswordFragment(): ResetPasswordFragment
 }

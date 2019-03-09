@@ -20,6 +20,7 @@ import com.framgia.oleo.data.source.model.User
 import com.framgia.oleo.databinding.FragmentLoginBinding
 import com.framgia.oleo.screen.home.HomeFragment
 import com.framgia.oleo.screen.main.MainActivity
+import com.framgia.oleo.screen.forgotpassword.ForgotPasswordFragment
 import com.framgia.oleo.screen.signup.SignUpFragment
 import com.framgia.oleo.utils.Constant.MIN_CHARACTER_INPUT_PASSWORD
 import com.framgia.oleo.utils.extension.*
@@ -65,6 +66,7 @@ class LoginFragment : BaseFragment(), View.OnClickListener {
         textViewLoginGG.setOnClickListener(this)
         buttonLogin.setOnClickListener(this)
         textViewSignUp.setOnClickListener(this)
+        textViewForgotPassword.setOnClickListener(this)
     }
 
     override fun bindView() {
@@ -85,6 +87,9 @@ class LoginFragment : BaseFragment(), View.OnClickListener {
                     (activity!! as MainActivity).addFragmentToActivity(R.id.containerMain, fragment)
                 }
             }
+            R.id.textViewForgotPassword -> (activity!! as MainActivity).addFragmentToActivity(
+                R.id.containerMain, ForgotPasswordFragment.newInstance()
+            )
         }
     }
 

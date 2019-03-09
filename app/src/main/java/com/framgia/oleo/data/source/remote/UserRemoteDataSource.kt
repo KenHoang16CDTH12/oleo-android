@@ -55,6 +55,19 @@ class UserRemoteDataSource : UserDataSource.Remote {
             )
     }
 
+    override fun updatePassword(
+        userId: String, password: String,
+        onSuccessListener: OnSuccessListener<Void>,
+        onFailureListener: OnFailureListener
+    ) {
+        firebaseDatabase.getReference(Constant.PATH_STRING_USER)
+            .child(userId)
+            .child(Constant.PATH_STRING_PASSWORD)
+            .setValue(password)
+            .addOnSuccessListener(onSuccessListener)
+            .addOnFailureListener(onFailureListener)
+    }
+
     override fun changeFollowStatus(userCurrent: User, followRequest: FollowRequest) {
         firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
             .child(userCurrent.id)

@@ -32,6 +32,15 @@ class UserRepository(
         remote.changeFollowStatus(userCurrent, followRequest)
     }
 
+    override fun updatePassword(
+        userId: String,
+        password: String,
+        onSuccessListener: OnSuccessListener<Void>,
+        onFailureListener: OnFailureListener
+    ) {
+        remote.updatePassword(userId, password, onSuccessListener, onFailureListener)
+    }
+
     override fun getFollowRequestsOfUser(id: String, status: String, childEventListener: ChildEventListener) {
         remote.getFollowRequestsOfUser(id, status, childEventListener)
     }

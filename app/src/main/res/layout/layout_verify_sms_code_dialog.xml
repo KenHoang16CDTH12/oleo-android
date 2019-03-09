@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textViewVerifyPhoneTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif"
+        android:text="@string/verify_phone_title"
+        android:textColor="@color/colorGrey900"
+        android:textSize="@dimen/sp_18"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewCloseDialog" />
+
+    <TextView
+        android:id="@+id/textViewVerifyPhoneDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8"
+        android:text="@string/verify_phone_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewVerifyPhoneTitle" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textLayoutSMSCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_24"
+        android:gravity="center"
+        android:inputType="number"
+        android:maxLength="6"
+        android:textAlignment="center"
+        app:errorEnabled="true"
+        app:errorTextAppearance="@style/errorAppearance"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewVerifyPhoneDescription"
+        app:layout_constraintWidth_min="@dimen/dp_16"
+        app:layout_constraintWidth_percent="0.6">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextSMSCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_24"
+            android:gravity="center"
+            android:hint="@string/sms_code_hint"
+            android:inputType="number"
+            android:maxLength="6" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textViewNotReceiveCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8"
+        android:text="@string/not_receive_sms_code"
+        android:textColor="@color/colorGrey800"
+        app:layout_constraintStart_toStartOf="@+id/textViewVerifyPhoneTitle"
+        app:layout_constraintTop_toBottomOf="@+id/textLayoutSMSCode" />
+
+    <TextView
+        android:id="@+id/textViewResendCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+        android:enabled="true"
+        android:text="@string/resend"
+        android:textColor="@color/resend_sms_code_state"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textViewNotReceiveCode"
+        app:layout_constraintStart_toEndOf="@+id/textViewNotReceiveCode" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonVerifyCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_24"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:text="@string/verify"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:theme="@style/Theme.MaterialComponents"
+        app:cornerRadius="@dimen/dp_16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textViewVerifyPhoneTitle"
+        app:layout_constraintStart_toStartOf="@+id/textViewVerifyPhoneTitle"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNotReceiveCode" />
+
+    <ImageView
+        android:id="@+id/imageViewCloseDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_8"
+        android:scaleX="0.5"
+        android:scaleY="0.5"
+        android:tint="@color/colorGrey800Light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_close"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <ProgressBar
+        android:id="@+id/progressBarVerifyCode"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:indeterminateDrawable="@drawable/progress_bar"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonVerifyCode"
+        app:layout_constraintEnd_toEndOf="@+id/buttonVerifyCode"
+        app:layout_constraintStart_toStartOf="@+id/buttonVerifyCode"
+        app:layout_constraintTop_toTopOf="@+id/buttonVerifyCode" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

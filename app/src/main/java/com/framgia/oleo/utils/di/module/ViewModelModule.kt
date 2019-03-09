@@ -8,6 +8,8 @@ import com.framgia.oleo.screen.follow.FollowListViewModel
 import com.framgia.oleo.screen.followed.FollowedViewModel
 import com.framgia.oleo.screen.waiting.WaitingViewModel
 import com.framgia.oleo.screen.following.FollowingViewModel
+import com.framgia.oleo.screen.forgotpassword.ForgotPasswordViewModel
+import com.framgia.oleo.screen.forgotpassword.ResetPasswordViewModel
 import com.framgia.oleo.screen.friendrequest.FriendRequestsViewModel
 import com.framgia.oleo.screen.home.HomeViewModel
 import com.framgia.oleo.screen.location.LocationViewModel
@@ -109,4 +111,14 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ContactsViewModel::class)
     abstract fun bindContactsViewModel(contactsViewModel: ContactsViewModel) : ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ForgotPasswordViewModel::class)
+    abstract fun bindForgotPasswordViewModel(forgotPasswordViewModel: ForgotPasswordViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ResetPasswordViewModel::class)
+    abstract fun bindResetPasswordViewModel(resetPasswordViewModel: ResetPasswordViewModel): ViewModel
 }

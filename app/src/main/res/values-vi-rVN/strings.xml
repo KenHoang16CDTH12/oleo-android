@@ -82,6 +82,23 @@
     <string name="msg_on_get_following_failed">Tải theo dõi đã chấp nhận thất bại, vui lòng thử lại sau!!</string>
     <string name="msg_on_get_followed_failed">Tải người dùng đã theo dõi thất, vui lòng thử lại sau!!</string>
     <string name="search_contact_hint">Tên, số điện thoại…</string>
+    <string name="resend"><u>Gửi lại</u></string>
+    <string name="not_receive_sms_code">\u2B24 Không nhận được mã?</string>
+    <string name="phone_number_not_exist">Số điện thoại này chưa được đăng ký !</string>
+    <string name="sms_code_not_correct">Mã xác nhận không chính xác!</string>
+    <string name="out_of_sms_request">Yêu cầu được gửi quá nhiều. Vui lòng thử lại sau!</string>
+    <string name="sms_code_hint">Mã xác nhận</string>
+    <string name="verify_phone_title">Xác thực số điện thoại</string>
+    <string name="verify_phone_description">Mã xác thực đã được gửi đến bạn</string>
+    <string name="verify">Xác nhận</string>
+    <string name="forgot_password_title">Quên mật khẩu</string>
+    <string name="enter_phone_number">Nhập số điện thoại của bạn</string>
+    <string name="submit">Xác nhận</string>
+    <string name="new_password">Mật khẩu mới</string>
+    <string name="reset_password_failed">Khôi phục mật khâu thất bại !</string>
+    <string name="password_reset_successful">Thay đổi mật khẩu thành công !</string>
+    <string name="reset_password">Thay đổi mật khẩu</string>
+    <string name="invalid_sms_code">Mã xác thực không hợp lệ</string>
     <string-array name="tab_titles">
         <item>Người theo dõi</item>
         <item>Đang theo dõi</item>
