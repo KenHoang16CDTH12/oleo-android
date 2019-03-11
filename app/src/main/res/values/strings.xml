@@ -79,6 +79,7 @@
     <string name="accept_permission_dialog">OK</string>
     <string name="msg_on_get_waiting_failed">Get wating follow request failed!</string>
     <string name="msg_on_get_following_failed">Get following request failed!</string>
+    <string name="msg_on_get_followed_failed">Get user folowed failed!</string>
     <string-array name="tab_titles">
         <item>Followed</item>
         <item>Following</item>

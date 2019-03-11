@@ -1,5 +1,6 @@
 package com.framgia.oleo.data.source
 
+import com.framgia.oleo.data.source.model.Followed
 import com.framgia.oleo.data.source.model.FriendRequest
 import com.framgia.oleo.data.source.model.Place
 import com.framgia.oleo.data.source.model.User
@@ -21,6 +22,10 @@ interface UserDataSource {
     }
 
     interface Remote {
+        fun deleteUserFollowed(id: String, userFriend: User)
+
+        fun getFollowedsOfUser(id: String, valueEventListener: ValueEventListener)
+
         fun addUserFollowed(idUser: String, userFollowed: User)
 
         fun pushUserLocation(idUser: String, place: Place)

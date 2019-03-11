@@ -18,12 +18,32 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class UserRemoteDataSource : UserDataSource.Remote {
+    override fun deleteUserFollowed(id: String, userFriend: User) {
+        firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
+            .child(id)
+            .child(Constant.PATH_STRING_FOLLOWED)
+            .child(userFriend.id)
+            .removeValue()
+        firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
+            .child(userFriend.id)
+            .child(Constant.PATH_STRING_FOLLOW_REQUEST)
+            .child(id)
+            .removeValue()
+    }
+
+    override fun getFollowedsOfUser(id: String, valueEventListener: ValueEventListener) {
+        firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
+            .child(id)
+            .child(Constant.PATH_STRING_FOLLOWED)
+            .addValueEventListener(valueEventListener)
+    }
+
     override fun addUserFollowed(idUser: String, userFollowed: User) {
         firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
             .child(idUser)
             .child(Constant.PATH_STRING_FOLLOWED)
-            .child(idUser)
-            .setValue(Followed(userFollowed.id,System.currentTimeMillis()))
+            .child(userFollowed.id)
+            .setValue(Followed(userFollowed.id, System.currentTimeMillis()))
     }
 
     override fun changeFollowStatus(userCurrent: User, userFriend: User, status: String) {
