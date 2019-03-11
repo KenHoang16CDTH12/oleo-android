@@ -1,5 +1,6 @@
 package com.framgia.oleo.data.source
 
+import com.framgia.oleo.data.source.model.Followed
 import com.framgia.oleo.data.source.model.FriendRequest
 import com.framgia.oleo.data.source.model.Place
 import com.framgia.oleo.data.source.model.User
@@ -13,6 +14,14 @@ class UserRepository(
     private val local: UserDataSource.Local,
     private val remote: UserDataSource.Remote
 ) : UserDataSource.Local, UserDataSource.Remote {
+
+    override fun deleteUserFollowed(id: String, userFriend: User) {
+        remote.deleteUserFollowed(id, userFriend)
+    }
+
+    override fun getFollowedsOfUser(id: String, valueEventListener: ValueEventListener) {
+        remote.getFollowedsOfUser(id, valueEventListener)
+    }
 
     override fun addUserFollowed(idUser: String, userFollowed: User) {
         remote.addUserFollowed(idUser, userFollowed)
