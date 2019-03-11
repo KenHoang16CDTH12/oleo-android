@@ -21,6 +21,8 @@ class FriendRequestsViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : BaseViewModel() {
 
+    val friend: MutableLiveData<User> by lazy { MutableLiveData<User>() }
+
     val onAddFriendRequest: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
@@ -75,16 +77,24 @@ class FriendRequestsViewModel @Inject constructor(
     }
 
     fun confirmFriendRequest(friendRequest: FriendRequest) {
-        userRepository.confirmFriendRequest(
-            userRepository.getUser()!!,
-            friendRequest,
-            onSuccessListener = OnSuccessListener {
-                userRepository.addFriend(userRepository.getUser()!!.id, friendRequest.id!!)
-                onAddFriendRequest.value = application.getString(string.msg_on_add_friend_success)
-            },
-            onFailureListener = OnFailureListener {
-                onAddFriendRequest.value = application.getString(string.msg_on_get_waiting_failed)
-            })
+        val user = userRepository.getUser()
+        userRepository.getUserById(friendRequest.id!!, object : ValueEventListener {
+            override fun onDataChange(data: DataSnapshot) {
+                if (data.exists()) {
+                    friend.value = data.getValue(User::class.java)
+                    userRepository.confirmFriendRequest(user!!, friend.value!!, friendRequest,
+                          onSuccessListener = OnSuccessListener {
+                                  userRepository.addFriend(user.id, friendRequest.id!!, user, friend.value!!)
+                                  onAddFriendRequest.value =
+                                      application.getString(string.msg_on_add_friend_success) },
+                          onFailureListener = OnFailureListener {
+                                  onAddFriendRequest.value =
+                                      application.getString(string.msg_on_get_waiting_failed) })
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     fun deleteFriendRequest(friendRequest: FriendRequest) {

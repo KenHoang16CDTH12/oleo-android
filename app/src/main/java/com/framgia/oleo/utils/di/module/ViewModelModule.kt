@@ -3,6 +3,7 @@ package com.framgia.oleo.utils.di.module
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.framgia.oleo.screen.boxchat.BoxChatViewModel
+import com.framgia.oleo.screen.contacts.ContactsViewModel
 import com.framgia.oleo.screen.follow.FollowListViewModel
 import com.framgia.oleo.screen.followed.FollowedViewModel
 import com.framgia.oleo.screen.waiting.WaitingViewModel
@@ -103,4 +104,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MessageOptionViewModel::class)
     abstract fun bindMessageOptionViewModel(messageOptionViewModel: MessageOptionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ContactsViewModel::class)
+    abstract fun bindContactsViewModel(contactsViewModel: ContactsViewModel) : ViewModel
 }

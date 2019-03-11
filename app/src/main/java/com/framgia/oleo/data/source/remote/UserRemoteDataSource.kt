@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class UserRemoteDataSource : UserDataSource.Remote {
+
     override fun deleteUserFollowed(id: String, followed: Followed) {
         firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
             .child(id)
@@ -100,18 +101,18 @@ class UserRemoteDataSource : UserDataSource.Remote {
     override fun addFriend(
         userId: String,
         friendRequestId: String
-    ) {
+    , user: User, friend: User) {
         firebaseDatabase.getReference(Constant.PATH_STRING_USER)
             .child(userId)
             .child(Constant.PATH_STRING_FRIEND)
             .child(friendRequestId)
-            .setValue(Friend(friendRequestId, System.currentTimeMillis()))
+            .setValue(Friend(friendRequestId, System.currentTimeMillis(), friend))
             .addOnSuccessListener {
                 firebaseDatabase.getReference(Constant.PATH_STRING_USER)
                     .child(friendRequestId)
                     .child(Constant.PATH_STRING_FRIEND)
                     .child(userId)
-                    .setValue(Friend(friendRequestId, System.currentTimeMillis()))
+                    .setValue(Friend(friendRequestId, System.currentTimeMillis(), user))
                 firebaseDatabase.getReference(Constant.PATH_STRING_FRIEND_REQUEST)
                     .child(friendRequestId)
                     .child(userId)
@@ -120,12 +121,12 @@ class UserRemoteDataSource : UserDataSource.Remote {
     }
 
     override fun confirmFriendRequest(
-        user: User,
+        user: User, friend: User,
         friendRequest: FriendRequest,
         onSuccessListener: OnSuccessListener<Void>,
         onFailureListener: OnFailureListener
     ) {
-        addFriend(user.id, friendRequest.id!!)
+        addFriend(user.id, friendRequest.id!!, user, friend)
         firebaseDatabase.getReference(Constant.PATH_STRING_FRIEND_REQUEST)
             .child(user.id)
             .child(friendRequest.id!!)
@@ -235,5 +236,13 @@ class UserRemoteDataSource : UserDataSource.Remote {
         firebaseDatabase.getReference(Constant.PATH_STRING_LOCATION)
             .child(id)
             .addChildEventListener(childEventListener)
+    }
+
+    override fun getContactsUser(userId: String, valueEventListener: ValueEventListener) {
+        firebaseDatabase.reference
+            .child(Constant.PATH_STRING_USER)
+            .child(userId)
+            .child(Constant.PATH_STRING_FRIEND)
+            .addValueEventListener(valueEventListener)
     }
 }

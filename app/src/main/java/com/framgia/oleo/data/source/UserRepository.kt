@@ -45,12 +45,12 @@ class UserRepository(
     }
 
     override fun confirmFriendRequest(
-        user: User,
+        user: User, friend: User,
         friendRequest: FriendRequest,
         onSuccessListener: OnSuccessListener<Void>,
         onFailureListener: OnFailureListener
     ) {
-        remote.confirmFriendRequest(user, friendRequest, onSuccessListener, onFailureListener)
+        remote.confirmFriendRequest(user, friend, friendRequest, onSuccessListener, onFailureListener)
     }
 
     override fun deleteFriendRequest(
@@ -62,8 +62,8 @@ class UserRepository(
         remote.deleteFriendRequest(user, friendRequest, onSuccessListener, onFailureListener)
     }
 
-    override fun addFriend(userId: String, friendRequestId: String) {
-        remote.addFriend(userId, friendRequestId)
+    override fun addFriend(userId: String, friendRequestId: String, user: User, friend: User) {
+        remote.addFriend(userId, friendRequestId, user, friend)
     }
 
     override fun getFriendRequests(userId: String, valueEventListener: ValueEventListener) {
@@ -125,5 +125,9 @@ class UserRepository(
 
     override fun getFriendLocation(id: String, childEventListener: ChildEventListener) {
         remote.getFriendLocation(id, childEventListener)
+    }
+
+    override fun getContactsUser(userId: String, valueEventListener: ValueEventListener) {
+        remote.getContactsUser(userId, valueEventListener)
     }
 }
