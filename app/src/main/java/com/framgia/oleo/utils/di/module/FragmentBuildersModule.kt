@@ -3,8 +3,7 @@ package com.framgia.oleo.utils.di.module
 import com.framgia.oleo.screen.boxchat.BoxChatFragment
 import com.framgia.oleo.screen.follow.FollowListFragment
 import com.framgia.oleo.screen.followed.FollowedFragment
-import com.framgia.oleo.screen.followed.FollowingFragment
-import com.framgia.oleo.screen.followed.WaitingFragment
+import com.framgia.oleo.screen.following.FollowingFragment
 import com.framgia.oleo.screen.friendrequest.FriendRequestsFragment
 import com.framgia.oleo.screen.home.HomeFragment
 import com.framgia.oleo.screen.location.LocationFragment
@@ -14,6 +13,7 @@ import com.framgia.oleo.screen.messages.MessagesFragment
 import com.framgia.oleo.screen.search.SearchFragment
 import com.framgia.oleo.screen.setting.SettingFragment
 import com.framgia.oleo.screen.signup.SignUpFragment
+import com.framgia.oleo.screen.waiting.WaitingFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

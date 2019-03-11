@@ -6,8 +6,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.framgia.oleo.R
 import com.framgia.oleo.screen.followed.FollowedFragment
-import com.framgia.oleo.screen.followed.FollowingFragment
-import com.framgia.oleo.screen.followed.WaitingFragment
+import com.framgia.oleo.screen.following.FollowingFragment
+import com.framgia.oleo.screen.waiting.WaitingFragment
 
 class FollowPagerAdapter(fm: FragmentManager, context: Context) : FragmentPagerAdapter(fm) {
     private val tabTitles = context.resources.getStringArray(R.array.tab_titles)

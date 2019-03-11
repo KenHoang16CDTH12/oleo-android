@@ -14,6 +14,10 @@ class UserRepository(
     private val remote: UserDataSource.Remote
 ) : UserDataSource.Local, UserDataSource.Remote {
 
+    override fun addUserFollowed(idUser: String, userFollowed: User) {
+        remote.addUserFollowed(idUser, userFollowed)
+    }
+
     override fun changeFollowStatus(userCurrent: User, userFriend: User, status: String) {
         remote.changeFollowStatus(userCurrent, userFriend, status)
     }
