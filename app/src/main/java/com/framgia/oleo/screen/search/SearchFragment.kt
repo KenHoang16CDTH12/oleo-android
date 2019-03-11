@@ -17,9 +17,12 @@ import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseFragment
 import com.framgia.oleo.data.source.model.User
 import com.framgia.oleo.databinding.FragmentSearchBinding
+import com.framgia.oleo.screen.boxchat.BoxChatFragment
 import com.framgia.oleo.screen.main.MainActivity
 import com.framgia.oleo.screen.search.SearchAdapter.OnItemViewListener
+import com.framgia.oleo.utils.extension.addFragment
 import com.framgia.oleo.utils.extension.goBackFragment
+import com.framgia.oleo.utils.extension.isCheckMultiClick
 import com.framgia.oleo.utils.extension.showSnackBar
 import com.framgia.oleo.utils.liveData.autoCleared
 import kotlinx.android.synthetic.main.fragment_search.recyclerViewSearch
@@ -107,6 +110,7 @@ class SearchFragment : BaseFragment(), SearchView.OnQueryTextListener, OnItemVie
         searchAdapter = SearchAdapter()
         recyclerViewSearch.adapter = searchAdapter
         searchAdapter.setOnItemViewListener(this)
+        viewModel.getFriend().observe(this, Observer { searchAdapter.setUserFriend(it) })
     }
 
     override fun onImageAddFriendClicked(user: User) {
@@ -115,6 +119,11 @@ class SearchFragment : BaseFragment(), SearchView.OnQueryTextListener, OnItemVie
 
     override fun onImageSendMessageClicked(user: User) {
         //todo
+        if (isCheckMultiClick())
+            viewModel.getBoxChat(user).observe(this, Observer { boxChat ->
+                goBackFragment()
+                addFragment(R.id.containerMain, BoxChatFragment.newInstance(boxChat))
+            })
     }
 
     override fun onImageUserProfileClicked(user: User) {

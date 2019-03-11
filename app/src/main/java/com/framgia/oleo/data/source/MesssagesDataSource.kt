@@ -1,9 +1,10 @@
 package com.framgia.oleo.data.source
 
+import com.framgia.oleo.data.source.model.BoxChat
 import com.framgia.oleo.data.source.model.Message
+import com.framgia.oleo.data.source.model.User
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.ValueEventListener
-
 
 interface MesssagesDataSource {
 
@@ -13,11 +14,13 @@ interface MesssagesDataSource {
 
     fun getOldMessage(userId: String, roomId: String, oldMessageId: String, valueEventListener: ValueEventListener)
 
-    fun sendMessage(userId: String, boxId: String, messageId: String, message: Message)
+    fun sendMessage(user: User, boxChat: BoxChat, message: Message)
 
     fun getImageProfile(userId: String, valueEventListener: ValueEventListener)
 
-    fun getListBoxChat(userId: String, childEventListener: ChildEventListener)
+    fun getListBoxChat(userId: String, valueEventListener: ValueEventListener)
 
     fun getLastMessage(userId: String, roomId: String, childEventListener: ChildEventListener)
+
+    fun getBoxChat(userId: String, friend: User, valueEventListener: ValueEventListener)
 }

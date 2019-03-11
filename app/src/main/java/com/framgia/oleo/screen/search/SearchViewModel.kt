@@ -6,7 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.framgia.oleo.R.string
 import com.framgia.oleo.base.BaseViewModel
+import com.framgia.oleo.data.source.MessagesRepository
 import com.framgia.oleo.data.source.UserRepository
+import com.framgia.oleo.data.source.model.BoxChat
+import com.framgia.oleo.data.source.model.Friend
 import com.framgia.oleo.data.source.model.User
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -17,7 +20,8 @@ import javax.inject.Inject
 
 class SearchViewModel @Inject constructor(
     private val application: Application,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val messagesRepository: MessagesRepository
 ) : BaseViewModel() {
 
     val users = mutableListOf<User>()
@@ -27,7 +31,11 @@ class SearchViewModel @Inject constructor(
     val onAddFriendRequest: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
+    val onOpenBoxChat: MutableLiveData<BoxChat>by lazy {
+        MutableLiveData<BoxChat>()
+    }
     val userId = userRepository.getUser()!!.id
+    val getFriendList: MutableLiveData<MutableList<Friend>>by lazy { MutableLiveData<MutableList<Friend>>() }
 
     fun addFriendRequest(user: User) {
         val defaultMessage = StringBuilder(
@@ -66,6 +74,38 @@ class SearchViewModel @Inject constructor(
                 }
             }
         })
+    }
+
+    fun getBoxChat(friend: User): MutableLiveData<BoxChat> {
+        messagesRepository.getBoxChat(
+            userId,
+            friend,
+            object : ValueEventListener {
+
+                override fun onDataChange(snapShot: DataSnapshot) {
+                    if (snapShot.getValue(BoxChat::class.java)!!.id.toString() == friend.id)
+                        onOpenBoxChat.value = snapShot.getValue(BoxChat::class.java)
+                }
+
+                override fun onCancelled(p0: DatabaseError) {}
+            })
+        return onOpenBoxChat
+    }
+
+    fun getFriend(): MutableLiveData<MutableList<Friend>> {
+        userRepository.getContactsUser(userRepository.getUser()!!.id, object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {}
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val listFriend = mutableListOf<Friend>()
+                if (snapshot.exists())
+                    snapshot.children.forEach { dataSnapshot: DataSnapshot? ->
+                        listFriend.add(dataSnapshot!!.getValue(Friend::class.java)!!)
+                    }
+                getFriendList.value = listFriend
+            }
+        })
+        return getFriendList
     }
 
     fun searchByPhoneNumberOrName(query: String) {

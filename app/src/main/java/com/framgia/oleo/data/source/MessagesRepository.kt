@@ -1,14 +1,15 @@
 package com.framgia.oleo.data.source
 
-
+import com.framgia.oleo.data.source.model.BoxChat
 import com.framgia.oleo.data.source.model.Message
+import com.framgia.oleo.data.source.model.User
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.ValueEventListener
 
 class MessagesRepository(private val messsagesDataSource: MesssagesDataSource) : MesssagesDataSource {
 
-    override fun getListBoxChat(userId: String, childEventListener: ChildEventListener) {
-        messsagesDataSource.getListBoxChat(userId, childEventListener)
+    override fun getListBoxChat(userId: String, valueEventListener: ValueEventListener) {
+        messsagesDataSource.getListBoxChat(userId, valueEventListener)
     }
 
     override fun getLastMessage(userId: String, roomId: String, childEventListener: ChildEventListener) {
@@ -30,7 +31,11 @@ class MessagesRepository(private val messsagesDataSource: MesssagesDataSource) :
 
     override fun getMessageId(userId: String, boxId: String): String = messsagesDataSource.getMessageId(userId, boxId)
 
-    override fun sendMessage(userId: String, boxId: String, messageId: String, message: Message) {
-        messsagesDataSource.sendMessage(userId, boxId, messageId, message)
+    override fun sendMessage(user: User, boxChat: BoxChat, message: Message) {
+        messsagesDataSource.sendMessage(user, boxChat, message)
+    }
+
+    override fun getBoxChat(userId: String, friend: User, valueEventListener: ValueEventListener) {
+        messsagesDataSource.getBoxChat(userId, friend, valueEventListener)
     }
 }

@@ -6,26 +6,22 @@ import android.os.Parcelable
 class BoxChat() : Parcelable {
 
     var id: String? = null
-    var userFriendId: String? = null
     var messageList: MutableList<Message>? = null
     var userFriendName: String? = null
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readString()
-        userFriendId = parcel.readString()
         userFriendName = parcel.readString()
     }
 
-    constructor(roomId: String, userFriendId: String, messageList: MutableList<Message>, userFriendName: String) : this() {
+    constructor(roomId: String, messageList: MutableList<Message>, userFriendName: String) : this() {
         id = roomId
-        this.userFriendId = userFriendId
         this.messageList = messageList
         this.userFriendName = userFriendName
     }
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest!!.writeString(id)
-        dest.writeString(userFriendId)
         dest.writeString(userFriendName)
     }
 

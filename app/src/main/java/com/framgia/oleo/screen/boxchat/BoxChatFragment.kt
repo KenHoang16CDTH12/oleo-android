@@ -76,7 +76,7 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
 
     override fun bindView() {
         boxChat = arguments!!.getParcelable(ARGUMENT_ROOM_ID)!!
-        viewModel.getFriendImageProfile(boxChat.userFriendId!!).observe(this, Observer { imageProfile ->
+        viewModel.getFriendImageProfile(boxChat.id!!).observe(this, Observer { imageProfile ->
             adapter.setUserFriendImage(imageProfile)
         })
         viewModel.getMessage(boxChat.id!!).observe(this, Observer { message ->
@@ -96,7 +96,7 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             android.R.id.home -> (activity!! as MainActivity).goBackFragment()
-            R.id.menu_option -> onBoxChatListener?.onMessageOptionClick(userFriendId = boxChat.userFriendId!!)
+            R.id.menu_option -> onBoxChatListener?.onMessageOptionClick(userFriendId = boxChat.id!!)
         }
         return true
     }
@@ -115,8 +115,7 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
                 if (isEnable) {
                     viewModel.sendMessage(
                         editSendMessage.text.toString(),
-                        boxChat.id.toString(),
-                        boxChat.userFriendId.toString()
+                        boxChat
                     )
                     editSendMessage.text.clear()
                 }

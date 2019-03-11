@@ -16,7 +16,7 @@ import com.framgia.oleo.data.source.model.User
 import com.framgia.oleo.databinding.AdapterMessageBinding
 import com.framgia.oleo.utils.Constant
 import com.framgia.oleo.utils.OnItemRecyclerViewClick
-import kotlinx.android.synthetic.main.adapter_message.view.*
+import kotlinx.android.synthetic.main.adapter_message.view.textFriendName
 
 class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.Companion.MessagesHolder>() {
 
@@ -29,8 +29,9 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.Companion.MessagesH
         listener = itemClickListener
     }
 
-    fun updateData(boxChat: BoxChat) {
-        messages.add(boxChat)
+    fun updateData(boxChats: ArrayList<BoxChat>) {
+        messages.clear()
+        messages.addAll(boxChats)
         notifyItemInserted(this.messages.size - Constant.DEFAULT_ONE)
     }
 
@@ -100,7 +101,7 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.Companion.MessagesH
                     binding.textMessage.text = message.message.toString()
                     binding.textTime.text = message.time.toString()
                 })
-                binding.viewModel!!.setImageProfile(boxChat.userFriendId!!)
+                binding.viewModel!!.setImageProfile(boxChat.id!!)
                 itemView.textFriendName.text = boxChat.userFriendName
             }
 
