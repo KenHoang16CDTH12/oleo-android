@@ -18,6 +18,7 @@ object Constant {
     const val PATH_STRING_FRIEND = "Friend"
     const val PATH_STRING_FOLLOW_REQUEST = "FollowRequest"
     const val PATH_STRING_FOLLOW = "Follow"
+    const val PATH_STRING_FOLLOWED = "Followed"
     const val PATH_STRING_STATUS = "status"
 
     const val STATUS_FRIEND_WAITING = 0
@@ -25,6 +26,7 @@ object Constant {
 
     const val STATUS_WAITING = "0"
     const val STATUS_FOLLOWING = "1"
+    const val STATUS_BLOCKING = "2"
 
     const val ACTION_RESTART_SERVICE = "ACTION_RESTART_SERVICE"
 }

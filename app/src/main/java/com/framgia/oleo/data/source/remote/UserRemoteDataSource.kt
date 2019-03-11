@@ -2,6 +2,7 @@ package com.framgia.oleo.data.source.remote
 
 import com.framgia.oleo.data.source.UserDataSource
 import com.framgia.oleo.data.source.model.FollowRequest
+import com.framgia.oleo.data.source.model.Followed
 import com.framgia.oleo.data.source.model.Friend
 import com.framgia.oleo.data.source.model.FriendRequest
 import com.framgia.oleo.data.source.model.Place
@@ -17,6 +18,14 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class UserRemoteDataSource : UserDataSource.Remote {
+    override fun addUserFollowed(idUser: String, userFollowed: User) {
+        firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
+            .child(idUser)
+            .child(Constant.PATH_STRING_FOLLOWED)
+            .child(idUser)
+            .setValue(Followed(userFollowed.id,System.currentTimeMillis()))
+    }
+
     override fun changeFollowStatus(userCurrent: User, userFriend: User, status: String) {
         firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
             .child(userCurrent.id)

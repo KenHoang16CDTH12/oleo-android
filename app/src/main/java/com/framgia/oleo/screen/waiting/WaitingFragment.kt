@@ -1,4 +1,4 @@
-package com.framgia.oleo.screen.followed
+package com.framgia.oleo.screen.waiting
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,6 @@ import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseFragment
 import com.framgia.oleo.data.source.model.User
 import com.framgia.oleo.databinding.WaitingFragmentBinding
-import com.framgia.oleo.screen.waiting.WaitingAdapter
 import com.framgia.oleo.screen.waiting.WaitingAdapter.OnItemViewListener
 import com.framgia.oleo.utils.liveData.autoCleared
 import kotlinx.android.synthetic.main.waiting_fragment.recyclerViewWating

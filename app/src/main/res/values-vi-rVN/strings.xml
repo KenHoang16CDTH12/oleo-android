@@ -79,6 +79,7 @@
     <string name="cancel_permission_dialog">Hủy</string>
     <string name="accept_permission_dialog">Tiếp tục</string>
     <string name="msg_on_get_waiting_failed">Tải theo dõi đang chờ thất bại, vui lòng thử lại sau!!</string>
+    <string name="msg_on_get_following_failed">Tải theo dõi đã chấp nhận thất bại, vui lòng thử lại sau!!</string>
     <string-array name="tab_titles">
         <item>Người theo dõi</item>
         <item>Đang theo dõi</item>

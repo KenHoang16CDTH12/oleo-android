@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.framgia.oleo.screen.followed.WaitingViewModel" />
+            type="com.framgia.oleo.screen.waiting.WaitingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

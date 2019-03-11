@@ -1,4 +1,4 @@
-package com.framgia.oleo.screen.followed
+package com.framgia.oleo.screen.waiting
 
 import android.app.Application
 import androidx.fragment.app.Fragment
@@ -83,6 +83,7 @@ class WaitingViewModel @Inject constructor(
             userFriend = user,
             status = Constant.STATUS_FOLLOWING
         )
+        userRepository.addUserFollowed(user.id,userRepository.getUser()!!)
     }
 
     companion object {

@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.framgia.oleo.screen.boxchat.BoxChatViewModel
 import com.framgia.oleo.screen.follow.FollowListViewModel
 import com.framgia.oleo.screen.followed.FollowedViewModel
-import com.framgia.oleo.screen.followed.FollowingViewModel
-import com.framgia.oleo.screen.followed.WaitingViewModel
+import com.framgia.oleo.screen.waiting.WaitingViewModel
+import com.framgia.oleo.screen.following.FollowingViewModel
 import com.framgia.oleo.screen.friendrequest.FriendRequestsViewModel
 import com.framgia.oleo.screen.home.HomeViewModel
 import com.framgia.oleo.screen.location.LocationViewModel
