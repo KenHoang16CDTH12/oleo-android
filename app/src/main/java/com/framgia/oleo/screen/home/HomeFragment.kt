@@ -65,7 +65,6 @@ class HomeFragment : BaseFragment(), BottomNavigationView.OnNavigationItemSelect
         pagerAdapter.addFragment(MessagesFragment.newInstance())
         //Todo replace later
         pagerAdapter.addFragment(Fragment())
-        pagerAdapter.addFragment(Fragment())
         pagerAdapter.addFragment(SettingFragment.newInstance())
         viewPager.adapter = pagerAdapter
         viewPager.addOnPageChangeListener(this)
@@ -83,10 +82,10 @@ class HomeFragment : BaseFragment(), BottomNavigationView.OnNavigationItemSelect
                 viewPager.setCurrentItem(TAB_CONTACTS, false)
                 return true
             }
-            R.id.navigation_groups -> {
-                viewPager.setCurrentItem(TAB_GROUPS, false)
-                return true
-            }
+//            R.id.navigation_groups -> {
+//                viewPager.setCurrentItem(TAB_GROUPS, false)
+//                return true
+//            }
             R.id.navigation_more -> {
                 viewPager.setCurrentItem(TAB_MORE, false)
                 return true
@@ -102,8 +101,8 @@ class HomeFragment : BaseFragment(), BottomNavigationView.OnNavigationItemSelect
         when (position) {
             TAB_MESSAGES -> navigation.selectedItemId = R.id.navigation_messages
             TAB_CONTACTS -> navigation.selectedItemId = R.id.navigation_contacts
-            TAB_GROUPS -> navigation.selectedItemId = R.id.navigation_groups
-            else -> navigation.selectedItemId = R.id.navigation_more
+//            TAB_GROUPS -> navigation.selectedItemId = R.id.navigation_groups
+            TAB_MORE -> navigation.selectedItemId = R.id.navigation_more
         }
     }
 
@@ -176,11 +175,10 @@ class HomeFragment : BaseFragment(), BottomNavigationView.OnNavigationItemSelect
 
         private const val REQUEST_APP_DETAILS = 99
         private const val PERMISSION_REQUEST = 10
-        private const val PERMISSION_DENIED = "Permission denied"
         private const val TAB_MESSAGES = 0
         private const val TAB_CONTACTS = 1
-        private const val TAB_GROUPS = 2
-        private const val TAB_MORE = 3
+//        private const val TAB_GROUPS = 2
+        private const val TAB_MORE = 2
 
         fun newInstance() = HomeFragment().apply {
             val bundle = Bundle()

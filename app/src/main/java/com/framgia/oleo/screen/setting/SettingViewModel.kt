@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.framgia.oleo.base.BaseViewModel
 import com.framgia.oleo.data.source.UserRepository
+import com.framgia.oleo.data.source.model.User
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import javax.inject.Inject
 
@@ -16,6 +17,8 @@ class SettingViewModel @Inject constructor(
     fun deleteUser() {
         userRepository.deleteUser()
     }
+
+    fun getUser() : User? = userRepository.getUser()
 
     companion object {
         fun create(fragment: Fragment, factory: ViewModelProvider.Factory): SettingViewModel =

@@ -8,7 +8,8 @@
             type="com.framgia.oleo.screen.setting.SettingViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorSettingGb">
@@ -25,7 +26,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/profile_bg">
+                android:background="@drawable/bg_cover">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imageProfile"
@@ -33,7 +34,7 @@
                     android:layout_height="0dp"
                     android:layout_marginTop="@dimen/dp_32"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_avatar"
+                    android:src="@drawable/ic_user_circle"
                     app:civ_border_color="@color/colorPrimaryDark"
                     app:civ_border_width="@dimen/dp_2"
                     app:layout_constraintBottom_toTopOf="@id/textViewNameUser"
@@ -108,97 +109,97 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                    <!--<androidx.constraintlayout.widget.ConstraintLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content">-->
 
-                        <TextView
-                            android:id="@+id/textViewNotification"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:drawablePadding="@dimen/dp_26"
-                            android:drawableStart="@drawable/ic_notification"
-                            android:fontFamily="serif"
-                            android:padding="@dimen/dp_16"
-                            android:paddingEnd="@dimen/dp_8"
-                            android:paddingStart="@dimen/dp_24"
-                            android:text="@string/notification"
-                            android:textColor="@color/colorGrey800Light"
-                            android:textSize="@dimen/sp_18"
-                            app:layout_constraintEnd_toStartOf="@id/switchNotification"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintWidth_percent="0.8" />
+                        <!--<TextView-->
+                            <!--android:id="@+id/textViewNotification"-->
+                            <!--android:layout_width="0dp"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:drawablePadding="@dimen/dp_26"-->
+                            <!--android:drawableStart="@drawable/ic_notification"-->
+                            <!--android:fontFamily="serif"-->
+                            <!--android:padding="@dimen/dp_16"-->
+                            <!--android:paddingEnd="@dimen/dp_8"-->
+                            <!--android:paddingStart="@dimen/dp_24"-->
+                            <!--android:text="@string/notification"-->
+                            <!--android:textColor="@color/colorGrey800Light"-->
+                            <!--android:textSize="@dimen/sp_18"-->
+                            <!--app:layout_constraintEnd_toStartOf="@id/switchNotification"-->
+                            <!--app:layout_constraintStart_toStartOf="parent"-->
+                            <!--app:layout_constraintTop_toTopOf="parent"-->
+                            <!--app:layout_constraintWidth_percent="0.8" />-->
 
-                        <Switch
-                            android:id="@+id/switchNotification"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp_16"
-                            android:thumbTint="@color/colorPrimaryDark"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/textViewNotification"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintWidth_percent="0.2" />
+                        <!--<Switch-->
+                            <!--android:id="@+id/switchNotification"-->
+                            <!--android:layout_width="0dp"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginTop="@dimen/dp_16"-->
+                            <!--android:thumbTint="@color/colorPrimaryDark"-->
+                            <!--app:layout_constraintEnd_toEndOf="parent"-->
+                            <!--app:layout_constraintStart_toEndOf="@id/textViewNotification"-->
+                            <!--app:layout_constraintTop_toTopOf="parent"-->
+                            <!--app:layout_constraintWidth_percent="0.2" />-->
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/LineUnderTextViewNotification"
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/dp_1"
-                            android:background="@color/colorGrey400"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/textViewNotification"
-                            app:layout_constraintWidth_percent="0.82" />
+                        <!--<androidx.constraintlayout.widget.ConstraintLayout-->
+                            <!--android:id="@+id/LineUnderTextViewNotification"-->
+                            <!--android:layout_width="0dp"-->
+                            <!--android:layout_height="@dimen/dp_1"-->
+                            <!--android:background="@color/colorGrey400"-->
+                            <!--app:layout_constraintEnd_toEndOf="parent"-->
+                            <!--app:layout_constraintTop_toBottomOf="@id/textViewNotification"-->
+                            <!--app:layout_constraintWidth_percent="0.82" />-->
 
-                        <TextView
-                            android:id="@+id/textViewSecurity"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:drawablePadding="@dimen/dp_26"
-                            android:drawableStart="@drawable/ic_security"
-                            android:focusable="true"
-                            android:fontFamily="serif"
-                            android:padding="@dimen/dp_16"
-                            android:paddingEnd="@dimen/dp_8"
-                            android:paddingStart="@dimen/dp_24"
-                            android:text="@string/security"
-                            android:textColor="@color/colorGrey800Light"
-                            android:textSize="@dimen/sp_18"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/LineUnderTextViewNotification"
-                            app:layout_constraintWidth_percent="1" />
+                        <!--<TextView-->
+                            <!--android:id="@+id/textViewSecurity"-->
+                            <!--android:layout_width="0dp"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:clickable="true"-->
+                            <!--android:drawablePadding="@dimen/dp_26"-->
+                            <!--android:drawableStart="@drawable/ic_security"-->
+                            <!--android:focusable="true"-->
+                            <!--android:fontFamily="serif"-->
+                            <!--android:padding="@dimen/dp_16"-->
+                            <!--android:paddingEnd="@dimen/dp_8"-->
+                            <!--android:paddingStart="@dimen/dp_24"-->
+                            <!--android:text="@string/security"-->
+                            <!--android:textColor="@color/colorGrey800Light"-->
+                            <!--android:textSize="@dimen/sp_18"-->
+                            <!--app:layout_constraintEnd_toEndOf="parent"-->
+                            <!--app:layout_constraintStart_toStartOf="parent"-->
+                            <!--app:layout_constraintTop_toBottomOf="@id/LineUnderTextViewNotification"-->
+                            <!--app:layout_constraintWidth_percent="1" />-->
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/LineUnderTextViewSecurity"
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/dp_1"
-                            android:background="@color/colorGrey400"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/textViewSecurity"
-                            app:layout_constraintWidth_percent="0.82" />
+                        <!--<androidx.constraintlayout.widget.ConstraintLayout-->
+                            <!--android:id="@+id/LineUnderTextViewSecurity"-->
+                            <!--android:layout_width="0dp"-->
+                            <!--android:layout_height="@dimen/dp_1"-->
+                            <!--android:background="@color/colorGrey400"-->
+                            <!--app:layout_constraintEnd_toEndOf="parent"-->
+                            <!--app:layout_constraintTop_toBottomOf="@id/textViewSecurity"-->
+                            <!--app:layout_constraintWidth_percent="0.82" />-->
 
-                        <TextView
-                            android:id="@+id/textViewAppInformation"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:drawablePadding="@dimen/dp_26"
-                            android:drawableStart="@drawable/ic_info"
-                            android:focusable="true"
-                            android:fontFamily="serif"
-                            android:padding="@dimen/dp_16"
-                            android:paddingEnd="@dimen/dp_8"
-                            android:paddingStart="@dimen/dp_24"
-                            android:text="@string/app_information"
-                            android:textColor="@color/colorGrey800Light"
-                            android:textSize="@dimen/sp_18"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/LineUnderTextViewSecurity"
-                            app:layout_constraintWidth_percent="1" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        <!--<TextView-->
+                            <!--android:id="@+id/textViewAppInformation"-->
+                            <!--android:layout_width="0dp"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:clickable="true"-->
+                            <!--android:drawablePadding="@dimen/dp_26"-->
+                            <!--android:drawableStart="@drawable/ic_info"-->
+                            <!--android:focusable="true"-->
+                            <!--android:fontFamily="serif"-->
+                            <!--android:padding="@dimen/dp_16"-->
+                            <!--android:paddingEnd="@dimen/dp_8"-->
+                            <!--android:paddingStart="@dimen/dp_24"-->
+                            <!--android:text="@string/app_information"-->
+                            <!--android:textColor="@color/colorGrey800Light"-->
+                            <!--android:textSize="@dimen/sp_18"-->
+                            <!--app:layout_constraintEnd_toEndOf="parent"-->
+                            <!--app:layout_constraintStart_toStartOf="parent"-->
+                            <!--app:layout_constraintTop_toBottomOf="@id/LineUnderTextViewSecurity"-->
+                            <!--app:layout_constraintWidth_percent="1" />-->
+                    <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
