@@ -166,34 +166,34 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/viewLine" />
 
-        <TextView
-            android:id="@+id/textViewLoginFB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_20"
-            android:background="@drawable/facebook_bg"
-            android:drawablePadding="@dimen/dp_5"
-            android:drawableStart="@drawable/ic_facebook"
-            android:fontFamily="serif"
-            android:paddingBottom="@dimen/dp_8"
-            android:paddingEnd="@dimen/dp_24"
-            android:paddingStart="@dimen/dp_10"
-            android:paddingTop="@dimen/dp_8"
-            android:text="@string/facebook"
-            android:textColor="@color/colorDefault"
-            android:textSize="@dimen/sp_14"
-            app:layout_constraintEnd_toStartOf="@+id/textViewLoginGG"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/viewLine" />
+        <!--<TextView-->
+            <!--android:id="@+id/textViewLoginFB"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="@dimen/dp_20"-->
+            <!--android:background="@drawable/facebook_bg"-->
+            <!--android:drawablePadding="@dimen/dp_5"-->
+            <!--android:drawableStart="@drawable/ic_facebook"-->
+            <!--android:fontFamily="serif"-->
+            <!--android:paddingBottom="@dimen/dp_8"-->
+            <!--android:paddingEnd="@dimen/dp_24"-->
+            <!--android:paddingStart="@dimen/dp_10"-->
+            <!--android:paddingTop="@dimen/dp_8"-->
+            <!--android:text="@string/facebook"-->
+            <!--android:textColor="@color/colorDefault"-->
+            <!--android:textSize="@dimen/sp_14"-->
+            <!--app:layout_constraintEnd_toStartOf="@+id/textViewLoginGG"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/viewLine" />-->
 
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/buttonLoginFB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/textViewLoginFB"
-            app:layout_constraintStart_toStartOf="@id/textViewLoginFB"
-            app:layout_constraintTop_toTopOf="@id/textViewLoginFB" />
+        <!--<com.facebook.login.widget.LoginButton-->
+            <!--android:id="@+id/buttonLoginFB"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:visibility="gone"-->
+            <!--app:layout_constraintBottom_toBottomOf="@id/textViewLoginFB"-->
+            <!--app:layout_constraintStart_toStartOf="@id/textViewLoginFB"-->
+            <!--app:layout_constraintTop_toTopOf="@id/textViewLoginFB" />-->
 
         <TextView
             android:id="@+id/textViewLoginGG"
@@ -212,7 +212,7 @@
             android:textColor="@color/colorDefault"
             android:textSize="@dimen/sp_14"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textViewLoginFB"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/viewLine" />
 
         <TextView

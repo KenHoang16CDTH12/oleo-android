@@ -10,11 +10,11 @@
       android:id="@+id/navigation_contacts"
       android:title="@string/title_contacts"
   />
-  <item
-      android:icon="@drawable/ic_groups"
-      android:id="@+id/navigation_groups"
-      android:title="@string/title_groups"
-  />
+  <!--<item-->
+      <!--android:icon="@drawable/ic_groups"-->
+      <!--android:id="@+id/navigation_groups"-->
+      <!--android:title="@string/title_groups"-->
+  <!--/>-->
   <item
       android:icon="@drawable/ic_more"
       android:id="@+id/navigation_more"

@@ -54,14 +54,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/LineUnderTextViewUnFollow"
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/dp_1"
-                            android:background="@color/colorGrey400"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/textViewFollow"
-                            app:layout_constraintWidth_percent="0.82" />
 
                         <TextView
                             android:id="@+id/textViewRename"
@@ -75,7 +67,7 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintWidth_percent="1" />
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
+                        <View
                             android:id="@+id/LineUnderTextViewRename"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/dp_1"
@@ -94,51 +86,50 @@
                             android:text="@string/follow"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/LineUnderTextViewRename"
-                            app:layout_constraintWidth_percent="1" />
+                            app:layout_constraintTop_toBottomOf="@id/LineUnderTextViewRename" />
 
-                        <TextView
-                            android:id="@+id/textViewNotification"
-                            style="@style/textViewOptionMessage"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:drawableStart="@drawable/ic_notify"
-                            android:text="@string/notification"
-                            app:layout_constraintHorizontal_chainStyle="spread_inside"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textViewFollow"
-                            app:layout_constraintWidth_percent="0.8" />
+                        <!--<TextView-->
+                        <!--android:id="@+id/textViewNotification"-->
+                        <!--style="@style/textViewOptionMessage"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:drawableStart="@drawable/ic_notify"-->
+                        <!--android:text="@string/notification"-->
+                        <!--app:layout_constraintHorizontal_chainStyle="spread_inside"-->
+                        <!--app:layout_constraintStart_toStartOf="parent"-->
+                        <!--app:layout_constraintTop_toBottomOf="@+id/textViewFollow"-->
+                        <!--app:layout_constraintWidth_percent="0.8" />-->
 
-                        <Switch
-                            android:id="@+id/switchNotification"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:thumbTint="@color/colorSwitchNotification"
-                            app:layout_constraintBottom_toTopOf="@+id/textViewBestFriend"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/textViewNotification"
-                            app:layout_constraintTop_toBottomOf="@+id/textViewFollow"
-                            app:layout_constraintWidth_percent="0.2" />
+                        <!--<Switch-->
+                        <!--android:id="@+id/switchNotification"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:thumbTint="@color/colorSwitchNotification"-->
+                        <!--app:layout_constraintBottom_toTopOf="@+id/textViewBestFriend"-->
+                        <!--app:layout_constraintEnd_toEndOf="parent"-->
+                        <!--app:layout_constraintStart_toEndOf="@+id/textViewNotification"-->
+                        <!--app:layout_constraintTop_toBottomOf="@+id/textViewFollow"-->
+                        <!--app:layout_constraintWidth_percent="0.2" />-->
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/LineUnderTextViewNotification"
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/dp_1"
-                            android:background="@color/colorGrey400"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/textViewNotification"
-                            app:layout_constraintWidth_percent="0.82" />
+                        <!--<androidx.constraintlayout.widget.ConstraintLayout-->
+                        <!--android:id="@+id/LineUnderTextViewNotification"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="@dimen/dp_1"-->
+                        <!--android:background="@color/colorGrey400"-->
+                        <!--app:layout_constraintEnd_toEndOf="parent"-->
+                        <!--app:layout_constraintTop_toBottomOf="@id/textViewNotification"-->
+                        <!--app:layout_constraintWidth_percent="0.82" />-->
 
-                        <TextView
-                            android:id="@+id/textViewBestFriend"
-                            style="@style/textViewOptionMessage"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:drawableStart="@drawable/ic_star"
-                            android:text="@string/best_friend"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/LineUnderTextViewNotification" />
+                        <!--<TextView-->
+                        <!--android:id="@+id/textViewBestFriend"-->
+                        <!--style="@style/textViewOptionMessage"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:drawableStart="@drawable/ic_star"-->
+                        <!--android:text="@string/best_friend"-->
+                        <!--app:layout_constraintEnd_toEndOf="parent"-->
+                        <!--app:layout_constraintStart_toStartOf="parent"-->
+                        <!--app:layout_constraintTop_toBottomOf="@id/LineUnderTextViewNotification" />-->
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -223,38 +214,38 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/textViewUnFriend" />
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/viewUnderLineTextViewRemoveBox"
-                            android:layout_width="0dp"
-                            android:layout_height="@dimen/dp_1"
-                            android:background="@color/colorGrey400"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="1"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/textViewRemoveBox"
-                            app:layout_constraintWidth_percent="0.82" />
+                        <!--<androidx.constraintlayout.widget.ConstraintLayout-->
+                        <!--android:id="@+id/viewUnderLineTextViewRemoveBox"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="@dimen/dp_1"-->
+                        <!--android:background="@color/colorGrey400"-->
+                        <!--app:layout_constraintEnd_toEndOf="parent"-->
+                        <!--app:layout_constraintHorizontal_bias="1"-->
+                        <!--app:layout_constraintStart_toStartOf="parent"-->
+                        <!--app:layout_constraintTop_toBottomOf="@id/textViewRemoveBox"-->
+                        <!--app:layout_constraintWidth_percent="0.82" />-->
 
-                        <TextView
-                            android:id="@+id/textViewBlockPerson"
-                            style="@style/textViewOptionMessage"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:drawableStart="@drawable/ic_blog"
-                            android:text="@string/block"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/viewUnderLineTextViewRemoveBox"
-                            app:layout_constraintWidth_percent="0.8" />
+                        <!--<TextView-->
+                        <!--android:id="@+id/textViewBlockPerson"-->
+                        <!--style="@style/textViewOptionMessage"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:drawableStart="@drawable/ic_blog"-->
+                        <!--android:text="@string/block"-->
+                        <!--app:layout_constraintStart_toStartOf="parent"-->
+                        <!--app:layout_constraintTop_toBottomOf="@+id/viewUnderLineTextViewRemoveBox"-->
+                        <!--app:layout_constraintWidth_percent="0.8" />-->
 
-                        <Switch
-                            android:id="@+id/switchBlockUser"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:thumbTint="@color/colorSwitchBlockUser"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/textViewBlockPerson"
-                            app:layout_constraintTop_toBottomOf="@+id/viewUnderLineTextViewRemoveBox"
-                            app:layout_constraintWidth_percent="0.2" />
+                        <!--<Switch-->
+                        <!--android:id="@+id/switchBlockUser"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:thumbTint="@color/colorSwitchBlockUser"-->
+                        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                        <!--app:layout_constraintEnd_toEndOf="parent"-->
+                        <!--app:layout_constraintStart_toEndOf="@+id/textViewBlockPerson"-->
+                        <!--app:layout_constraintTop_toBottomOf="@+id/viewUnderLineTextViewRemoveBox"-->
+                        <!--app:layout_constraintWidth_percent="0.2" />-->
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

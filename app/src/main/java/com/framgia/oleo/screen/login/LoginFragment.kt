@@ -61,20 +61,20 @@ class LoginFragment : BaseFragment(), View.OnClickListener {
         googleSignInClient = GoogleSignIn.getClient(activity!!, viewModel.getGoogleSignInOptions())
         textLayoutPassWord.isPasswordVisibilityToggleEnabled = true
         buttonLogin.setOnClickListener(this)
-        textViewLoginFB.setOnClickListener(this)
+//        textViewLoginFB.setOnClickListener(this)
         textViewLoginGG.setOnClickListener(this)
         buttonLogin.setOnClickListener(this)
         textViewSignUp.setOnClickListener(this)
     }
 
     override fun bindView() {
-        signInWithFacebook()
-        buttonLoginFB.fragment = this
+//        signInWithFacebook()
+//        buttonLoginFB.fragment = this
     }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
-            R.id.textViewLoginFB -> if (isCheckMultiClick()) buttonLoginFB.performClick()
+//            R.id.textViewLoginFB -> if (isCheckMultiClick()) buttonLoginFB.performClick()
             R.id.textViewLoginGG -> if (isCheckMultiClick()) signInWithGoogle()
             R.id.buttonLogin -> signWithPhoneNumberAndPassword()
             R.id.textViewSignUp -> {
@@ -98,29 +98,29 @@ class LoginFragment : BaseFragment(), View.OnClickListener {
         ).show()
     }
 
-    private fun signInWithFacebook() {
-        buttonLoginFB.setReadPermissions(Arrays.asList(PUBLIC_PROFILE, EMAIL))
-        buttonLoginFB.registerCallback(callBackManager, object : FacebookCallback<LoginResult> {
-            override fun onSuccess(result: LoginResult?) {
-                if (result != null) {
-                    viewModel.receiveDataUserFacebook(result)
-                    (activity!! as MainActivity).replaceFragmentInActivity(
-                        R.id.containerMain, HomeFragment.newInstance()
-                    )
-                } else {
-                    Toast.makeText(context, REQUEST_NULL, Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onCancel() {
-                view!!.showSnackBar(FACEBOOK_SIGN_CANCELLED)
-            }
-
-            override fun onError(error: FacebookException?) {
-                view!!.showSnackBar(FACEBOOK_SIGN_FAILED + error.toString())
-            }
-        })
-    }
+//    private fun signInWithFacebook() {
+//        buttonLoginFB.setReadPermissions(Arrays.asList(PUBLIC_PROFILE, EMAIL))
+//        buttonLoginFB.registerCallback(callBackManager, object : FacebookCallback<LoginResult> {
+//            override fun onSuccess(result: LoginResult?) {
+//                if (result != null) {
+//                    viewModel.receiveDataUserFacebook(result)
+//                    (activity!! as MainActivity).replaceFragmentInActivity(
+//                        R.id.containerMain, HomeFragment.newInstance()
+//                    )
+//                } else {
+//                    Toast.makeText(context, REQUEST_NULL, Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//
+//            override fun onCancel() {
+//                view!!.showSnackBar(FACEBOOK_SIGN_CANCELLED)
+//            }
+//
+//            override fun onError(error: FacebookException?) {
+//                view!!.showSnackBar(FACEBOOK_SIGN_FAILED + error.toString())
+//            }
+//        })
+//    }
 
     private fun signWithPhoneNumberAndPassword() {
         if (!onCheckValidateFormLogin()) {

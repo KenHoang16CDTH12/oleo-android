@@ -36,7 +36,7 @@
                     android:layout_marginStart="@dimen/dp_16"
                     android:layout_marginTop="@dimen/dp_16"
                     android:imageUrl="@{user.image}"
-                    android:src="@drawable/ic_avatar"
+                    android:src="@drawable/ic_user_circle"
                     app:civ_border_color="@color/colorSwitchNotification"
                     app:civ_border_width="@dimen/dp_2"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -45,30 +45,45 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0" />
 
+                <View
+                    android:id="@+id/viewCenter"
+                    android:layout_width="0dp"
+                    app:layout_constraintStart_toEndOf="@id/imageProfile"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:background="@color/colorGrey100"
+                    android:layout_marginStart="@dimen/dp_10"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
                 <TextView
                     android:id="@+id/textViewNameUser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_15"
                     android:fontFamily="serif"
                     android:text="@{user.userName}"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/sp_24"
+                    app:layout_constraintVertical_bias="0.7"
                     app:layout_constraintStart_toEndOf="@+id/imageProfile"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/viewCenter"/>
+
 
                 <TextView
                     android:id="@+id/textViewWatchInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_8"
-                    android:layout_marginTop="@dimen/dp_8"
-                    android:text="@string/see_personal_information"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_2"
+                    android:text="@{user.email}"
                     android:textColor="@color/colorGrey800Light"
                     android:textSize="@dimen/sp_16"
                     app:layout_constraintStart_toEndOf="@+id/imageProfile"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewNameUser" />
+                    app:layout_constraintTop_toBottomOf="@id/viewCenter" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

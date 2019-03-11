@@ -13,6 +13,7 @@ import com.facebook.HttpMethod
 import com.facebook.login.LoginManager
 import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseFragment
+import com.framgia.oleo.data.source.model.User
 import com.framgia.oleo.databinding.FragmentSettingBinding
 import com.framgia.oleo.utils.extension.isCheckMultiClick
 import com.framgia.oleo.utils.liveData.autoCleared
@@ -21,13 +22,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_setting.textFriendRequest
 import kotlinx.android.synthetic.main.fragment_setting.textViewLogOut
+import kotlinx.android.synthetic.main.fragment_setting.textViewNameUser
 import kotlinx.android.synthetic.main.fragment_setting.textViewWatchList
 
 class SettingFragment : BaseFragment(), View.OnClickListener {
-    private var listener: OnSettingListener? = null
+
     private lateinit var viewModel: SettingViewModel
-    private var binding by autoCleared<FragmentSettingBinding>()
     private lateinit var googleSignInClient: GoogleSignInClient
+    private var listener: OnSettingListener? = null
+    private var binding by autoCleared<FragmentSettingBinding>()
+    private var user : User? = null
 
     override fun createView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -57,6 +61,8 @@ class SettingFragment : BaseFragment(), View.OnClickListener {
     }
 
     override fun bindView() {
+        user = viewModel.getUser()
+        textViewNameUser.text = user!!.userName
     }
 
     override fun onClick(v: View?) {
@@ -109,6 +115,7 @@ class SettingFragment : BaseFragment(), View.OnClickListener {
     }
 
     companion object {
+
         fun newInstance() = SettingFragment().apply {
             val bundle = Bundle()
             arguments = bundle
