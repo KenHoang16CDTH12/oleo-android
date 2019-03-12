@@ -18,7 +18,7 @@ interface MesssagesDataSource {
 
     fun getImageProfile(userId: String, valueEventListener: ValueEventListener)
 
-    fun getListBoxChat(userId: String, valueEventListener: ValueEventListener)
+    fun getListBoxChat(userId: String, childEventListener: ChildEventListener)
 
     fun getLastMessage(userId: String, roomId: String, childEventListener: ChildEventListener)
 
