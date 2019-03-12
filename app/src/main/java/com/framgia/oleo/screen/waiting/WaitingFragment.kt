@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseFragment
-import com.framgia.oleo.data.source.model.User
+import com.framgia.oleo.data.source.model.FollowRequest
 import com.framgia.oleo.databinding.WaitingFragmentBinding
 import com.framgia.oleo.screen.waiting.WaitingAdapter.OnItemViewListener
 import com.framgia.oleo.utils.liveData.autoCleared
@@ -19,8 +19,8 @@ class WaitingFragment : BaseFragment(), OnItemViewListener {
     private var waitingFragmentBinding by autoCleared<WaitingFragmentBinding>()
     private var waitingAdapter by autoCleared<WaitingAdapter>()
 
-    override fun onAcceptClick(user: User) {
-        viewModel.changeStatusOfFollowRequest(user)
+    override fun onAcceptClick(followRequest: FollowRequest) {
+        viewModel.changeStatusOfFollowRequest(followRequest)
     }
 
     override fun setUpView() {
@@ -35,8 +35,14 @@ class WaitingFragment : BaseFragment(), OnItemViewListener {
 
     override fun bindView() {
         viewModel.getFollowRequest()
-        viewModel.usersLiveData.observe(this, Observer {
-            waitingAdapter.updateData(it)
+        viewModel.onChildAddedEvent.observe(this, Observer {
+            waitingAdapter.addFollowRequest(it)
+        })
+        viewModel.onChildChangedEvent.observe(this, Observer {
+            waitingAdapter.changeFollowRequest(it)
+        })
+        viewModel.onChildRemovedEvent.observe(this, Observer {
+            waitingAdapter.removeFollowRequest(it)
         })
     }
 

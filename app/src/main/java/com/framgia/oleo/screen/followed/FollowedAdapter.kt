@@ -5,11 +5,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.framgia.oleo.R
-import com.framgia.oleo.data.source.model.User
+import com.framgia.oleo.data.source.model.Followed
 import com.framgia.oleo.databinding.AdapterFollowedBinding
+import com.framgia.oleo.utils.extension.lastIndex
 
 class FollowedAdapter : RecyclerView.Adapter<FollowedAdapter.Companion.ViewHolder>() {
-    private var users: MutableList<User> = mutableListOf()
+    private var followeds: MutableList<Followed> = mutableListOf()
     private lateinit var onItemViewListener: OnItemViewListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -19,17 +20,28 @@ class FollowedAdapter : RecyclerView.Adapter<FollowedAdapter.Companion.ViewHolde
     }
 
     override fun getItemCount(): Int {
-        return users.size
+        return followeds.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindData(users.get(position))
+        holder.bindData(followeds.get(position))
     }
 
-    fun updateData(users: List<User>) {
-        this.users.clear()
-        this.users.addAll(users)
-        notifyDataSetChanged()
+    fun addFollowRequest(followed: Followed) {
+        followeds.add(followed)
+        notifyItemInserted(followeds.lastIndex)
+    }
+
+    fun removeFollowRequest(followed: Followed) {
+        val index = followeds.indexOf(followeds.find { it.id == followed.id })
+        followeds.removeAt(index)
+        notifyItemRemoved(index)
+    }
+
+    fun changeFollowRequest(followed: Followed) {
+        val index = followeds.indexOf(followeds.find { it.id == followed.id })
+        followeds.set(index, followed)
+        notifyItemChanged(index)
     }
 
     fun setOnItemViewListener(onItemViewListener: OnItemViewListener) {
@@ -37,7 +49,7 @@ class FollowedAdapter : RecyclerView.Adapter<FollowedAdapter.Companion.ViewHolde
     }
 
     interface OnItemViewListener {
-        fun onUnfollowClick(user: User)
+        fun onUnfollowClick(followed: Followed)
     }
 
     companion object {
@@ -50,8 +62,8 @@ class FollowedAdapter : RecyclerView.Adapter<FollowedAdapter.Companion.ViewHolde
                 binding.listener = onItemViewListener
             }
 
-            fun bindData(user: User) {
-                binding.user = user
+            fun bindData(followed: Followed) {
+                binding.followed = followed
             }
         }
     }

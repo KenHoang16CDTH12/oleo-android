@@ -1,5 +1,6 @@
 package com.framgia.oleo.data.source
 
+import com.framgia.oleo.data.source.model.FollowRequest
 import com.framgia.oleo.data.source.model.Followed
 import com.framgia.oleo.data.source.model.FriendRequest
 import com.framgia.oleo.data.source.model.Place
@@ -15,24 +16,24 @@ class UserRepository(
     private val remote: UserDataSource.Remote
 ) : UserDataSource.Local, UserDataSource.Remote {
 
-    override fun deleteUserFollowed(id: String, userFriend: User) {
-        remote.deleteUserFollowed(id, userFriend)
+    override fun deleteUserFollowed(id: String, followed: Followed) {
+        remote.deleteUserFollowed(id, followed)
     }
 
-    override fun getFollowedsOfUser(id: String, valueEventListener: ValueEventListener) {
-        remote.getFollowedsOfUser(id, valueEventListener)
+    override fun getFollowedsOfUser(id: String, childEventListener: ChildEventListener) {
+        remote.getFollowedsOfUser(id, childEventListener)
     }
 
     override fun addUserFollowed(idUser: String, userFollowed: User) {
         remote.addUserFollowed(idUser, userFollowed)
     }
 
-    override fun changeFollowStatus(userCurrent: User, userFriend: User, status: String) {
-        remote.changeFollowStatus(userCurrent, userFriend, status)
+    override fun changeFollowStatus(userCurrent: User, followRequest: FollowRequest) {
+        remote.changeFollowStatus(userCurrent, followRequest)
     }
 
-    override fun getFollowRequestsOfUser(id: String, status: String, valueEventListener: ValueEventListener) {
-        remote.getFollowRequestsOfUser(id, status, valueEventListener)
+    override fun getFollowRequestsOfUser(id: String, status: String, childEventListener: ChildEventListener) {
+        remote.getFollowRequestsOfUser(id, status, childEventListener)
     }
 
     override fun getFollowRequestById(id: String, user: User, valueEventListener: ValueEventListener) {

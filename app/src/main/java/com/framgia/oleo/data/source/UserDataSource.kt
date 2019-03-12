@@ -1,5 +1,6 @@
 package com.framgia.oleo.data.source
 
+import com.framgia.oleo.data.source.model.FollowRequest
 import com.framgia.oleo.data.source.model.Followed
 import com.framgia.oleo.data.source.model.FriendRequest
 import com.framgia.oleo.data.source.model.Place
@@ -22,17 +23,17 @@ interface UserDataSource {
     }
 
     interface Remote {
-        fun deleteUserFollowed(id: String, userFriend: User)
+        fun deleteUserFollowed(id: String, followed: Followed)
 
-        fun getFollowedsOfUser(id: String, valueEventListener: ValueEventListener)
+        fun getFollowedsOfUser(id: String, childEventListener: ChildEventListener)
 
         fun addUserFollowed(idUser: String, userFollowed: User)
 
         fun pushUserLocation(idUser: String, place: Place)
 
-        fun changeFollowStatus(userCurrent: User, userFriend: User, status: String)
+        fun changeFollowStatus(userCurrent: User, followRequest: FollowRequest)
 
-        fun getFollowRequestsOfUser(id: String, status: String, valueEventListener: ValueEventListener)
+        fun getFollowRequestsOfUser(id: String, status: String, childEventListener: ChildEventListener)
 
         fun getFollowRequestById(id: String, user: User, valueEventListener: ValueEventListener)
 
