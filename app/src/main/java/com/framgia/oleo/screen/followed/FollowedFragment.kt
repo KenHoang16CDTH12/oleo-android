@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseFragment
-import com.framgia.oleo.data.source.model.User
+import com.framgia.oleo.data.source.model.Followed
 import com.framgia.oleo.databinding.FollowedFragmentBinding
 import com.framgia.oleo.utils.liveData.autoCleared
 import kotlinx.android.synthetic.main.followed_fragment.recyclerViewFollowed
@@ -18,8 +18,8 @@ class FollowedFragment : BaseFragment(), FollowedAdapter.OnItemViewListener {
     private var followedFragmentBinding by autoCleared<FollowedFragmentBinding>()
     private var followedAdapter by autoCleared<FollowedAdapter>()
 
-    override fun onUnfollowClick(user: User) {
-        viewModel.deleteUserFollowed(user)
+    override fun onUnfollowClick(followed: Followed) {
+        viewModel.deleteUserFollowed(followed)
     }
 
     override fun setUpView() {
@@ -34,8 +34,14 @@ class FollowedFragment : BaseFragment(), FollowedAdapter.OnItemViewListener {
 
     override fun bindView() {
         viewModel.getFollowedsOfUser()
-        viewModel.usersLiveData.observe(this, Observer {
-            followedAdapter.updateData(it)
+        viewModel.onChildAddedEvent.observe(this, Observer {
+            followedAdapter.addFollowRequest(it)
+        })
+        viewModel.onChildChangedEvent.observe(this, Observer {
+            followedAdapter.changeFollowRequest(it)
+        })
+        viewModel.onChildRemovedEvent.observe(this, Observer {
+            followedAdapter.removeFollowRequest(it)
         })
     }
 

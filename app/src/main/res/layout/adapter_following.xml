@@ -10,8 +10,8 @@
             type="com.framgia.oleo.screen.following.FollowingAdapter.OnItemViewListener" />
 
         <variable
-            name="user"
-            type="com.framgia.oleo.data.source.model.User" />
+            name="followRequest"
+            type="com.framgia.oleo.data.source.model.FollowRequest" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,7 +26,7 @@
             android:layout_marginEnd="@dimen/dp_8"
             android:layout_marginStart="@dimen/dp_16"
             android:layout_marginTop="@dimen/dp_8"
-            android:imageUrl="@{user.image}"
+            android:imageUrl="@{followRequest.image}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -40,7 +40,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:padding="@dimen/dp_8"
-            android:text="@{user.userName}"
+            android:text="@{followRequest.name}"
             android:textSize="@dimen/sp_18"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline4"
@@ -61,7 +61,7 @@
             android:layout_margin="@dimen/dp_8"
             android:background="@drawable/button_block_bg"
             android:gravity="center"
-            android:onClick="@{()->listener.onBlockClick(user)}"
+            android:onClick="@{()->listener.onBlockClick(followRequest)}"
             android:padding="@dimen/dp_4"
             android:text="@string/block"
             android:textAllCaps="false"

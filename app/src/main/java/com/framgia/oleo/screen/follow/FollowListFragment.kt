@@ -72,11 +72,13 @@ class FollowListFragment : BaseFragment() {
 
     private fun setupTabLayoutWithViewPager() {
         followPagerAdapter = FollowPagerAdapter(childFragmentManager, activity as MainActivity)
+        viewPagerFollowList.offscreenPageLimit = OFF_SCREEN_PAGE
         viewPagerFollowList.adapter = followPagerAdapter
         tabLayoutFollowList.setupWithViewPager(viewPagerFollowList)
     }
 
     companion object {
         fun newInstance() = FollowListFragment()
+        const val OFF_SCREEN_PAGE = 2
     }
 }

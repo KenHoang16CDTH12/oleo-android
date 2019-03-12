@@ -18,24 +18,24 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class UserRemoteDataSource : UserDataSource.Remote {
-    override fun deleteUserFollowed(id: String, userFriend: User) {
+    override fun deleteUserFollowed(id: String, followed: Followed) {
         firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
             .child(id)
             .child(Constant.PATH_STRING_FOLLOWED)
-            .child(userFriend.id)
+            .child(followed.id!!)
             .removeValue()
         firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
-            .child(userFriend.id)
+            .child(followed.id!!)
             .child(Constant.PATH_STRING_FOLLOW_REQUEST)
             .child(id)
             .removeValue()
     }
 
-    override fun getFollowedsOfUser(id: String, valueEventListener: ValueEventListener) {
+    override fun getFollowedsOfUser(id: String, childEventListener: ChildEventListener) {
         firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
             .child(id)
             .child(Constant.PATH_STRING_FOLLOWED)
-            .addValueEventListener(valueEventListener)
+            .addChildEventListener(childEventListener)
     }
 
     override fun addUserFollowed(idUser: String, userFollowed: User) {
@@ -43,25 +43,33 @@ class UserRemoteDataSource : UserDataSource.Remote {
             .child(idUser)
             .child(Constant.PATH_STRING_FOLLOWED)
             .child(userFollowed.id)
-            .setValue(Followed(userFollowed.id, System.currentTimeMillis()))
+            .setValue(
+                Followed(
+                    userFollowed.id,
+                    System.currentTimeMillis(),
+                    userFollowed.userName,
+                    userFollowed.image,
+                    userFollowed.phoneNumber
+                )
+            )
     }
 
-    override fun changeFollowStatus(userCurrent: User, userFriend: User, status: String) {
+    override fun changeFollowStatus(userCurrent: User, followRequest: FollowRequest) {
         firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
             .child(userCurrent.id)
             .child(Constant.PATH_STRING_FOLLOW_REQUEST)
-            .child(userFriend.id)
+            .child(followRequest.id!!)
             .child(Constant.PATH_STRING_STATUS)
-            .setValue(status)
+            .setValue(followRequest.status)
     }
 
-    override fun getFollowRequestsOfUser(id: String, status: String, valueEventListener: ValueEventListener) {
+    override fun getFollowRequestsOfUser(id: String, status: String, childEventListener: ChildEventListener) {
         firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
             .child(id)
             .child(Constant.PATH_STRING_FOLLOW_REQUEST)
             .orderByChild(Constant.PATH_STRING_STATUS)
             .equalTo(status)
-            .addValueEventListener(valueEventListener)
+            .addChildEventListener(childEventListener)
     }
 
     override fun getFollowRequestById(id: String, user: User, valueEventListener: ValueEventListener) {
@@ -77,7 +85,16 @@ class UserRemoteDataSource : UserDataSource.Remote {
             .child(userFriend.id)
             .child(Constant.PATH_STRING_FOLLOW_REQUEST)
             .child(userCurrent.id)
-            .setValue(FollowRequest(userCurrent.id, Constant.STATUS_WAITING, System.currentTimeMillis()))
+            .setValue(
+                FollowRequest(
+                    userCurrent.id,
+                    Constant.STATUS_WAITING,
+                    System.currentTimeMillis(),
+                    userCurrent.userName,
+                    userCurrent.image,
+                    userCurrent.phoneNumber
+                )
+            )
     }
 
     override fun addFriend(

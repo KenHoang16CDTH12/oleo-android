@@ -8,11 +8,9 @@ import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseViewModel
 import com.framgia.oleo.data.source.UserRepository
 import com.framgia.oleo.data.source.model.Followed
-import com.framgia.oleo.data.source.model.User
-import com.framgia.oleo.utils.Constant
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import javax.inject.Inject
 
 class FollowedViewModel @Inject constructor(
@@ -20,12 +18,16 @@ class FollowedViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : BaseViewModel() {
 
-    val usersLiveData: MutableLiveData<MutableList<User>> by lazy {
-        MutableLiveData<MutableList<User>>()
+    val onChildAddedEvent: MutableLiveData<Followed> by lazy {
+        MutableLiveData<Followed>()
     }
 
-    val followedLiveData: MutableLiveData<MutableList<Followed>> by lazy {
-        MutableLiveData<MutableList<Followed>>()
+    val onChildChangedEvent: MutableLiveData<Followed> by lazy {
+        MutableLiveData<Followed>()
+    }
+
+    val onChildRemovedEvent: MutableLiveData<Followed> by lazy {
+        MutableLiveData<Followed>()
     }
 
     val onErrorEvent: MutableLiveData<String> by lazy {
@@ -33,57 +35,31 @@ class FollowedViewModel @Inject constructor(
     }
 
     fun getFollowedsOfUser() {
-        userRepository.getFollowedsOfUser(userRepository.getUser()?.id!!, object : ValueEventListener {
+        userRepository.getFollowedsOfUser(userRepository.getUser()!!.id, object : ChildEventListener {
             override fun onCancelled(error: DatabaseError) {
-                onErrorEvent.value = application.getString(R.string.msg_on_get_following_failed)
+                onErrorEvent.value = application.getString(R.string.msg_on_get_followed_failed)
             }
 
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val followeds = mutableListOf<Followed>()
-                for (datasnapshot in dataSnapshot.children) {
-                    followeds.add(datasnapshot.getValue(Followed::class.java)!!)
-                }
-                getUsersByFolloweds(followeds, dataSnapshot.children.count())
-                followedLiveData.value = followeds
+            override fun onChildMoved(dataSnapshot: DataSnapshot, p1: String?) {
+                //todo
+            }
+
+            override fun onChildChanged(dataSnapshot: DataSnapshot, p1: String?) {
+                onChildChangedEvent.value = dataSnapshot.getValue(Followed::class.java)
+            }
+
+            override fun onChildAdded(dataSnapshot: DataSnapshot, p1: String?) {
+                onChildAddedEvent.value = dataSnapshot.getValue(Followed::class.java)
+            }
+
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+                onChildRemovedEvent.value = dataSnapshot.getValue(Followed::class.java)
             }
         })
     }
 
-    fun getUsersByFolloweds(
-        followeds: MutableList<Followed>,
-        childrenCount: Int
-    ) {
-        var users = mutableListOf<User>()
-        if (followeds.isEmpty()) {
-            usersLiveData.value = users
-            return
-        }
-        for (followed in followeds) {
-            userRepository.getUserById(followed.id!!, object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    users.add(dataSnapshot.getValue(User::class.java)!!)
-                    if (users.size == childrenCount) {
-                        usersLiveData.value = users
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    onErrorEvent.value = application.getString(R.string.msg_on_get_followed_failed)
-                }
-            })
-        }
-    }
-
-    fun changeStatusOfFollowRequest(user: User) {
-        userRepository.changeFollowStatus(
-            userCurrent = userRepository.getUser()!!,
-            userFriend = user,
-            status = Constant.STATUS_BLOCKING
-        )
-    }
-
-    fun deleteUserFollowed(user: User) {
-        userRepository.deleteUserFollowed(userRepository.getUser()?.id!!,user)
+    fun deleteUserFollowed(followed: Followed) {
+        userRepository.deleteUserFollowed(userRepository.getUser()?.id!!, followed)
     }
 
     companion object {

@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseFragment
-import com.framgia.oleo.data.source.model.User
+import com.framgia.oleo.data.source.model.FollowRequest
 import com.framgia.oleo.databinding.FollowingFragmentBinding
 import com.framgia.oleo.screen.following.FollowingAdapter.OnItemViewListener
 import com.framgia.oleo.utils.liveData.autoCleared
@@ -19,8 +19,8 @@ class FollowingFragment : BaseFragment(), OnItemViewListener {
     private var followingFragmentBinding by autoCleared<FollowingFragmentBinding>()
     private var followingAdapter by autoCleared<FollowingAdapter>()
 
-    override fun onBlockClick(user: User) {
-        viewModel.changeStatusOfFollowRequest(user)
+    override fun onBlockClick(followRequest: FollowRequest) {
+        viewModel.changeStatusOfFollowRequest(followRequest)
     }
 
     override fun setUpView() {
@@ -35,8 +35,14 @@ class FollowingFragment : BaseFragment(), OnItemViewListener {
 
     override fun bindView() {
         viewModel.getFollowingRequestOfUser()
-        viewModel.usersLiveData.observe(this, Observer {
-            followingAdapter.updateData(it)
+        viewModel.onChildAddedEvent.observe(this, Observer {
+            followingAdapter.addFollowRequest(it)
+        })
+        viewModel.onChildChangedEvent.observe(this, Observer {
+            followingAdapter.changeFollowRequest(it)
+        })
+        viewModel.onChildRemovedEvent.observe(this, Observer {
+            followingAdapter.removeFollowRequest(it)
         })
     }
 
