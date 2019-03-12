@@ -1,14 +1,15 @@
 package com.framgia.oleo.screen.messages
 
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.framgia.oleo.base.BaseViewModel
 import com.framgia.oleo.data.source.MessagesRepository
 import com.framgia.oleo.data.source.UserRepository
 import com.framgia.oleo.data.source.model.BoxChat
-import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import javax.inject.Inject
 
 class MessagesViewModel @Inject constructor(
@@ -17,6 +18,8 @@ class MessagesViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private lateinit var messageAdapter: MessagesAdapter
+    val onUpdateBoxChat: MutableLiveData<ArrayList<BoxChat>> = MutableLiveData()
+    private var listBoxChat = arrayListOf<BoxChat>()
 
     fun setAdapter(messageAdapter: MessagesAdapter) {
         this.messageAdapter = messageAdapter
@@ -24,21 +27,19 @@ class MessagesViewModel @Inject constructor(
         this.messageAdapter.setMessageRepository(messagesRepository)
     }
 
-    fun getAllMessages() {
-        messagesRepository.getListBoxChat(userRepository.getUser()!!.id, object : ChildEventListener {
-            override fun onCancelled(dataSnapshot: DatabaseError) {}
+    fun getAllMessages(): MutableLiveData<ArrayList<BoxChat>> {
+        messagesRepository.getListBoxChat(userRepository.getUser()!!.id, object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {}
 
-            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {}
-
-            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {}
-
-            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-                val data = dataSnapshot.getValue(BoxChat::class.java)
-                if (data != null) messageAdapter.updateData(data)
+            override fun onDataChange(snapshot: DataSnapshot) {
+                snapshot.children.forEach { dataSnapshot: DataSnapshot? ->
+                    if (dataSnapshot != null) listBoxChat.add(dataSnapshot.getValue(BoxChat::class.java)!!)
+                }
+                onUpdateBoxChat.value = listBoxChat
+                listBoxChat.clear()
             }
-
-            override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
         })
+        return onUpdateBoxChat
     }
 
     companion object {

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.framgia.oleo.base.BaseViewModel
 import com.framgia.oleo.data.source.MessagesRepository
 import com.framgia.oleo.data.source.UserRepository
+import com.framgia.oleo.data.source.model.BoxChat
 import com.framgia.oleo.data.source.model.Message
 import com.framgia.oleo.data.source.model.User
 import com.framgia.oleo.utils.Index
@@ -14,7 +15,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import java.text.DateFormat
-import java.util.*
+import java.util.ArrayList
+import java.util.Date
 import javax.inject.Inject
 
 class BoxChatViewModel @Inject constructor(
@@ -64,15 +66,10 @@ class BoxChatViewModel @Inject constructor(
         return messages
     }
 
-    fun sendMessage(text: String, boxId: String, userFriendId: String) {
-        val messageId = messagesRepository.getMessageId(user!!.id, boxId)
+    fun sendMessage(text: String, boxChat: BoxChat) {
+        val messageId = messagesRepository.getMessageId(user!!.id, boxChat.id!!)
         val message = Message(messageId, user.id, text, DateFormat.getDateTimeInstance().format(Date()))
-        saveMessage(user.id, boxId, messageId, message)
-        saveMessage(userFriendId, boxId, messageId, message)
-    }
-
-    private fun saveMessage(userId: String, boxId: String, messageId: String, message: Message) {
-        messagesRepository.sendMessage(userId, boxId, messageId, message)
+        messagesRepository.sendMessage(user, boxChat, message)
     }
 
     fun getFriendImageProfile(userId: String): MutableLiveData<String> {

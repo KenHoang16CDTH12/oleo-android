@@ -112,7 +112,7 @@ class UserRemoteDataSource : UserDataSource.Remote {
                     .child(friendRequestId)
                     .child(Constant.PATH_STRING_FRIEND)
                     .child(userId)
-                    .setValue(Friend(friendRequestId, System.currentTimeMillis(), user))
+                    .setValue(Friend(userId, System.currentTimeMillis(), user))
                 firebaseDatabase.getReference(Constant.PATH_STRING_FRIEND_REQUEST)
                     .child(friendRequestId)
                     .child(userId)
@@ -182,20 +182,19 @@ class UserRemoteDataSource : UserDataSource.Remote {
                                 override fun onCancelled(p0: DatabaseError) {}
 
                                 override fun onDataChange(snapShot: DataSnapshot) {
-                                    if (!snapShot.exists())
-                                        firebaseDatabase.getReference(Constant.PATH_STRING_FRIEND_REQUEST)
-                                            .child(reciveId)
-                                            .child(user.id)
-                                            .setValue(
-                                                FriendRequest(
-                                                    user.id,
-                                                    message,
-                                                    Constant.STATUS_FRIEND_WAITING,
-                                                    System.currentTimeMillis()
-                                                )
+                                    firebaseDatabase.getReference(Constant.PATH_STRING_FRIEND_REQUEST)
+                                        .child(reciveId)
+                                        .child(user.id)
+                                        .setValue(
+                                            FriendRequest(
+                                                user.id,
+                                                message,
+                                                Constant.STATUS_FRIEND_WAITING,
+                                                System.currentTimeMillis()
                                             )
-                                            .addOnSuccessListener(onSuccessListener)
-                                            .addOnFailureListener(onFailureListener)
+                                        )
+                                        .addOnSuccessListener(onSuccessListener)
+                                        .addOnFailureListener(onFailureListener)
                                 }
                             })
                 }
