@@ -7,9 +7,9 @@ import com.framgia.oleo.base.BaseViewModel
 import com.framgia.oleo.data.source.MessagesRepository
 import com.framgia.oleo.data.source.UserRepository
 import com.framgia.oleo.data.source.model.BoxChat
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import javax.inject.Inject
 
 class MessagesViewModel @Inject constructor(
@@ -28,16 +28,21 @@ class MessagesViewModel @Inject constructor(
     }
 
     fun getAllMessages(): MutableLiveData<ArrayList<BoxChat>> {
-        messagesRepository.getListBoxChat(userRepository.getUser()!!.id, object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {}
+        listBoxChat.clear()
+        messagesRepository.getListBoxChat(userRepository.getUser()!!.id, object : ChildEventListener {
+            override fun onCancelled(dataSnapshot: DatabaseError) {}
 
-            override fun onDataChange(snapshot: DataSnapshot) {
-                snapshot.children.forEach { dataSnapshot: DataSnapshot? ->
-                    if (dataSnapshot != null) listBoxChat.add(dataSnapshot.getValue(BoxChat::class.java)!!)
-                }
+            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {}
+
+            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {}
+
+            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                val data = dataSnapshot.getValue(BoxChat::class.java)
+                if (data != null) listBoxChat.add(data)
                 onUpdateBoxChat.value = listBoxChat
-                listBoxChat.clear()
             }
+
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
         })
         return onUpdateBoxChat
     }

@@ -8,8 +8,8 @@ import com.google.firebase.database.ValueEventListener
 
 class MessagesRepository(private val messsagesDataSource: MesssagesDataSource) : MesssagesDataSource {
 
-    override fun getListBoxChat(userId: String, valueEventListener: ValueEventListener) {
-        messsagesDataSource.getListBoxChat(userId, valueEventListener)
+    override fun getListBoxChat(userId: String, childEventListener: ChildEventListener) {
+        messsagesDataSource.getListBoxChat(userId, childEventListener)
     }
 
     override fun getLastMessage(userId: String, roomId: String, childEventListener: ChildEventListener) {

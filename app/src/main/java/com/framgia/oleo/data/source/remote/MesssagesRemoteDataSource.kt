@@ -98,12 +98,12 @@ class MesssagesRemoteDataSource : MesssagesDataSource {
             .addValueEventListener(valueEventListener)
     }
 
-    override fun getListBoxChat(userId: String, valueEventListener: ValueEventListener) {
+    override fun getListBoxChat(userId: String, childEventListener: ChildEventListener) {
         firebaseDatabase.reference
             .child(Constant.PATH_STRING_USER)
             .child(userId)
             .child(Constant.PATH_STRING_BOX)
-            .addValueEventListener(valueEventListener)
+            .addChildEventListener(childEventListener)
     }
 
     override fun getLastMessage(userId: String, roomId: String, childEventListener: ChildEventListener) {
