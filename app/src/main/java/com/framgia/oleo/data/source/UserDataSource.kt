@@ -62,7 +62,7 @@ interface UserDataSource {
         fun getFriendRequests(userId: String, valueEventListener: ValueEventListener)
 
         fun confirmFriendRequest(
-            user: User,
+            user: User, friend: User,
             friendRequest: FriendRequest,
             onSuccessListener: OnSuccessListener<Void>,
             onFailureListener: OnFailureListener
@@ -75,8 +75,10 @@ interface UserDataSource {
             onFailureListener: OnFailureListener
         )
 
-        fun addFriend(userId: String, friendRequestId: String)
+        fun addFriend(userId: String, friendRequestId: String, user: User, friend: User)
 
         fun addFollowRequest(userCurrent: User, userFriend: User)
+
+        fun getContactsUser(userId : String, valueEventListener: ValueEventListener)
     }
 }

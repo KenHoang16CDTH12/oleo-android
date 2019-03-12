@@ -1,6 +1,7 @@
 package com.framgia.oleo.utils.di.module
 
 import com.framgia.oleo.screen.boxchat.BoxChatFragment
+import com.framgia.oleo.screen.contacts.ContactsFragment
 import com.framgia.oleo.screen.follow.FollowListFragment
 import com.framgia.oleo.screen.followed.FollowedFragment
 import com.framgia.oleo.screen.following.FollowingFragment
@@ -61,4 +62,7 @@ abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributeWaitingFragment(): WaitingFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeContactsFragment(): ContactsFragment
 }

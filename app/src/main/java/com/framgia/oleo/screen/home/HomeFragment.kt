@@ -13,11 +13,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseFragment
 import com.framgia.oleo.databinding.FragmentHomeBinding
+import com.framgia.oleo.screen.contacts.ContactsFragment
 import com.framgia.oleo.screen.messages.MessagesFragment
 import com.framgia.oleo.screen.setting.SettingFragment
 import com.framgia.oleo.utils.liveData.autoCleared
@@ -64,7 +64,7 @@ class HomeFragment : BaseFragment(), BottomNavigationView.OnNavigationItemSelect
         val pagerAdapter = ViewPagerAdapter(childFragmentManager)
         pagerAdapter.addFragment(MessagesFragment.newInstance())
         //Todo replace later
-        pagerAdapter.addFragment(Fragment())
+        pagerAdapter.addFragment(ContactsFragment.newInstance())
         pagerAdapter.addFragment(SettingFragment.newInstance())
         viewPager.adapter = pagerAdapter
         viewPager.addOnPageChangeListener(this)
