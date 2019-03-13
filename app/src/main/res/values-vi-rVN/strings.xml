@@ -81,6 +81,7 @@
     <string name="msg_on_get_waiting_failed">Tải theo dõi đang chờ thất bại, vui lòng thử lại sau!!</string>
     <string name="msg_on_get_following_failed">Tải theo dõi đã chấp nhận thất bại, vui lòng thử lại sau!!</string>
     <string name="msg_on_get_followed_failed">Tải người dùng đã theo dõi thất, vui lòng thử lại sau!!</string>
+    <string name="search_contact_hint">Tên, số điện thoại…</string>
     <string-array name="tab_titles">
         <item>Người theo dõi</item>
         <item>Đang theo dõi</item>

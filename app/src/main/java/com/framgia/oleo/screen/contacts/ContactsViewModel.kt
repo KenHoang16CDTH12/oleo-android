@@ -21,6 +21,9 @@ class ContactsViewModel @Inject constructor(private val userRepository: UserRepo
     private val userContacts: MutableLiveData<MutableList<Friend>> by lazy {
         MutableLiveData<MutableList<Friend>>()
     }
+    private val searchResult: MutableLiveData<ArrayList<Friend>> by lazy {
+        MutableLiveData<ArrayList<Friend>>()
+    }
     private val messageErrorLiveData: MutableLiveData<String> by lazy { MutableLiveData<String>() }
 
     val onOpenBoxChat: MutableLiveData<BoxChat>by lazy {
@@ -58,10 +61,24 @@ class ContactsViewModel @Inject constructor(private val userRepository: UserRepo
         return onOpenBoxChat
     }
 
+    fun searchContacts(query: String) {
+        var result = arrayListOf<Friend>()
+        when (query.isNotEmpty()) {
+            true -> for (friend in userContacts.value!!) {
+                if (friend.user!!.phoneNumber.contains(query) || friend.user!!.userName.toLowerCase().contains(query)) {
+                    result.add(friend)
+                }
+            }
+            false -> result = userContacts.value as ArrayList<Friend>
+        }
+        searchResult.value = result
+    }
+
     fun getLiveDataContacts(): MutableLiveData<MutableList<Friend>> = userContacts
 
     fun getMessageLiveDataError(): MutableLiveData<String> = messageErrorLiveData
 
+    fun getSearchResultLiveData(): MutableLiveData<ArrayList<Friend>> = searchResult
 
     companion object {
         fun create(fragment: Fragment, factory: ViewModelProvider.Factory): ContactsViewModel =
