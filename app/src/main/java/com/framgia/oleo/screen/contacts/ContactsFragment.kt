@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseFragment
+import com.framgia.oleo.data.source.model.BoxChat
 import com.framgia.oleo.data.source.model.Friend
 import com.framgia.oleo.databinding.FragmentContactsBinding
 import com.framgia.oleo.screen.boxchat.BoxChatFragment
@@ -41,6 +42,7 @@ class ContactsFragment : BaseFragment(), OnItemRecyclerViewClick<Friend>, Search
     }
 
     override fun setUpView() {
+        registerLiveData()
         setUpSearchView()
         adapter = ContactsAdapter(this)
         recyclerViewContacts.adapter = adapter
@@ -53,10 +55,7 @@ class ContactsFragment : BaseFragment(), OnItemRecyclerViewClick<Friend>, Search
 
     override fun onItemClickListener(data: Friend) {
         if (isCheckMultiClick())
-            viewModel.getBoxChat(data.user!!).observe(this, Observer { boxChat ->
-                (activity!! as MainActivity).addFragmentToActivity(R.id.containerMain, BoxChatFragment.newInstance
-                (boxChat))
-            })
+            viewModel.getBoxChat(data.user!!)
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -95,6 +94,12 @@ class ContactsFragment : BaseFragment(), OnItemRecyclerViewClick<Friend>, Search
             ContextCompat.getColor(activity!!.applicationContext, R.color.colorDefault)
         )
         searchView.findViewById<View>(R.id.search_plate).setBackgroundColor(Color.TRANSPARENT)
+    }
+    private fun registerLiveData(){
+        viewModel.getBoxChatLiveData().observe(this, Observer { boxChat ->
+            (activity!! as MainActivity).addFragmentToActivity(R.id.containerMain, BoxChatFragment.newInstance
+                (boxChat))
+        })
     }
 
     companion object {
