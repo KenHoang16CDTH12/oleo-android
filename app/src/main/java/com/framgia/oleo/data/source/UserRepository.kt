@@ -16,6 +16,10 @@ class UserRepository(
     private val remote: UserDataSource.Remote
 ) : UserDataSource.Local, UserDataSource.Remote {
 
+    override fun getFollowRequestSingleValueEvent(idUser: String, userFollowed: User, valueEventListener: ValueEventListener) {
+        remote.getFollowRequestSingleValueEvent(idUser, userFollowed, valueEventListener)
+    }
+
     override fun deleteUserFollowed(id: String, followed: Followed) {
         remote.deleteUserFollowed(id, followed)
     }

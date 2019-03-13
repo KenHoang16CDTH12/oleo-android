@@ -79,7 +79,6 @@
     <string name="accept_permission_dialog">OK</string>
     <string name="msg_on_get_waiting_failed">Get waiting follow request failed!</string>
     <string name="msg_on_get_following_failed">Get following request failed!</string>
-    <string name="msg_on_get_followed_failed">Get user followed failed!</string>
     <string name="search_contact_hint">Name, phone number…</string>
     <string name="resend"><u>Resend</u></string>
     <string name="not_receive_sms_code">\u2022 Don\'t receive the code?</string>
@@ -98,6 +97,10 @@
     <string name="password_reset_successful">Password reset successful !</string>
     <string name="reset_password">Reset Password</string>
     <string name="invalid_sms_code">The code is invalid</string>
+    <string name="msg_on_get_followed_failed">Get user folowed failed!</string>
+    <string name="msg_on_follow_request_exists">Follow reqeuest was sented!</string>
+    <string name="msg_on_database_error">Something wrong, please try again later!!!</string>
+    <string name="msg_do_not_have_permission">You don\'t have permisson to see the list location!!!</string>
     <string-array name="tab_titles">
         <item>Followed</item>
         <item>Following</item>
