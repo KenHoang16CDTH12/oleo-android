@@ -4,20 +4,28 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.framgia.oleo.base.BaseViewModel
+import com.framgia.oleo.data.source.MessagesRepository
 import com.framgia.oleo.data.source.UserRepository
+import com.framgia.oleo.data.source.model.BoxChat
 import com.framgia.oleo.data.source.model.Friend
+import com.framgia.oleo.data.source.model.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import javax.inject.Inject
 
-class ContactsViewModel @Inject constructor(private val userRepository: UserRepository) :
+class ContactsViewModel @Inject constructor(private val userRepository: UserRepository, private val
+    messagesRepository: MessagesRepository) :
     BaseViewModel() {
 
     private val userContacts: MutableLiveData<MutableList<Friend>> by lazy {
         MutableLiveData<MutableList<Friend>>()
     }
     private val messageErrorLiveData: MutableLiveData<String> by lazy { MutableLiveData<String>() }
+
+    val onOpenBoxChat: MutableLiveData<BoxChat>by lazy {
+        MutableLiveData<BoxChat>()
+    }
 
     fun getContacts() {
         userRepository.getContactsUser(userRepository.getUser()!!.id, object : ValueEventListener {
@@ -34,9 +42,26 @@ class ContactsViewModel @Inject constructor(private val userRepository: UserRepo
         })
     }
 
-    fun getMessageLiveDataError(): MutableLiveData<String> {
-        return messageErrorLiveData
+    fun getBoxChat(friend: User): MutableLiveData<BoxChat> {
+        messagesRepository.getBoxChat(
+            userRepository.getUser()!!.id,
+            friend,
+            object : ValueEventListener {
+
+                override fun onDataChange(snapShot: DataSnapshot) {
+                    if (snapShot.getValue(BoxChat::class.java)!!.id.toString() == friend.id)
+                        onOpenBoxChat.value = snapShot.getValue(BoxChat::class.java)
+                }
+
+                override fun onCancelled(p0: DatabaseError) {}
+            })
+        return onOpenBoxChat
     }
+
+    fun getLiveDataContacts(): MutableLiveData<MutableList<Friend>> = userContacts
+
+    fun getMessageLiveDataError(): MutableLiveData<String> = messageErrorLiveData
+
 
     companion object {
         fun create(fragment: Fragment, factory: ViewModelProvider.Factory): ContactsViewModel =

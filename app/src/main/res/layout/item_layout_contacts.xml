@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.framgia.oleo.screen.contacts.ItemContactsViewModel" />
+    </data>
+        <LinearLayout
+            android:onClick="@{() -> viewModel.onItemClick()}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/dp_10"
+            android:background="@android:color/transparent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageUser"
+                android:layout_margin="@dimen/dp_10"
+                android:layout_width="@dimen/dp_50"
+                android:layout_height="@dimen/dp_50"
+                android:imageUrl="@{viewModel.contacts.user.image}"
+                app:civ_border_color="@color/colorGrey100"
+                app:civ_border_width="@dimen/dp_1" />
+
+            <TextView
+                android:id="@+id/textFriendName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/dp_20"
+                android:layout_marginStart="@dimen/dp_10"
+                android:ellipsize="end"
+                android:fontFamily="serif"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="@{viewModel.contacts.user.userName}"
+                android:textColor="@color/colorGrey800"
+                android:textSize="@dimen/sp_18" />
+
+        </LinearLayout>
+</layout>
