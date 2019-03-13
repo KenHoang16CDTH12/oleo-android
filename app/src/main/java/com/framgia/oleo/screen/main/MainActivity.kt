@@ -19,6 +19,8 @@ import com.framgia.oleo.data.service.LocationService
 import com.framgia.oleo.databinding.ActivityMainBinding
 import com.framgia.oleo.screen.boxchat.BoxChatFragment.OnBoxChatListener
 import com.framgia.oleo.screen.follow.FollowListFragment
+import com.framgia.oleo.screen.forgotpassword.ForgotPasswordFragment.OnForgotPasswordListener
+import com.framgia.oleo.screen.forgotpassword.ResetPasswordFragment
 import com.framgia.oleo.screen.friendrequest.FriendRequestsFragment
 import com.framgia.oleo.screen.home.HomeFragment
 import com.framgia.oleo.screen.home.HomeFragment.OnCallBackLocationListener
@@ -37,7 +39,7 @@ import com.framgia.oleo.utils.extension.showToast
 import kotlinx.android.synthetic.main.toolbar.view.textTitleToolbar
 
 class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettingListener,
-    OnBoxChatListener, OnCallBackLocationListener, OnActionBarListener {
+    OnBoxChatListener, OnCallBackLocationListener, OnActionBarListener, OnForgotPasswordListener {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var currentFragment: Fragment
@@ -136,6 +138,11 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
             setHomeAsUpIndicator(R.drawable.ic_back)
             setDisplayShowTitleEnabled(false)
         }
+    }
+
+    override fun onVerifyCodeClick(phoneNumber: String) {
+        supportFragmentManager.popBackStack()
+        addFragmentToActivity(R.id.containerMain, ResetPasswordFragment.newInstance(phoneNumber))
     }
 
     private fun registerIsCheckUserData() {

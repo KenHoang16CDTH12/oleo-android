@@ -20,6 +20,7 @@ object Constant {
     const val PATH_STRING_FOLLOW = "Follow"
     const val PATH_STRING_FOLLOWED = "Followed"
     const val PATH_STRING_STATUS = "status"
+    const val PATH_STRING_PASSWORD = "password"
 
     const val STATUS_FRIEND_WAITING = 0
     const val STATUS_FRIEND_ACCEPT = 1

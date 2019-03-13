@@ -2,6 +2,7 @@ package com.framgia.oleo.utils.extension
 
 import android.content.Context
 import com.framgia.oleo.R
+import com.framgia.oleo.R.string
 import com.google.android.material.textfield.TextInputLayout
 
 fun validInputPhoneNumber(context: Context, phoneNumber: String, textInputLayout: TextInputLayout): Boolean {
@@ -51,6 +52,14 @@ fun validInputConfirmPassword(
     return true
 }
 
+fun validateSMSCode(context: Context, code: String, textInputLayout: TextInputLayout): Boolean {
+    if (!code.checkSMSPattern()) {
+        textInputLayout.error = context.getString(string.invalid_sms_code)
+        return false
+    }
+    return true
+}
+
 fun String.checkPasswordPattern(): Boolean {
     this.let { return Regex(PASSWORD_PATTERN).find(this) != null }
 }
@@ -67,6 +76,11 @@ fun String.checkUserNamePattern(): Boolean {
     this.let { return Regex(USER_NAME_PATTERN).find(this) != null }
 }
 
+fun String.checkSMSPattern(): Boolean {
+    this.let { return Regex(SMS_CODE_PATTERN).find(this) != null && this.length == 6 }
+}
+
 const val PASSWORD_PATTERN = "^[a-zA-Z0-9]*$"
 const val PHONE_PATTERN = "(09|01|03|07|08|05[2|3|4|5|6|7|8|9|0|1])([0-9]{8})\\b"
 const val USER_NAME_PATTERN = "^[a-zA-Z0-9]([._](?![._])|[a-zA-Z0-9]){1,18}[a-zA-Z0-9]\$"
+const val SMS_CODE_PATTERN = "^[0-9]*$"
