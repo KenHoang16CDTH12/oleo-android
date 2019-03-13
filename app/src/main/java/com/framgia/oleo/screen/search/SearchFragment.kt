@@ -51,6 +51,7 @@ class SearchFragment : BaseFragment(), SearchView.OnQueryTextListener, OnItemVie
     }
 
     override fun bindView() {
+        registerLiveDataViewModel()
         viewModel.getUsers()
         searchAdapter.setUserId(viewModel.userId)
         viewModel.usersSeachResult.observe(this, Observer {
@@ -94,6 +95,14 @@ class SearchFragment : BaseFragment(), SearchView.OnQueryTextListener, OnItemVie
         searchView.findViewById<View>(R.id.search_plate).setBackgroundColor(Color.TRANSPARENT)
     }
 
+    private fun registerLiveDataViewModel() {
+        viewModel.getBoxChatLiveData().observe(this, Observer { boxChat ->
+            goBackFragment()
+            addFragment(R.id.containerMain, BoxChatFragment.newInstance(boxChat))
+        })
+    }
+
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
             android.R.id.home -> (activity!! as MainActivity).goBackFragment()
@@ -118,12 +127,9 @@ class SearchFragment : BaseFragment(), SearchView.OnQueryTextListener, OnItemVie
     }
 
     override fun onImageSendMessageClicked(user: User) {
-        //todo
-        if (isCheckMultiClick())
-            viewModel.getBoxChat(user).observe(this, Observer { boxChat ->
-                goBackFragment()
-                addFragment(R.id.containerMain, BoxChatFragment.newInstance(boxChat))
-            })
+        if (isCheckMultiClick()) {
+            viewModel.getBoxChat(user)
+        }
     }
 
     override fun onImageUserProfileClicked(user: User) {

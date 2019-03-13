@@ -31,7 +31,7 @@ class SearchViewModel @Inject constructor(
     val onAddFriendRequest: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
-    val onOpenBoxChat: MutableLiveData<BoxChat>by lazy {
+    private val onOpenBoxChat: MutableLiveData<BoxChat>by lazy {
         MutableLiveData<BoxChat>()
     }
     val userId = userRepository.getUser()!!.id
@@ -120,6 +120,8 @@ class SearchViewModel @Inject constructor(
         }
         usersSeachResult.value = searchResult
     }
+
+    fun getBoxChatLiveData() : MutableLiveData<BoxChat> = onOpenBoxChat
 
     companion object {
         fun create(fragment: Fragment, factory: ViewModelProvider.Factory): SearchViewModel =

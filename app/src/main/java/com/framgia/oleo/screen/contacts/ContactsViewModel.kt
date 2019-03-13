@@ -26,7 +26,7 @@ class ContactsViewModel @Inject constructor(private val userRepository: UserRepo
     }
     private val messageErrorLiveData: MutableLiveData<String> by lazy { MutableLiveData<String>() }
 
-    val onOpenBoxChat: MutableLiveData<BoxChat>by lazy {
+    private val onOpenBoxChat: MutableLiveData<BoxChat>by lazy {
         MutableLiveData<BoxChat>()
     }
 
@@ -45,7 +45,7 @@ class ContactsViewModel @Inject constructor(private val userRepository: UserRepo
         })
     }
 
-    fun getBoxChat(friend: User): MutableLiveData<BoxChat> {
+    fun getBoxChat(friend: User){
         messagesRepository.getBoxChat(
             userRepository.getUser()!!.id,
             friend,
@@ -58,7 +58,6 @@ class ContactsViewModel @Inject constructor(private val userRepository: UserRepo
 
                 override fun onCancelled(p0: DatabaseError) {}
             })
-        return onOpenBoxChat
     }
 
     fun searchContacts(query: String) {
@@ -77,6 +76,8 @@ class ContactsViewModel @Inject constructor(private val userRepository: UserRepo
     fun getLiveDataContacts(): MutableLiveData<MutableList<Friend>> = userContacts
 
     fun getMessageLiveDataError(): MutableLiveData<String> = messageErrorLiveData
+
+    fun getBoxChatLiveData() : MutableLiveData<BoxChat> = onOpenBoxChat
 
     fun getSearchResultLiveData(): MutableLiveData<ArrayList<Friend>> = searchResult
 
