@@ -7,7 +7,7 @@ import android.os.SystemClock
 import android.widget.Button
 import android.widget.ImageButton
 
-private const val VALUE_MAX_TIME_CLICK = 2000
+private const val VALUE_MAX_TIME_CLICK = 1000
 private var lastClickTime: Long = 0
 
 fun isCheckMultiClick(): Boolean {

@@ -14,8 +14,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import javax.inject.Inject
 
-class ContactsViewModel @Inject constructor(private val userRepository: UserRepository, private val
-    messagesRepository: MessagesRepository) :
+class ContactsViewModel @Inject constructor(
+    private val userRepository: UserRepository,
+    private val messagesRepository: MessagesRepository
+) :
     BaseViewModel() {
 
     private val userContacts: MutableLiveData<MutableList<Friend>> by lazy {
@@ -34,10 +36,11 @@ class ContactsViewModel @Inject constructor(private val userRepository: UserRepo
         userRepository.getContactsUser(userRepository.getUser()!!.id, object : ValueEventListener {
             var contacts = mutableListOf<Friend>()
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                contacts.clear()
                 if (dataSnapshot.exists()) dataSnapshot.children.forEach { name ->
                     contacts.add(name.getValue(Friend::class.java)!!)
-                    userContacts.value = contacts
                 }
+                userContacts.value = contacts
             }
 
             override fun onCancelled(error: DatabaseError) {

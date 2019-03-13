@@ -13,7 +13,9 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorGrey100">
+        android:background="@color/colorGrey100"
+        android:clickable="true"
+        android:focusable="true">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbarBoxChat"
@@ -51,6 +53,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/dp_5"
+                app:stackFromEnd="true"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -58,10 +61,13 @@
             android:id="@+id/editSendMessage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_10"
             android:background="@drawable/edit_send_message"
             android:hint="@string/type_message"
-            android:inputType="textMultiLine|textShortMessage"
+            android:imeOptions="actionSend"
+            android:inputType="textImeMultiLine|textLongMessage"
             android:paddingBottom="@dimen/dp_6"
             android:paddingEnd="@dimen/dp_10"
             android:paddingStart="@dimen/dp_15"
@@ -76,10 +82,10 @@
             android:id="@+id/buttonSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_10"
             android:background="@drawable/ic_send_message"
             android:enabled="false"
-            android:padding="@dimen/dp_10"
+            android:scaleX="0.55"
+            android:scaleY="0.65"
             app:layout_constraintBottom_toBottomOf="@id/editSendMessage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/editSendMessage" />
