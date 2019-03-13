@@ -77,9 +77,10 @@
     <string name="message_permission_denied">We need to access your location. Please turn on the permissions to continue !</string>
     <string name="cancel_permission_dialog">Don\'t allow</string>
     <string name="accept_permission_dialog">OK</string>
-    <string name="msg_on_get_waiting_failed">Get wating follow request failed!</string>
+    <string name="msg_on_get_waiting_failed">Get waiting follow request failed!</string>
     <string name="msg_on_get_following_failed">Get following request failed!</string>
-    <string name="msg_on_get_followed_failed">Get user folowed failed!</string>
+    <string name="msg_on_get_followed_failed">Get user followed failed!</string>
+    <string name="search_contact_hint">Name, phone number…</string>
     <string-array name="tab_titles">
         <item>Followed</item>
         <item>Following</item>

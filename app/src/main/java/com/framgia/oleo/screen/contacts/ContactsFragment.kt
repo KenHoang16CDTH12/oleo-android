@@ -1,9 +1,13 @@
 package com.framgia.oleo.screen.contacts
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.framgia.oleo.R
@@ -18,8 +22,9 @@ import com.framgia.oleo.utils.extension.isCheckMultiClick
 import com.framgia.oleo.utils.liveData.autoCleared
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_contacts.recyclerViewContacts
+import kotlinx.android.synthetic.main.fragment_search.searchView
 
-class ContactsFragment : BaseFragment(), OnItemRecyclerViewClick<Friend> {
+class ContactsFragment : BaseFragment(), OnItemRecyclerViewClick<Friend>, SearchView.OnQueryTextListener {
 
     private lateinit var viewModel: ContactsViewModel
     private var binding by autoCleared<FragmentContactsBinding>()
@@ -36,6 +41,7 @@ class ContactsFragment : BaseFragment(), OnItemRecyclerViewClick<Friend> {
     }
 
     override fun setUpView() {
+        setUpSearchView()
         adapter = ContactsAdapter(this)
         recyclerViewContacts.adapter = adapter
     }
@@ -53,6 +59,16 @@ class ContactsFragment : BaseFragment(), OnItemRecyclerViewClick<Friend> {
             })
     }
 
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        viewModel.searchContacts(query!!)
+        return true
+    }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        viewModel.searchContacts(query!!)
+        return true
+    }
+
     private fun getDataLive() {
         viewModel.getMessageLiveDataError().observe(this, Observer { message ->
             Snackbar.make(view!!, message, Snackbar.LENGTH_SHORT).show()
@@ -61,6 +77,24 @@ class ContactsFragment : BaseFragment(), OnItemRecyclerViewClick<Friend> {
         viewModel.getLiveDataContacts().observe(this, Observer { data ->
             adapter.updateData(data)
         })
+        viewModel.getSearchResultLiveData().observe(this, Observer {
+            adapter.updateData(it)
+        })
+    }
+
+    private fun setUpSearchView(){
+        searchView.setIconifiedByDefault(false)
+        searchView.requestFocusFromTouch()
+        searchView.setOnQueryTextListener(this)
+        val searchEditText = searchView
+            .findViewById(androidx.appcompat.R.id.search_src_text) as EditText
+        searchEditText.setTextColor(
+            ContextCompat.getColor(activity!!.applicationContext, R.color.colorDefault)
+        )
+        searchEditText.setHintTextColor(
+            ContextCompat.getColor(activity!!.applicationContext, R.color.colorDefault)
+        )
+        searchView.findViewById<View>(R.id.search_plate).setBackgroundColor(Color.TRANSPARENT)
     }
 
     companion object {
