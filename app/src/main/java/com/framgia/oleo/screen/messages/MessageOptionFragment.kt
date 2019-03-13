@@ -18,6 +18,7 @@ import com.framgia.oleo.screen.location.LocationFragment
 import com.framgia.oleo.utils.OnActionBarListener
 import com.framgia.oleo.utils.extension.addFragment
 import com.framgia.oleo.utils.extension.goBackFragment
+import com.framgia.oleo.utils.extension.showSnackBar
 import com.framgia.oleo.utils.liveData.autoCleared
 import kotlinx.android.synthetic.main.fragment_option_message.textViewLocationList
 import kotlinx.android.synthetic.main.fragment_option_message.toolbarOption
@@ -52,11 +53,7 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
         textViewLocationList.setOnClickListener(this)
         val userFriendId = arguments?.getString(ARGUMENT_USER_ID)
         viewModel.getUserFriend(userFriendId!!)
-        viewModel.getFollowRequest(userFriendId)
-        viewModel.userFriend.observe(this, Observer {
-            binding.layoutHeader.user = it
-            binding.user = it
-        })
+        registerLiveData()
     }
 
     override fun onAttach(context: Context?) {
@@ -71,12 +68,7 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
 
     override fun onClick(view: View?) {
         when (view!!.id) {
-            R.id.textViewLocationList -> addFragment(
-                R.id.containerMain, LocationFragment.newInstance(
-                    textViewNameUser.text.toString(),
-                    arguments?.getString(ARGUMENT_USER_ID)!!
-                ), true
-            )
+            R.id.textViewLocationList -> viewModel.registerLiveData(arguments?.getString(ARGUMENT_USER_ID)!!)
         }
     }
 
@@ -97,6 +89,24 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
             toolbar = toolbarOption.toolbarCustom,
             title = activity!!.getString(R.string.follow_list)
         )
+    }
+
+    private fun registerLiveData() {
+        viewModel.getUserFriendLiveData().observe(this, Observer {
+            binding.layoutHeader.user = it
+            binding.user = it
+        })
+        viewModel.getOnNavigateEventLiveData().observe(this, Observer {
+            addFragment(
+                R.id.containerMain, LocationFragment.newInstance(
+                    textViewNameUser.text.toString(),
+                    arguments?.getString(ARGUMENT_USER_ID)!!
+                ), true
+            )
+        })
+        viewModel.getOnErrorEventLiveData().observe(this, Observer {
+            view!!.showSnackBar(it)
+        })
     }
 
     companion object {

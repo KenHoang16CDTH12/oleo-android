@@ -23,6 +23,8 @@ interface UserDataSource {
     }
 
     interface Remote {
+        fun getFollowRequestSingleValueEvent(idUser: String, userFollowed: User, valueEventListener: ValueEventListener)
+
         fun deleteUserFollowed(id: String, followed: Followed)
 
         fun getFollowedsOfUser(id: String, childEventListener: ChildEventListener)

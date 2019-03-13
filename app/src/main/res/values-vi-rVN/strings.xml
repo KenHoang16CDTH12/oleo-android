@@ -99,6 +99,9 @@
     <string name="password_reset_successful">Thay đổi mật khẩu thành công !</string>
     <string name="reset_password">Thay đổi mật khẩu</string>
     <string name="invalid_sms_code">Mã xác thực không hợp lệ</string>
+    <string name="msg_on_follow_request_exists">Yêu cầu theo dõi đã được gửi!!</string>
+    <string name="msg_on_database_error">Tải dữ liệu thất bại, vui lòng thử lại sau !</string>
+    <string name="msg_do_not_have_permission">Bạn không có quyền xem vị trí của người này!!</string>
     <string-array name="tab_titles">
         <item>Người theo dõi</item>
         <item>Đang theo dõi</item>
