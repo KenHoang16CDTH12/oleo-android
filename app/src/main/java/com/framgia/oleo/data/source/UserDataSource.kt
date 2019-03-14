@@ -88,5 +88,9 @@ interface UserDataSource {
             onSuccessListener: OnSuccessListener<Void>,
             onFailureListener: OnFailureListener
         )
+
+        fun deleteFriend(userId: String, friendId: String)
+
+        fun checkFriendByUserId(userId: String, friendId: String, valueEventListener: ValueEventListener)
     }
 }

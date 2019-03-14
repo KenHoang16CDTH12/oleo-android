@@ -10,6 +10,8 @@ import com.framgia.oleo.data.source.UserRepository
 import com.framgia.oleo.data.source.model.FollowRequest
 import com.framgia.oleo.data.source.model.User
 import com.framgia.oleo.utils.Constant
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -29,6 +31,14 @@ class MessageOptionViewModel @Inject constructor(
     }
 
     private val onErrorEvent: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+
+    val isFriendAlready: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+
+    val onAddFriendRequest: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
 
@@ -87,6 +97,36 @@ class MessageOptionViewModel @Inject constructor(
     fun getOnNavigateEventLiveData(): MutableLiveData<Boolean> = onNavigateEvent
 
     fun getOnErrorEventLiveData(): MutableLiveData<String> = onErrorEvent
+
+    fun deleteFriend(friendId: String) {
+        userRepository.deleteFriend(userRepository.getUser()!!.id, friendId)
+    }
+
+    fun checkFriendByUserId(friendId: String) {
+        userRepository.checkFriendByUserId(userRepository.getUser()!!.id, friendId, object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                isFriendAlready.value = dataSnapshot.exists()
+            }
+        })
+    }
+
+    fun addFriendRequest(user: User) {
+        val defaultMessage = StringBuilder(application.getString(R.string.msg_defaut_friend_request_prefix))
+            .append(userRepository.getUser()!!.userName)
+            .append(application.getString(R.string.msg_defaut_friend_request_postfix))
+            .toString()
+
+        userRepository.addFriendRequest(user.id,
+            userRepository.getUser()!!, defaultMessage,
+            OnSuccessListener {
+                onAddFriendRequest.value = application.getString(R.string.msg_on_add_friend_request_success)
+            }, onFailureListener = OnFailureListener {
+                onAddFriendRequest.value = application.getString(R.string.msg_on_get_waiting_failed)
+            })
+    }
 
     companion object {
         fun create(fragment: Fragment, factory: ViewModelProvider.Factory): MessageOptionViewModel =

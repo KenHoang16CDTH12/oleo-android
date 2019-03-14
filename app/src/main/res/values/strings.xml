@@ -101,6 +101,7 @@
     <string name="msg_on_follow_request_exists">Follow reqeuest was sented!</string>
     <string name="msg_on_database_error">Something wrong, please try again later!!!</string>
     <string name="msg_do_not_have_permission">You don\'t have permisson to see the list location!!!</string>
+    <string name="unfriend_message">Are you sure want to remove %1$s as your friend?</string>
     <string-array name="tab_titles">
         <item>Followed</item>
         <item>Following</item>

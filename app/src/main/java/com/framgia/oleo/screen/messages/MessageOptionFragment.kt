@@ -1,5 +1,6 @@
 package com.framgia.oleo.screen.messages
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,6 +22,7 @@ import com.framgia.oleo.utils.extension.goBackFragment
 import com.framgia.oleo.utils.extension.showSnackBar
 import com.framgia.oleo.utils.liveData.autoCleared
 import kotlinx.android.synthetic.main.fragment_option_message.textViewLocationList
+import kotlinx.android.synthetic.main.fragment_option_message.textViewUnFriend
 import kotlinx.android.synthetic.main.fragment_option_message.toolbarOption
 import kotlinx.android.synthetic.main.fragment_option_message_header.textViewNameUser
 import kotlinx.android.synthetic.main.toolbar.view.toolbarCustom
@@ -29,6 +31,7 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
     private lateinit var viewModel: MessageOptionViewModel
     private var binding by autoCleared<FragmentOptionMessageBinding>()
     private var listener: OnActionBarListener? = null
+    private var isAlreadyFriend: Boolean = false
 
     override fun onFollowClick(userFriend: User) {
         viewModel.addFollowRequest(userFriend)
@@ -51,8 +54,10 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
 
     override fun bindView() {
         textViewLocationList.setOnClickListener(this)
+        textViewUnFriend.setOnClickListener(this)
         val userFriendId = arguments?.getString(ARGUMENT_USER_ID)
         viewModel.getUserFriend(userFriendId!!)
+        viewModel.checkFriendByUserId(userFriendId)
         registerLiveData()
     }
 
@@ -69,6 +74,12 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.textViewLocationList -> viewModel.registerLiveData(arguments?.getString(ARGUMENT_USER_ID)!!)
+            R.id.textViewUnFriend ->
+                if (isAlreadyFriend) {
+                    showUnFriendDialog()
+                } else {
+                    viewModel.addFriendRequest(binding.user!!)
+                }
         }
     }
 
@@ -107,10 +118,40 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
         viewModel.getOnErrorEventLiveData().observe(this, Observer {
             view!!.showSnackBar(it)
         })
+        viewModel.isFriendAlready.observe(this, Observer {
+            isAlreadyFriend = it
+            if (it) {
+                updateFriendStatus(getString(R.string.unfriend), R.drawable.ic_unfriend)
+            } else {
+                updateFriendStatus(getString(R.string.add_friend), R.drawable.ic_add_friend_message_option)
+            }
+        })
+        viewModel.onAddFriendRequest.observe(this, Observer {
+            view!!.showSnackBar(it)
+        })
+    }
+
+    private fun showUnFriendDialog() {
+        AlertDialog.Builder(context, R.style.alertDialog).apply {
+            setMessage(context.getString(R.string.unfriend_message, binding.user!!.userName))
+            setPositiveButton(context.getString(R.string.ok)) { dialog, which -> viewModel.deleteFriend(binding.user!!.id) }
+            setNegativeButton(context.getString(R.string.cancel)) { dialog, which -> dialog.dismiss() }
+        }.create().show()
+    }
+
+    private fun updateFriendStatus(title: String, drawable: Int) {
+        textViewUnFriend.text = title
+        textViewUnFriend.setCompoundDrawablesWithIntrinsicBounds(
+            drawable,
+            RESOURCE_VALUE,
+            RESOURCE_VALUE,
+            RESOURCE_VALUE
+        )
     }
 
     companion object {
         private const val ARGUMENT_USER_ID = "ARGUMENT_USER_ID"
+        private const val RESOURCE_VALUE = 0
 
         fun newInstance(id: String) = MessageOptionFragment().apply {
             val bundle = Bundle()
