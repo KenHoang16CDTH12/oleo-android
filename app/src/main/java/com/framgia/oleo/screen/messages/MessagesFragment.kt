@@ -3,7 +3,6 @@ package com.framgia.oleo.screen.messages
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.framgia.oleo.R
@@ -58,12 +57,18 @@ class MessagesFragment : BaseFragment(), OnItemRecyclerViewClick<BoxChat>, View.
         viewModel.setAdapter(messagesAdapter)
         messagesAdapter.setListener(this)
         textSearchMessage.setOnClickListener(this)
+        viewModel.getAllBoxChat()
     }
 
     override fun bindView() {
         // Add Show View
-        viewModel.getAllMessages().observe(this, Observer {
-            messagesAdapter.updateData(it) })
+        viewModel.onBoxChatAdded.observe(this, Observer {
+            messagesAdapter.addData(it)
+        })
+
+        viewModel.onBoxChatRemoved.observe(this, Observer {
+            messagesAdapter.removeData(it)
+        })
     }
 
     override fun onItemClickListener(data: BoxChat) {

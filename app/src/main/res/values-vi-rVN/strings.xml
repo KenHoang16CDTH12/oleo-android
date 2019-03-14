@@ -108,6 +108,8 @@
     <string name="enter_a_new_name">Nhập vào tên mới cho %s</string>
     <string name="update_name">Cập nhật tên</string>
     <string name="save">Lưu</string>
+    <string name="delete_box_chat_message">Bạn có chắc muốn xóa hộp thoại này không?</string>
+    <string name="delete_box_chat_failed">Xóa hộp thoại thất bại !</string>
     <string-array name="tab_titles">
         <item>Người theo dõi</item>
         <item>Đang theo dõi</item>

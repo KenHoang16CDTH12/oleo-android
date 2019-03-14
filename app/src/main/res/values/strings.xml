@@ -107,6 +107,8 @@
     <string name="enter_a_new_name">Please enter a new name for %s</string>
     <string name="update_name">Update Name</string>
     <string name="save">Save</string>
+    <string name="delete_box_chat_message">Are you sure want to delete this box chat?</string>
+    <string name="delete_box_chat_failed">Delete box chat failed !</string>
     <string-array name="tab_titles">
         <item>Followed</item>
         <item>Following</item>

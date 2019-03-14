@@ -19,10 +19,14 @@ class MessagesViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private lateinit var messageAdapter: MessagesAdapter
-    private var listBoxChat = arrayListOf<BoxChat>()
-    private var boxChatName : String? = null
-    val boxChats: MutableLiveData<MutableList<BoxChat>> by lazy {
-        MutableLiveData<MutableList<BoxChat>>() }
+
+    val onBoxChatAdded: MutableLiveData<BoxChat> by lazy {
+        MutableLiveData<BoxChat>()
+    }
+
+    val onBoxChatRemoved: MutableLiveData<BoxChat> by lazy {
+        MutableLiveData<BoxChat>()
+    }
 
     fun setAdapter(messageAdapter: MessagesAdapter) {
         this.messageAdapter = messageAdapter
@@ -30,43 +34,22 @@ class MessagesViewModel @Inject constructor(
         this.messageAdapter.setMessageRepository(messagesRepository)
     }
 
-    fun getAllMessages(): MutableLiveData<MutableList<BoxChat>> {
-        listBoxChat.clear()
+    fun getAllBoxChat() {
         messagesRepository.getListBoxChat(userRepository.getUser()!!.id, object : ChildEventListener {
             override fun onCancelled(dataSnapshot: DatabaseError) {}
 
             override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {}
 
-            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
-                getBoxChatName(dataSnapshot.key!!, dataSnapshot.key.toString())
-            }
+            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {}
 
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 val data = dataSnapshot.getValue(BoxChat::class.java)
-                if (data != null) listBoxChat.add(data)
-                boxChats.value = listBoxChat
+                if (data != null) onBoxChatAdded.value = data
             }
 
-            override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
-        })
-        return boxChats
-    }
-
-    fun getBoxChatName(boxChatId: String, keyData: String){
-        messagesRepository.getNameBoxChat(userRepository.getUser()!!.id, boxChatId, object :
-            ValueEventListener{
-            override fun onCancelled(error: DatabaseError) {}
-
-            override fun onDataChange(data: DataSnapshot) {
-                val boxChat = data.getValue(BoxChat::class.java)
-                boxChatName = boxChat!!.userFriendName
-                for (item in listBoxChat) {
-                    if (item.id == keyData) {
-                        item.userFriendName = boxChatName
-                        boxChats.value = listBoxChat
-                        return
-                    }
-                }
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+                val data = dataSnapshot.getValue(BoxChat::class.java)
+                if (data != null) onBoxChatRemoved.value = data
             }
         })
     }

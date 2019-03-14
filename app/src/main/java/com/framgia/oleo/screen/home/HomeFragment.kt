@@ -23,6 +23,7 @@ import com.framgia.oleo.screen.setting.SettingFragment
 import com.framgia.oleo.utils.liveData.autoCleared
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_home.navigation
+import kotlinx.android.synthetic.main.fragment_home.view.viewPager
 import kotlinx.android.synthetic.main.fragment_home.viewPager
 
 class HomeFragment : BaseFragment(), BottomNavigationView.OnNavigationItemSelectedListener, OnPageChangeListener {
@@ -66,6 +67,7 @@ class HomeFragment : BaseFragment(), BottomNavigationView.OnNavigationItemSelect
         //Todo replace later
         pagerAdapter.addFragment(ContactsFragment.newInstance())
         pagerAdapter.addFragment(SettingFragment.newInstance())
+        viewPager.offscreenPageLimit = VIEW_PAGER_OFFSET
         viewPager.adapter = pagerAdapter
         viewPager.addOnPageChangeListener(this)
         navigation.setOnNavigationItemSelectedListener(this)
@@ -179,6 +181,7 @@ class HomeFragment : BaseFragment(), BottomNavigationView.OnNavigationItemSelect
         private const val TAB_CONTACTS = 1
 //        private const val TAB_GROUPS = 2
         private const val TAB_MORE = 2
+        private const val VIEW_PAGER_OFFSET = 3
 
         fun newInstance() = HomeFragment().apply {
             val bundle = Bundle()

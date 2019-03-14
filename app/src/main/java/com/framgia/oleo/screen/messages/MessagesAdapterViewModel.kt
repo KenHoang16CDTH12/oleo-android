@@ -5,6 +5,7 @@ import androidx.databinding.Bindable
 import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.MutableLiveData
 import com.framgia.oleo.data.source.MessagesRepository
+import com.framgia.oleo.data.source.model.BoxChat
 import com.framgia.oleo.data.source.model.Message
 import com.framgia.oleo.data.source.model.User
 import com.google.firebase.database.ChildEventListener
@@ -19,6 +20,10 @@ class MessagesAdapterViewModel(
     private var message = MutableLiveData<Message>()
 
     private var image = ""
+
+    val boxChatName: MutableLiveData<String> by lazy{
+        MutableLiveData<String>()
+    }
 
     fun setMessage(userId: String, boxId: String): MutableLiveData<Message> {
         messagesRepository.getLastMessage(userId, boxId, object : ChildEventListener {
@@ -46,6 +51,18 @@ class MessagesAdapterViewModel(
                 notifyPropertyChanged(BR.image)
             }
         })
+    }
+
+    fun getBoxChatName(userId: String, boxChatId : String){
+        messagesRepository.getNameBoxChat(userId,
+            boxChatId, object :ValueEventListener{
+                override fun onCancelled(error: DatabaseError) {}
+
+                override fun onDataChange(data: DataSnapshot) {
+                    if (data.exists())
+                        boxChatName.value = data.getValue(BoxChat::class.java)!!.userFriendName
+                }
+            })
     }
 
     @Bindable
