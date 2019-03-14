@@ -20,6 +20,14 @@ class UserRepository(
         remote.getFollowRequestSingleValueEvent(idUser, userFollowed, valueEventListener)
     }
 
+    override fun checkFriendByUserId(userId: String, friendId: String, valueEventListener: ValueEventListener) {
+        remote.checkFriendByUserId(userId, friendId, valueEventListener)
+    }
+
+    override fun deleteFriend(userId: String, friendId: String) {
+        remote.deleteFriend(userId, friendId)
+    }
+
     override fun deleteUserFollowed(id: String, followed: Followed) {
         remote.deleteUserFollowed(id, followed)
     }
