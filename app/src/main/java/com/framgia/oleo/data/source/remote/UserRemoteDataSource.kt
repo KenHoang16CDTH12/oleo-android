@@ -41,11 +41,15 @@ class UserRemoteDataSource : UserDataSource.Remote {
             }
     }
 
-    override fun getFollowRequestSingleValueEvent(idUser: String, userFollowed: User, valueEventListener: ValueEventListener) {
+    override fun getFollowRequestSingleValueEvent(
+        userCurrent: User,
+        userFriend: User,
+        valueEventListener: ValueEventListener
+    ) {
         firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
-            .child(idUser)
-            .child(Constant.PATH_STRING_FOLLOWED)
-            .child(userFollowed.id)
+            .child(userFriend.id)
+            .child(Constant.PATH_STRING_FOLLOW_REQUEST)
+            .child(userCurrent.id)
             .addListenerForSingleValueEvent(valueEventListener)
     }
 
@@ -124,7 +128,12 @@ class UserRemoteDataSource : UserDataSource.Remote {
             .addValueEventListener(valueEventListener)
     }
 
-    override fun addFollowRequest(userCurrent: User, userFriend: User) {
+    override fun addFollowRequest(
+        userCurrent: User,
+        userFriend: User,
+        onFailureListener: OnFailureListener,
+        onSuccessListener: OnSuccessListener<Void>
+    ) {
         firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
             .child(userFriend.id)
             .child(Constant.PATH_STRING_FOLLOW_REQUEST)
@@ -139,6 +148,8 @@ class UserRemoteDataSource : UserDataSource.Remote {
                     userCurrent.phoneNumber
                 )
             )
+            .addOnFailureListener(onFailureListener)
+            .addOnSuccessListener(onSuccessListener)
     }
 
     override fun addFriend(

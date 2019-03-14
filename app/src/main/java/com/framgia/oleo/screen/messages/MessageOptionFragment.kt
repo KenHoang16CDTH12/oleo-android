@@ -31,10 +31,10 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
     private lateinit var viewModel: MessageOptionViewModel
     private var binding by autoCleared<FragmentOptionMessageBinding>()
     private var listener: OnActionBarListener? = null
+    private lateinit var dialog: AlertDialog
     private var isAlreadyFriend: Boolean = false
-
     override fun onFollowClick(userFriend: User) {
-        viewModel.addFollowRequest(userFriend)
+        viewModel.onFollowClick(userFriend)
     }
 
     override fun createView(
@@ -50,6 +50,7 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
     override fun setUpView() {
         setupActionBar()
         setHasOptionsMenu(true)
+        setupProgressBar()
     }
 
     override fun bindView() {
@@ -73,7 +74,10 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
 
     override fun onClick(view: View?) {
         when (view!!.id) {
-            R.id.textViewLocationList -> viewModel.registerLiveData(arguments?.getString(ARGUMENT_USER_ID)!!)
+            R.id.textViewLocationList -> {
+                dialog.show()
+                viewModel.getFollowRequestOfUser(arguments?.getString(ARGUMENT_USER_ID)!!)
+            }
             R.id.textViewUnFriend ->
                 if (isAlreadyFriend) {
                     showUnFriendDialog()
@@ -102,12 +106,20 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
         )
     }
 
+    private fun setupProgressBar() {
+        val builder = AlertDialog.Builder(activity)
+        builder.setView(R.layout.progress_dialog)
+        builder.setCancelable(true)
+        dialog = builder.create()
+    }
+
     private fun registerLiveData() {
-        viewModel.getUserFriendLiveData().observe(this, Observer {
+        viewModel.userFriend.observe(this, Observer {
             binding.layoutHeader.user = it
             binding.user = it
         })
-        viewModel.getOnNavigateEventLiveData().observe(this, Observer {
+        viewModel.onNavigateEvent.observe(this, Observer {
+            dialog.dismiss()
             addFragment(
                 R.id.containerMain, LocationFragment.newInstance(
                     textViewNameUser.text.toString(),
@@ -115,8 +127,11 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
                 ), true
             )
         })
-        viewModel.getOnErrorEventLiveData().observe(this, Observer {
+        viewModel.onMessageEvent.observe(this, Observer {
             view!!.showSnackBar(it)
+            if (dialog.isShowing) {
+                dialog.dismiss()
+            }
         })
         viewModel.isFriendAlready.observe(this, Observer {
             isAlreadyFriend = it

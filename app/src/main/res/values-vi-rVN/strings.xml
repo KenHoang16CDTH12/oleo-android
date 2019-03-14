@@ -103,6 +103,8 @@
     <string name="msg_on_database_error">Tải dữ liệu thất bại, vui lòng thử lại sau !</string>
     <string name="msg_do_not_have_permission">Bạn không có quyền xem vị trí của người này!!</string>
     <string name="unfriend_message">Bạn có chắc muốn xóa kết bạn với %1$s?.</string>
+    <string name="msg_on_add_follow_request_failed">Gửi yêu cầu theo dõi thất bại!!, vui lòng thử lại</string>
+    <string name="msg_on_add_follow_request_success">Gửi yêu cầu theo dõi thành công, đang đợi chấp nhận!!!</string>
     <string-array name="tab_titles">
         <item>Người theo dõi</item>
         <item>Đang theo dõi</item>

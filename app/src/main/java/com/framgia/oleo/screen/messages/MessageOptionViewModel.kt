@@ -22,15 +22,15 @@ class MessageOptionViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : BaseViewModel() {
 
-    private val userFriend: MutableLiveData<User> by lazy {
+    val userFriend: MutableLiveData<User> by lazy {
         MutableLiveData<User>()
     }
 
-    private val onNavigateEvent: MutableLiveData<Boolean> by lazy {
+    val onNavigateEvent: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
 
-    private val onErrorEvent: MutableLiveData<String> by lazy {
+    val onMessageEvent: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
 
@@ -55,10 +55,10 @@ class MessageOptionViewModel @Inject constructor(
         })
     }
 
-    fun registerLiveData(id: String) {
+    fun getFollowRequestOfUser(id: String) {
         userRepository.getFollowRequestById(id, userRepository.getUser()!!, object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
-                onErrorEvent.value = application.getString(R.string.msg_on_database_error)
+                onMessageEvent.value = application.getString(R.string.msg_on_database_error)
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -69,34 +69,39 @@ class MessageOptionViewModel @Inject constructor(
                 }
                 when (isFollowed) {
                     true -> onNavigateEvent.value = true
-                    else -> onErrorEvent.value = application.getString(R.string.msg_do_not_have_permission)
+                    else -> onMessageEvent.value = application.getString(R.string.msg_do_not_have_permission)
                 }
             }
         })
+    }
+
+    fun onFollowClick(userFriend: User) {
+        userRepository.getFollowRequestSingleValueEvent(
+            userRepository.getUser()!!,
+            userFriend,
+            object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    onMessageEvent.value = application.getString(R.string.msg_on_database_error)
+                }
+
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val followRequest = dataSnapshot.getValue(FollowRequest::class.java)
+                    when {
+                        !dataSnapshot.exists() -> addFollowRequest(userFriend)
+                        else -> onMessageEvent.value = application.getString(R.string.msg_on_follow_request_exists)
+                    }
+                }
+            })
     }
 
     fun addFollowRequest(userFriend: User) {
-        userRepository.getFollowRequestSingleValueEvent(userRepository.getUser()!!.id, userFriend, object : ValueEventListener {
-            override fun onCancelled(error: DatabaseError) {
-                onErrorEvent.value = application.getString(R.string.msg_on_follow_request_exists)
-            }
-
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                when {
-                    dataSnapshot.exists() -> userRepository
-                        .addFollowRequest(userRepository.getUser()!!, userFriend)
-                    else -> onErrorEvent.value = application.
-                        getString(R.string.msg_on_follow_request_exists)
-                }
-            }
-        })
+        userRepository
+            .addFollowRequest(userRepository.getUser()!!, userFriend, OnFailureListener {
+                onMessageEvent.value = application.getString(R.string.msg_on_add_follow_request_failed)
+            }, OnSuccessListener {
+                onMessageEvent.value = application.getString(R.string.msg_on_add_follow_request_success)
+            })
     }
-
-    fun getUserFriendLiveData(): MutableLiveData<User> = userFriend
-
-    fun getOnNavigateEventLiveData(): MutableLiveData<Boolean> = onNavigateEvent
-
-    fun getOnErrorEventLiveData(): MutableLiveData<String> = onErrorEvent
 
     fun deleteFriend(friendId: String) {
         userRepository.deleteFriend(userRepository.getUser()!!.id, friendId)

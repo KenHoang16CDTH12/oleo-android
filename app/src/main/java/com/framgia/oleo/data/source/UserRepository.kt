@@ -16,8 +16,12 @@ class UserRepository(
     private val remote: UserDataSource.Remote
 ) : UserDataSource.Local, UserDataSource.Remote {
 
-    override fun getFollowRequestSingleValueEvent(idUser: String, userFollowed: User, valueEventListener: ValueEventListener) {
-        remote.getFollowRequestSingleValueEvent(idUser, userFollowed, valueEventListener)
+    override fun getFollowRequestSingleValueEvent(
+        userCurrent: User,
+        userFriend: User,
+        valueEventListener: ValueEventListener
+    ) {
+        remote.getFollowRequestSingleValueEvent(userCurrent, userFriend, valueEventListener)
     }
 
     override fun checkFriendByUserId(userId: String, friendId: String, valueEventListener: ValueEventListener) {
@@ -61,8 +65,13 @@ class UserRepository(
         remote.getFollowRequestById(id, user, valueEventListener)
     }
 
-    override fun addFollowRequest(userCurrent: User, userFriend: User) {
-        remote.addFollowRequest(userCurrent, userFriend)
+    override fun addFollowRequest(
+        userCurrent: User,
+        userFriend: User,
+        onFailureListener: OnFailureListener,
+        onSuccessListener: OnSuccessListener<Void>
+    ) {
+        remote.addFollowRequest(userCurrent, userFriend, onFailureListener, onSuccessListener)
     }
 
     override fun confirmFriendRequest(
