@@ -23,7 +23,11 @@ interface UserDataSource {
     }
 
     interface Remote {
-        fun getFollowRequestSingleValueEvent(idUser: String, userFollowed: User, valueEventListener: ValueEventListener)
+        fun getFollowRequestSingleValueEvent(
+            userCurrent: User,
+            userFriend: User,
+            valueEventListener: ValueEventListener
+        )
 
         fun deleteUserFollowed(id: String, followed: Followed)
 
@@ -79,9 +83,14 @@ interface UserDataSource {
 
         fun addFriend(userId: String, friendRequestId: String, user: User, friend: User)
 
-        fun addFollowRequest(userCurrent: User, userFriend: User)
+        fun addFollowRequest(
+            userCurrent: User,
+            userFriend: User,
+            onFailureListener: OnFailureListener,
+            onSuccessListener: OnSuccessListener<Void>
+        )
 
-        fun getContactsUser(userId : String, valueEventListener: ValueEventListener)
+        fun getContactsUser(userId: String, valueEventListener: ValueEventListener)
 
         fun updatePassword(
             userId: String, password: String,
