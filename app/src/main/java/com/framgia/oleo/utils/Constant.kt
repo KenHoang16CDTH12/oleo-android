@@ -21,6 +21,9 @@ object Constant {
     const val PATH_STRING_FOLLOWED = "Followed"
     const val PATH_STRING_STATUS = "status"
     const val PATH_STRING_PASSWORD = "password"
+    const val PATH_STRING_USER_FRIEND = "user"
+    const val PATH_STRING_USER_NAME_VALUE = "userName"
+    const val PATH_STRING_USER_FRIEND_VALUE = "userFriendName"
 
     const val STATUS_FRIEND_WAITING = 0
     const val STATUS_FRIEND_ACCEPT = 1

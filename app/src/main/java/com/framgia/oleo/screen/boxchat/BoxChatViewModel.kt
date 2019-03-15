@@ -24,6 +24,9 @@ class BoxChatViewModel @Inject constructor(
     private val messagesRepository: MessagesRepository
 ) : BaseViewModel() {
 
+    val boxChatName : MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
     private val user = userRepository.getUser()
     private var message = MutableLiveData<Message>()
     private var messages = MutableLiveData<ArrayList<Message>>()
@@ -84,6 +87,17 @@ class BoxChatViewModel @Inject constructor(
             }
         })
         return imageProfile
+    }
+
+    fun getBoxChatName(boxChatId : String){
+        messagesRepository.getNameBoxChat(userRepository.getUser()!!.id,
+                                          boxChatId, object :ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {}
+
+            override fun onDataChange(data: DataSnapshot) {
+                boxChatName.value = data.getValue(BoxChat::class.java)!!.userFriendName
+            }
+        })
     }
 
     fun getUserId() = userRepository.getUser()

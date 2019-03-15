@@ -76,15 +76,25 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
 
     override fun bindView() {
         boxChat = arguments!!.getParcelable(ARGUMENT_ROOM_ID)!!
+        viewModel.getBoxChatName(boxChat.id!!)
+        textTitleChatBox.text = boxChat.userFriendName
+        registerLiveData()
+    }
+
+    private fun registerLiveData() {
+        viewModel.boxChatName.observe(this, Observer {
+            textTitleChatBox.text = it
+        })
+
         viewModel.getFriendImageProfile(boxChat.id!!).observe(this, Observer { imageProfile ->
             adapter.setUserFriendImage(imageProfile)
         })
+
         viewModel.getMessage(boxChat.id!!).observe(this, Observer { message ->
             adapter.updateData(message)
             recyclerViewBoxChat.smoothScrollToPosition(adapter.itemCount)
             swipeRefreshBoxChat.isEnabled = true
         })
-        textTitleChatBox.text = boxChat.userFriendName
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {

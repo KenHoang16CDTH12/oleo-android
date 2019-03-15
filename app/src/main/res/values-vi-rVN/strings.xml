@@ -105,6 +105,9 @@
     <string name="unfriend_message">Bạn có chắc muốn xóa kết bạn với %1$s?.</string>
     <string name="msg_on_add_follow_request_failed">Gửi yêu cầu theo dõi thất bại!!, vui lòng thử lại</string>
     <string name="msg_on_add_follow_request_success">Gửi yêu cầu theo dõi thành công, đang đợi chấp nhận!!!</string>
+    <string name="enter_a_new_name">Nhập vào tên mới cho %s</string>
+    <string name="update_name">Cập nhật tên</string>
+    <string name="save">Lưu</string>
     <string-array name="tab_titles">
         <item>Người theo dõi</item>
         <item>Đang theo dõi</item>

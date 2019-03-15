@@ -8,6 +8,7 @@ import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseViewModel
 import com.framgia.oleo.data.source.UserRepository
 import com.framgia.oleo.data.source.model.FollowRequest
+import com.framgia.oleo.data.source.model.Friend
 import com.framgia.oleo.data.source.model.User
 import com.framgia.oleo.utils.Constant
 import com.google.android.gms.tasks.OnFailureListener
@@ -42,14 +43,17 @@ class MessageOptionViewModel @Inject constructor(
         MutableLiveData<String>()
     }
 
-    fun getUserFriend(id: String) {
-        userRepository.getUserById(id, object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-            }
+    val resultError : MutableLiveData<String> by lazy {
+        MutableLiveData<String>() }
 
-            override fun onDataChange(p0: DataSnapshot) {
-                if (p0.exists()) {
-                    userFriend.value = p0.getValue(User::class.java)
+    fun getFriendById(idFriend: String) {
+        userRepository.getFriendById(userRepository.getUser()!!.id, idFriend , object :
+        ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {}
+
+            override fun onDataChange(data: DataSnapshot) {
+                if (data.exists()) {
+                    userFriend.value = data.getValue(Friend::class.java)!!.user
                 }
             }
         })
@@ -92,6 +96,14 @@ class MessageOptionViewModel @Inject constructor(
                     }
                 }
             })
+    }
+
+    fun onUpdateNickNameMyFriend(friendId: String, newName: String){
+        userRepository.updateNameFriend(userRepository.getUser()!!.id, friendId, newName,
+                                        OnSuccessListener {},
+                                        OnFailureListener {
+                                                error -> resultError.value = error.message
+                                        })
     }
 
     fun addFollowRequest(userFriend: User) {
