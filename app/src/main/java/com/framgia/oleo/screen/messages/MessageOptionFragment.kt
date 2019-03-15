@@ -3,15 +3,18 @@ package com.framgia.oleo.screen.messages
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.framgia.oleo.R
+import com.framgia.oleo.R.string
 import com.framgia.oleo.base.BaseFragment
 import com.framgia.oleo.data.source.model.User
 import com.framgia.oleo.databinding.FragmentOptionMessageBinding
@@ -21,8 +24,11 @@ import com.framgia.oleo.utils.extension.addFragment
 import com.framgia.oleo.utils.extension.goBackFragment
 import com.framgia.oleo.utils.extension.showSnackBar
 import com.framgia.oleo.utils.liveData.autoCleared
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.fragment_option_message.textViewLocationList
 import kotlinx.android.synthetic.main.fragment_option_message.textViewUnFriend
+import kotlinx.android.synthetic.main.fragment_option_message.textViewRename
 import kotlinx.android.synthetic.main.fragment_option_message.toolbarOption
 import kotlinx.android.synthetic.main.fragment_option_message_header.textViewNameUser
 import kotlinx.android.synthetic.main.toolbar.view.toolbarCustom
@@ -33,6 +39,8 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
     private var listener: OnActionBarListener? = null
     private lateinit var dialog: AlertDialog
     private var isAlreadyFriend: Boolean = false
+    private var userFriend : User? = null
+
     override fun onFollowClick(userFriend: User) {
         viewModel.onFollowClick(userFriend)
     }
@@ -54,12 +62,14 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
     }
 
     override fun bindView() {
+        registerLiveData()
         textViewLocationList.setOnClickListener(this)
+        textViewRename.setOnClickListener(this)
         textViewUnFriend.setOnClickListener(this)
         val userFriendId = arguments?.getString(ARGUMENT_USER_ID)
-        viewModel.getUserFriend(userFriendId!!)
-        viewModel.checkFriendByUserId(userFriendId)
-        registerLiveData()
+        viewModel.checkFriendByUserId(userFriendId!!)
+        viewModel.getFriendById(userFriendId)
+        viewModel.getFollowRequestOfUser(userFriendId)
     }
 
     override fun onAttach(context: Context?) {
@@ -84,6 +94,7 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
                 } else {
                     viewModel.addFriendRequest(binding.user!!)
                 }
+            R.id.textViewRename -> onShowDiaLogUpdateNameFriend()
         }
     }
 
@@ -118,6 +129,7 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
             binding.layoutHeader.user = it
             binding.user = it
         })
+
         viewModel.onNavigateEvent.observe(this, Observer {
             dialog.dismiss()
             addFragment(
@@ -127,12 +139,14 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
                 ), true
             )
         })
+
         viewModel.onMessageEvent.observe(this, Observer {
             view!!.showSnackBar(it)
             if (dialog.isShowing) {
                 dialog.dismiss()
             }
         })
+
         viewModel.isFriendAlready.observe(this, Observer {
             isAlreadyFriend = it
             if (it) {
@@ -141,8 +155,19 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
                 updateFriendStatus(getString(R.string.add_friend), R.drawable.ic_add_friend_message_option)
             }
         })
+
         viewModel.onAddFriendRequest.observe(this, Observer {
             view!!.showSnackBar(it)
+        })
+
+        viewModel.userFriend.observe(this, Observer {
+            userFriend = it
+            binding.layoutHeader.user = it
+            binding.user = it
+        })
+
+        viewModel.resultError.observe(this, Observer {
+            Snackbar.make(view!!, it, Snackbar.LENGTH_SHORT).show()
         })
     }
 
@@ -164,9 +189,34 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
         )
     }
 
+    private fun onShowDiaLogUpdateNameFriend() {
+        val textNameUser = textViewNameUser.text.toString()
+        val inputText = TextInputLayout(context)
+        inputText.setPadding(resources.getDimensionPixelOffset(R.dimen.dp_20),RESOURCE_VALUE,resources
+            .getDimensionPixelOffset(R.dimen.dp_20),RESOURCE_VALUE)
+        val editText = EditText(context)
+        editText.text = Editable.Factory.getInstance().newEditable(textNameUser)
+        editText.setLines(MAX_LINE_TEXT)
+        editText.setSelection(editText.text.length)
+        inputText.hint = resources.getString(R.string.user_name)
+        inputText.addView(editText)
+
+        val builder = AlertDialog.Builder(context, R.style.alertDialog)
+        builder.setTitle(getString(string.update_name))
+            .setView(inputText)
+            .setMessage(getString(string.enter_a_new_name, textNameUser))
+            .setIcon(R.mipmap.ic_launcher_round)
+            .setCancelable(false)
+            .setPositiveButton(getString(string.save)) { dialog, which -> viewModel
+                .onUpdateNickNameMyFriend(userFriend!!.id, editText.text.toString())}
+        builder.setNegativeButton(android.R.string.cancel) {dialog, which -> dialog.cancel() }
+        builder.create().show()
+    }
+
     companion object {
         private const val ARGUMENT_USER_ID = "ARGUMENT_USER_ID"
         private const val RESOURCE_VALUE = 0
+        private const val MAX_LINE_TEXT = 1
 
         fun newInstance(id: String) = MessageOptionFragment().apply {
             val bundle = Bundle()

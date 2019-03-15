@@ -29,10 +29,10 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.Companion.MessagesH
         listener = itemClickListener
     }
 
-    fun updateData(boxChats: ArrayList<BoxChat>) {
+    fun updateData(boxChats: MutableList<BoxChat>) {
         messages.clear()
         messages.addAll(boxChats)
-        notifyItemInserted(this.messages.size - Constant.DEFAULT_ONE)
+        notifyDataSetChanged()
     }
 
     fun getUser(user: User) {

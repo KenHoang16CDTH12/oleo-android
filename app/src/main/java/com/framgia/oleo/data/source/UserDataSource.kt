@@ -13,6 +13,7 @@ import com.google.firebase.database.ValueEventListener
 
 interface UserDataSource {
     interface Local {
+
         fun getUser(): User?
 
         fun insertUser(vararg users: User)
@@ -23,6 +24,7 @@ interface UserDataSource {
     }
 
     interface Remote {
+
         fun getFollowRequestSingleValueEvent(
             userCurrent: User,
             userFriend: User,
@@ -97,6 +99,11 @@ interface UserDataSource {
             onSuccessListener: OnSuccessListener<Void>,
             onFailureListener: OnFailureListener
         )
+
+        fun getFriendById(userId: String, friendId : String, onValueEventListener: ValueEventListener)
+
+        fun updateNameFriend(userId: String, friendId : String, newName: String,
+            onSuccessListener: OnSuccessListener<Void>, onFailureListener: OnFailureListener)
 
         fun deleteFriend(userId: String, friendId: String)
 

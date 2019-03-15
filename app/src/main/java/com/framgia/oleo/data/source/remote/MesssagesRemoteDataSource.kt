@@ -149,6 +149,15 @@ class MesssagesRemoteDataSource : MesssagesDataSource {
             })
     }
 
+    override fun getNameBoxChat(userId: String, boxChatId: String, onValueEventListener: ValueEventListener) {
+        firebaseDatabase.reference
+            .child(Constant.PATH_STRING_USER)
+            .child(userId)
+            .child(Constant.PATH_STRING_BOX)
+            .child(boxChatId)
+            .addValueEventListener(onValueEventListener)
+    }
+
     companion object {
         fun newInstance() = MesssagesRemoteDataSource()
     }

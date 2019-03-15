@@ -2,6 +2,7 @@ package com.framgia.oleo.data.source
 
 import com.framgia.oleo.data.source.model.FollowRequest
 import com.framgia.oleo.data.source.model.Followed
+import com.framgia.oleo.data.source.model.Friend
 import com.framgia.oleo.data.source.model.FriendRequest
 import com.framgia.oleo.data.source.model.Place
 import com.framgia.oleo.data.source.model.User
@@ -159,5 +160,15 @@ class UserRepository(
 
     override fun getContactsUser(userId: String, valueEventListener: ValueEventListener) {
         remote.getContactsUser(userId, valueEventListener)
+    }
+
+    override fun updateNameFriend(userId: String, friendId: String, newName: String,
+        onSuccessListener: OnSuccessListener<Void>, onFailureListener: OnFailureListener) {
+        remote.updateNameFriend(userId, friendId, newName, onSuccessListener, onFailureListener)
+    }
+
+    override fun getFriendById(userId: String, friendId: String,
+        onValueEventListener: ValueEventListener) {
+        remote.getFriendById(userId, friendId, onValueEventListener)
     }
 }

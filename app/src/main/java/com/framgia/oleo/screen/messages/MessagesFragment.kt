@@ -3,6 +3,7 @@ package com.framgia.oleo.screen.messages
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.framgia.oleo.R
@@ -61,7 +62,8 @@ class MessagesFragment : BaseFragment(), OnItemRecyclerViewClick<BoxChat>, View.
 
     override fun bindView() {
         // Add Show View
-        viewModel.getAllMessages().observe(this, Observer { if (it != null) messagesAdapter.updateData(it) })
+        viewModel.getAllMessages().observe(this, Observer {
+            messagesAdapter.updateData(it) })
     }
 
     override fun onItemClickListener(data: BoxChat) {

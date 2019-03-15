@@ -11,6 +11,7 @@ import com.framgia.oleo.utils.Constant
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -298,5 +299,37 @@ class UserRemoteDataSource : UserDataSource.Remote {
             .child(userId)
             .child(Constant.PATH_STRING_FRIEND)
             .addValueEventListener(valueEventListener)
+    }
+
+    override fun updateNameFriend(userId: String, friendId : String, newName: String,
+        onSuccessListener: OnSuccessListener<Void>, onFailureListener: OnFailureListener) {
+        firebaseDatabase.reference
+            .child(Constant.PATH_STRING_USER)
+            .child(userId)
+            .child(Constant.PATH_STRING_FRIEND)
+            .child(friendId)
+            .child(Constant.PATH_STRING_USER_FRIEND)
+            .child(Constant.PATH_STRING_USER_NAME_VALUE)
+            .setValue(newName)
+            .addOnSuccessListener {
+                firebaseDatabase.reference.child(Constant.PATH_STRING_USER)
+                    .child(userId)
+                    .child(Constant.PATH_STRING_BOX)
+                    .child(friendId)
+                    .child(Constant.PATH_STRING_USER_FRIEND_VALUE)
+                    .setValue(newName)
+                    .addOnSuccessListener(onSuccessListener)
+                    .addOnFailureListener(onFailureListener)
+            }
+    }
+
+    override fun getFriendById(userId: String, friendId: String,
+        onValueEventListener: ValueEventListener) {
+        firebaseDatabase.reference
+            .child(Constant.PATH_STRING_USER)
+            .child(userId)
+            .child(Constant.PATH_STRING_FRIEND)
+            .child(friendId)
+            .addValueEventListener(onValueEventListener)
     }
 }

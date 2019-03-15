@@ -104,6 +104,9 @@
     <string name="unfriend_message">Are you sure want to remove %1$s as your friend?</string>
     <string name="msg_on_add_follow_request_failed">Send friend request failed, please try again!!!</string>
     <string name="msg_on_add_follow_request_success">Send friend request success, waiting accept!</string>
+    <string name="enter_a_new_name">Please enter a new name for %s</string>
+    <string name="update_name">Update Name</string>
+    <string name="save">Save</string>
     <string-array name="tab_titles">
         <item>Followed</item>
         <item>Following</item>

@@ -38,4 +38,8 @@ class MessagesRepository(private val messsagesDataSource: MesssagesDataSource) :
     override fun getBoxChat(userId: String, friend: User, valueEventListener: ValueEventListener) {
         messsagesDataSource.getBoxChat(userId, friend, valueEventListener)
     }
+
+    override fun getNameBoxChat(userId: String, boxChatId: String, onValueEventListener: ValueEventListener) {
+        messsagesDataSource.getNameBoxChat(userId, boxChatId, onValueEventListener)
+    }
 }

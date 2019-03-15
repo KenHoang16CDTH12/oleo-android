@@ -23,4 +23,6 @@ interface MesssagesDataSource {
     fun getLastMessage(userId: String, roomId: String, childEventListener: ChildEventListener)
 
     fun getBoxChat(userId: String, friend: User, valueEventListener: ValueEventListener)
+
+    fun getNameBoxChat(userId: String, boxChatId : String, onValueEventListener: ValueEventListener)
 }
