@@ -19,18 +19,23 @@ import com.framgia.oleo.base.BaseFragment
 import com.framgia.oleo.data.source.model.User
 import com.framgia.oleo.databinding.FragmentOptionMessageBinding
 import com.framgia.oleo.screen.location.LocationFragment
+import com.framgia.oleo.screen.main.MainActivity
 import com.framgia.oleo.utils.OnActionBarListener
 import com.framgia.oleo.utils.extension.addFragment
+import com.framgia.oleo.utils.extension.clearAllFragment
 import com.framgia.oleo.utils.extension.goBackFragment
 import com.framgia.oleo.utils.extension.showSnackBar
 import com.framgia.oleo.utils.liveData.autoCleared
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.android.synthetic.main.fragment_option_message.layoutHeader
 import kotlinx.android.synthetic.main.fragment_option_message.textViewLocationList
+import kotlinx.android.synthetic.main.fragment_option_message.textViewRemoveBox
 import kotlinx.android.synthetic.main.fragment_option_message.textViewUnFriend
 import kotlinx.android.synthetic.main.fragment_option_message.textViewRename
 import kotlinx.android.synthetic.main.fragment_option_message.toolbarOption
 import kotlinx.android.synthetic.main.fragment_option_message_header.textViewNameUser
+import kotlinx.android.synthetic.main.fragment_option_message_header.view.textViewNameUser
 import kotlinx.android.synthetic.main.toolbar.view.toolbarCustom
 
 class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOptionListener {
@@ -66,10 +71,11 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
         textViewLocationList.setOnClickListener(this)
         textViewRename.setOnClickListener(this)
         textViewUnFriend.setOnClickListener(this)
+        textViewRemoveBox.setOnClickListener(this)
         val userFriendId = arguments?.getString(ARGUMENT_USER_ID)
         viewModel.checkFriendByUserId(userFriendId!!)
-        viewModel.getFriendById(userFriendId)
-        viewModel.getFollowRequestOfUser(userFriendId)
+        viewModel.getUserFriend(userFriendId)
+        viewModel.getBoxChatName(userFriendId)
     }
 
     override fun onAttach(context: Context?) {
@@ -95,6 +101,7 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
                     viewModel.addFriendRequest(binding.user!!)
                 }
             R.id.textViewRename -> onShowDiaLogUpdateNameFriend()
+            R.id.textViewRemoveBox -> showRemoveBoxChatDialog()
         }
     }
 
@@ -128,6 +135,7 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
         viewModel.userFriend.observe(this, Observer {
             binding.layoutHeader.user = it
             binding.user = it
+            userFriend = it
         })
 
         viewModel.onNavigateEvent.observe(this, Observer {
@@ -160,14 +168,20 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
             view!!.showSnackBar(it)
         })
 
-        viewModel.userFriend.observe(this, Observer {
-            userFriend = it
-            binding.layoutHeader.user = it
-            binding.user = it
-        })
-
         viewModel.resultError.observe(this, Observer {
             Snackbar.make(view!!, it, Snackbar.LENGTH_SHORT).show()
+        })
+
+        viewModel.isBoxChatDeleted.observe(this, Observer {
+            if (it){
+                (activity as MainActivity).clearAllFragment()
+            }else{
+                view!!.showSnackBar(getString(R.string.delete_box_chat_failed))
+            }
+        })
+
+        viewModel.boxChatName.observe(this, Observer {
+            layoutHeader.textViewNameUser.text = it
         })
     }
 
@@ -175,6 +189,15 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
         AlertDialog.Builder(context, R.style.alertDialog).apply {
             setMessage(context.getString(R.string.unfriend_message, binding.user!!.userName))
             setPositiveButton(context.getString(R.string.ok)) { dialog, which -> viewModel.deleteFriend(binding.user!!.id) }
+            setNegativeButton(context.getString(R.string.cancel)) { dialog, which -> dialog.dismiss() }
+        }.create().show()
+    }
+
+    private fun showRemoveBoxChatDialog() {
+        AlertDialog.Builder(context, R.style.alertDialog).apply {
+            setMessage(getString(R.string.delete_box_chat_message))
+            setPositiveButton(context.getString(R.string.ok)) { dialog, which ->
+                viewModel.deleteBoxChat(binding.user!!.id)}
             setNegativeButton(context.getString(R.string.cancel)) { dialog, which -> dialog.dismiss() }
         }.create().show()
     }

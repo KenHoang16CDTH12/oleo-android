@@ -7,6 +7,8 @@ import com.framgia.oleo.data.source.model.User
 import com.framgia.oleo.screen.boxchat.BoxChatViewModel
 import com.framgia.oleo.utils.Constant
 import com.framgia.oleo.utils.Index
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -136,14 +138,13 @@ class MesssagesRemoteDataSource : MesssagesDataSource {
                         if (dataSnapshot!!.getValue(BoxChat::class.java)!!.id.toString() == friend.id) {
                             dataSnapshot.ref.addListenerForSingleValueEvent(valueEventListener)
                             return
-                        } else {
-                            snapshot.child(friend.id).ref.setValue(
-                                BoxChat(friend.id, arrayListOf(), friend.userName)
-                            ).addOnSuccessListener {
-                                snapshot.child(friend.id).ref.addListenerForSingleValueEvent(valueEventListener)
-                            }
-                            return
                         }
+
+                    }
+                    snapshot.child(friend.id).ref.setValue(
+                        BoxChat(friend.id, arrayListOf(), friend.userName)
+                    ).addOnSuccessListener {
+                        snapshot.child(friend.id).ref.addListenerForSingleValueEvent(valueEventListener)
                     }
                 }
             })
@@ -156,6 +157,21 @@ class MesssagesRemoteDataSource : MesssagesDataSource {
             .child(Constant.PATH_STRING_BOX)
             .child(boxChatId)
             .addValueEventListener(onValueEventListener)
+    }
+
+    override fun deleteBoxChat(
+        userId: String,
+        boxChatId: String,
+        onSuccessListener: OnSuccessListener<Void>,
+        onFailureListener: OnFailureListener
+    ) {
+        firebaseDatabase.getReference(Constant.PATH_STRING_USER)
+            .child(userId)
+            .child(Constant.PATH_STRING_BOX)
+            .child(boxChatId).ref
+            .removeValue()
+            .addOnSuccessListener(onSuccessListener)
+            .addOnFailureListener(onFailureListener)
     }
 
     companion object {

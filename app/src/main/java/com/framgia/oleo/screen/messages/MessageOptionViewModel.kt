@@ -6,7 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseViewModel
+import com.framgia.oleo.data.source.MessagesRepository
 import com.framgia.oleo.data.source.UserRepository
+import com.framgia.oleo.data.source.model.BoxChat
 import com.framgia.oleo.data.source.model.FollowRequest
 import com.framgia.oleo.data.source.model.Friend
 import com.framgia.oleo.data.source.model.User
@@ -20,7 +22,8 @@ import javax.inject.Inject
 
 class MessageOptionViewModel @Inject constructor(
     private val application: Application,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val messagesRepository: MessagesRepository
 ) : BaseViewModel() {
 
     val userFriend: MutableLiveData<User> by lazy {
@@ -43,20 +46,41 @@ class MessageOptionViewModel @Inject constructor(
         MutableLiveData<String>()
     }
 
-    val resultError : MutableLiveData<String> by lazy {
-        MutableLiveData<String>() }
+    val resultError: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
 
-    fun getFriendById(idFriend: String) {
-        userRepository.getFriendById(userRepository.getUser()!!.id, idFriend , object :
-        ValueEventListener {
-            override fun onCancelled(error: DatabaseError) {}
+    val isBoxChatDeleted: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+
+    val boxChatName: MutableLiveData<String> by lazy{
+        MutableLiveData<String>()
+    }
+
+    fun getUserFriend(id: String) {
+        userRepository.getUserById(id, object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+            }
 
             override fun onDataChange(data: DataSnapshot) {
                 if (data.exists()) {
-                    userFriend.value = data.getValue(Friend::class.java)!!.user
+                    userFriend.value = data.getValue(User::class.java)
                 }
             }
         })
+    }
+
+    fun getBoxChatName(boxChatId : String){
+        messagesRepository.getNameBoxChat(userRepository.getUser()!!.id,
+            boxChatId, object :ValueEventListener{
+                override fun onCancelled(error: DatabaseError) {}
+
+                override fun onDataChange(data: DataSnapshot) {
+                    if (data.exists())
+                        boxChatName.value = data.getValue(BoxChat::class.java)!!.userFriendName
+                }
+            })
     }
 
     fun getFollowRequestOfUser(id: String) {
@@ -98,12 +122,12 @@ class MessageOptionViewModel @Inject constructor(
             })
     }
 
-    fun onUpdateNickNameMyFriend(friendId: String, newName: String){
+    fun onUpdateNickNameMyFriend(friendId: String, newName: String) {
         userRepository.updateNameFriend(userRepository.getUser()!!.id, friendId, newName,
-                                        OnSuccessListener {},
-                                        OnFailureListener {
-                                                error -> resultError.value = error.message
-                                        })
+            OnSuccessListener {},
+            OnFailureListener { error ->
+                resultError.value = error.message
+            })
     }
 
     fun addFollowRequest(userFriend: User) {
@@ -142,6 +166,18 @@ class MessageOptionViewModel @Inject constructor(
                 onAddFriendRequest.value = application.getString(R.string.msg_on_add_friend_request_success)
             }, onFailureListener = OnFailureListener {
                 onAddFriendRequest.value = application.getString(R.string.msg_on_get_waiting_failed)
+            })
+    }
+
+    fun deleteBoxChat(boxChatId: String) {
+        messagesRepository.deleteBoxChat(
+            userRepository.getUser()!!.id,
+            boxChatId,
+            OnSuccessListener {
+                isBoxChatDeleted.value = true
+            },
+            OnFailureListener {
+                isBoxChatDeleted.value = false
             })
     }
 

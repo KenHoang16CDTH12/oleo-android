@@ -100,7 +100,7 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
     }
 
     override fun onSearchClick() {
-        replaceFragmentInActivity(R.id.containerMain, searchFragment, true)
+        addFragmentToActivity(R.id.containerMain, searchFragment, true)
     }
 
     override fun onLogOutClick() {

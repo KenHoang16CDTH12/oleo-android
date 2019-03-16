@@ -3,6 +3,8 @@ package com.framgia.oleo.data.source
 import com.framgia.oleo.data.source.model.BoxChat
 import com.framgia.oleo.data.source.model.Message
 import com.framgia.oleo.data.source.model.User
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.ValueEventListener
 
@@ -25,4 +27,11 @@ interface MesssagesDataSource {
     fun getBoxChat(userId: String, friend: User, valueEventListener: ValueEventListener)
 
     fun getNameBoxChat(userId: String, boxChatId : String, onValueEventListener: ValueEventListener)
+
+    fun deleteBoxChat(
+        userId: String,
+        boxChatId: String,
+        onSuccessListener: OnSuccessListener<Void>,
+        onFailureListener: OnFailureListener
+    )
 }

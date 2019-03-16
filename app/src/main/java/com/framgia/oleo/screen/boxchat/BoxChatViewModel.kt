@@ -95,7 +95,8 @@ class BoxChatViewModel @Inject constructor(
             override fun onCancelled(error: DatabaseError) {}
 
             override fun onDataChange(data: DataSnapshot) {
-                boxChatName.value = data.getValue(BoxChat::class.java)!!.userFriendName
+                if (data.exists())
+                    boxChatName.value = data.getValue(BoxChat::class.java)!!.userFriendName
             }
         })
     }

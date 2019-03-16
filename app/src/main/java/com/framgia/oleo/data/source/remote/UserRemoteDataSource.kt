@@ -303,24 +303,14 @@ class UserRemoteDataSource : UserDataSource.Remote {
 
     override fun updateNameFriend(userId: String, friendId : String, newName: String,
         onSuccessListener: OnSuccessListener<Void>, onFailureListener: OnFailureListener) {
-        firebaseDatabase.reference
-            .child(Constant.PATH_STRING_USER)
-            .child(userId)
-            .child(Constant.PATH_STRING_FRIEND)
-            .child(friendId)
-            .child(Constant.PATH_STRING_USER_FRIEND)
-            .child(Constant.PATH_STRING_USER_NAME_VALUE)
-            .setValue(newName)
-            .addOnSuccessListener {
-                firebaseDatabase.reference.child(Constant.PATH_STRING_USER)
-                    .child(userId)
-                    .child(Constant.PATH_STRING_BOX)
-                    .child(friendId)
-                    .child(Constant.PATH_STRING_USER_FRIEND_VALUE)
-                    .setValue(newName)
-                    .addOnSuccessListener(onSuccessListener)
-                    .addOnFailureListener(onFailureListener)
-            }
+            firebaseDatabase.reference.child(Constant.PATH_STRING_USER)
+                .child(userId)
+                .child(Constant.PATH_STRING_BOX)
+                .child(friendId)
+                .child(Constant.PATH_STRING_USER_FRIEND_VALUE)
+                .setValue(newName)
+                .addOnSuccessListener(onSuccessListener)
+                .addOnFailureListener(onFailureListener)
     }
 
     override fun getFriendById(userId: String, friendId: String,

@@ -111,6 +111,7 @@ class SearchFragment : BaseFragment(), SearchView.OnQueryTextListener, OnItemVie
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        menu?.clear()
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.search, menu)
     }

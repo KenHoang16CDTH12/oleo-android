@@ -15,6 +15,7 @@ import com.framgia.oleo.data.source.model.BoxChat
 import com.framgia.oleo.data.source.model.User
 import com.framgia.oleo.databinding.AdapterMessageBinding
 import com.framgia.oleo.utils.Constant
+import com.framgia.oleo.utils.Index
 import com.framgia.oleo.utils.OnItemRecyclerViewClick
 import kotlinx.android.synthetic.main.adapter_message.view.textFriendName
 
@@ -29,10 +30,20 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.Companion.MessagesH
         listener = itemClickListener
     }
 
-    fun updateData(boxChats: MutableList<BoxChat>) {
-        messages.clear()
-        messages.addAll(boxChats)
-        notifyDataSetChanged()
+    fun addData(boxChat: BoxChat) {
+        val index = messages.indexOfFirst { it.id == boxChat.id }
+        if (index < Index.POSITION_ZERO) {
+            messages.add(boxChat)
+            notifyItemInserted(messages.lastIndex)
+        }
+    }
+
+    fun removeData(boxChat: BoxChat) {
+        val index = messages.indexOfFirst { it.id == boxChat.id }
+        if (index >= Index.POSITION_ZERO) {
+            messages.removeAt(index)
+            notifyItemRemoved(index)
+        }
     }
 
     fun getUser(user: User) {
@@ -70,7 +81,7 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.Companion.MessagesH
             private val binding: AdapterMessageBinding,
             private val listener: OnItemRecyclerViewClick<BoxChat>,
             private val user: User,
-            messagesRepository: MessagesRepository
+            private val messagesRepository: MessagesRepository
         ) : RecyclerView.ViewHolder(binding.root), View.OnClickListener, LifecycleOwner {
 
             private val lifecycleRegistry = LifecycleRegistry(this)
@@ -97,10 +108,16 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.Companion.MessagesH
 
             fun bindData(boxChat: BoxChat) {
                 this.boxChat = boxChat
+                lifecycleRegistry.markState(Lifecycle.State.STARTED)
+                binding.textMessage.text = ""
+                binding.textTime.text = ""
+                binding.viewModel = MessagesAdapterViewModel(messagesRepository)
+                binding.viewModel!!.getBoxChatName(user.id, boxChat.id!!)
                 binding.viewModel!!.setMessage(user.id, boxChat.id!!).observe(this, Observer { message ->
                     binding.textMessage.text = message.message.toString()
                     binding.textTime.text = message.time.toString()
                 })
+                binding.viewModel!!.boxChatName.observe(this, Observer { itemView.textFriendName.text = it })
                 binding.viewModel!!.setImageProfile(boxChat.id!!)
                 itemView.textFriendName.text = boxChat.userFriendName
             }
