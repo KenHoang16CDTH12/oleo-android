@@ -16,7 +16,9 @@ import androidx.lifecycle.Observer
 import com.framgia.oleo.R
 import com.framgia.oleo.base.BaseActivity
 import com.framgia.oleo.data.service.LocationService
+import com.framgia.oleo.data.source.model.BoxChat
 import com.framgia.oleo.databinding.ActivityMainBinding
+import com.framgia.oleo.screen.boxchat.BoxChatFragment
 import com.framgia.oleo.screen.boxchat.BoxChatFragment.OnBoxChatListener
 import com.framgia.oleo.screen.follow.FollowListFragment
 import com.framgia.oleo.screen.forgotpassword.ForgotPasswordFragment.OnForgotPasswordListener
@@ -39,7 +41,8 @@ import com.framgia.oleo.utils.extension.showToast
 import kotlinx.android.synthetic.main.toolbar.view.textTitleToolbar
 
 class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettingListener,
-    OnBoxChatListener, OnCallBackLocationListener, OnActionBarListener, OnForgotPasswordListener {
+    OnBoxChatListener, OnCallBackLocationListener, OnActionBarListener, OnForgotPasswordListener,
+    SearchFragment.ImageSendMessageClickedListener {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var currentFragment: Fragment
@@ -100,7 +103,7 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
     }
 
     override fun onSearchClick() {
-        addFragmentToActivity(R.id.containerMain, searchFragment, true)
+        addFragmentToActivity(R.id.containerMain, searchFragment)
     }
 
     override fun onLogOutClick() {
@@ -111,7 +114,7 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
     }
 
     override fun onFriendRequestClick() {
-        replaceFragmentInActivity(R.id.containerMain, friendRequestsFragment, true)
+        addFragmentToActivity(R.id.containerMain, friendRequestsFragment)
     }
 
     override fun onMessageOptionClick(userFriendId: String) {
@@ -119,7 +122,7 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
     }
 
     override fun onWatchListClick() {
-        replaceFragmentInActivity(R.id.containerMain, followListFragment, true)
+        addFragmentToActivity(R.id.containerMain, followListFragment)
     }
 
     override fun onCallBackLocation(isCheckPermission: Boolean) {
@@ -143,6 +146,11 @@ class MainActivity : BaseActivity(), MessagesFragment.OnSearchListener, OnSettin
     override fun onVerifyCodeClick(phoneNumber: String) {
         supportFragmentManager.popBackStack()
         addFragmentToActivity(R.id.containerMain, ResetPasswordFragment.newInstance(phoneNumber))
+    }
+
+    override fun onOpenBoxChat(data: BoxChat) {
+        supportFragmentManager.popBackStack()
+        addFragmentToActivity(R.id.containerMain, BoxChatFragment.newInstance(data))
     }
 
     private fun registerIsCheckUserData() {

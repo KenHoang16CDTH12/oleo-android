@@ -17,8 +17,7 @@ class MessagesAdapterViewModel(
     private val messagesRepository: MessagesRepository
 ) : BaseObservable() {
 
-    private var message = MutableLiveData<Message>()
-
+    val message: MutableLiveData<Message> by lazy { MutableLiveData<Message>() }
     private var image = ""
 
     val boxChatName: MutableLiveData<String> by lazy{
@@ -53,7 +52,7 @@ class MessagesAdapterViewModel(
         })
     }
 
-    fun getBoxChatName(userId: String, boxChatId : String){
+    fun setBoxChatName(userId: String, boxChatId : String){
         messagesRepository.getNameBoxChat(userId,
             boxChatId, object :ValueEventListener{
                 override fun onCancelled(error: DatabaseError) {}

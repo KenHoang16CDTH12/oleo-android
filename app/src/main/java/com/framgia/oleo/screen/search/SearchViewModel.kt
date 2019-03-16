@@ -35,7 +35,9 @@ class SearchViewModel @Inject constructor(
         MutableLiveData<BoxChat>()
     }
     val userId = userRepository.getUser()!!.id
-    val getFriendList: MutableLiveData<MutableList<Friend>>by lazy { MutableLiveData<MutableList<Friend>>() }
+    val onGetFriendList: MutableLiveData<MutableList<Friend>>by lazy {
+        MutableLiveData<MutableList<Friend>>()
+    }
 
     fun addFriendRequest(user: User) {
         val defaultMessage = StringBuilder(
@@ -76,7 +78,7 @@ class SearchViewModel @Inject constructor(
         })
     }
 
-    fun getBoxChat(friend: User): MutableLiveData<BoxChat> {
+    fun getBoxChat(friend: User) {
         messagesRepository.getBoxChat(
             userId,
             friend,
@@ -89,10 +91,9 @@ class SearchViewModel @Inject constructor(
 
                 override fun onCancelled(p0: DatabaseError) {}
             })
-        return onOpenBoxChat
     }
 
-    fun getFriend(): MutableLiveData<MutableList<Friend>> {
+    fun getFriend() {
         userRepository.getContactsUser(userRepository.getUser()!!.id, object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {}
 
@@ -102,10 +103,9 @@ class SearchViewModel @Inject constructor(
                     snapshot.children.forEach { dataSnapshot: DataSnapshot? ->
                         listFriend.add(dataSnapshot!!.getValue(Friend::class.java)!!)
                     }
-                getFriendList.value = listFriend
+                onGetFriendList.value = listFriend
             }
         })
-        return getFriendList
     }
 
     fun searchByPhoneNumberOrName(query: String) {

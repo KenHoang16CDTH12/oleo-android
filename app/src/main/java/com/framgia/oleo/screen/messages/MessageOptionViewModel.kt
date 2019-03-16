@@ -10,7 +10,6 @@ import com.framgia.oleo.data.source.MessagesRepository
 import com.framgia.oleo.data.source.UserRepository
 import com.framgia.oleo.data.source.model.BoxChat
 import com.framgia.oleo.data.source.model.FollowRequest
-import com.framgia.oleo.data.source.model.Friend
 import com.framgia.oleo.data.source.model.User
 import com.framgia.oleo.utils.Constant
 import com.google.android.gms.tasks.OnFailureListener
@@ -54,14 +53,13 @@ class MessageOptionViewModel @Inject constructor(
         MutableLiveData<Boolean>()
     }
 
-    val boxChatName: MutableLiveData<String> by lazy{
+    val boxChatName:MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
 
-    fun getUserFriend(id: String) {
-        userRepository.getUserById(id, object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-            }
+    fun getUserFriend(friendId: String) {
+        userRepository.getUserById(friendId, object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {}
 
             override fun onDataChange(data: DataSnapshot) {
                 if (data.exists()) {
@@ -71,16 +69,15 @@ class MessageOptionViewModel @Inject constructor(
         })
     }
 
-    fun getBoxChatName(boxChatId : String){
-        messagesRepository.getNameBoxChat(userRepository.getUser()!!.id,
-            boxChatId, object :ValueEventListener{
-                override fun onCancelled(error: DatabaseError) {}
+    fun getBoxChatName(boxChatId: String) {
+        messagesRepository.getNameBoxChat(userRepository.getUser()!!.id, boxChatId, object :
+            ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {}
 
-                override fun onDataChange(data: DataSnapshot) {
-                    if (data.exists())
-                        boxChatName.value = data.getValue(BoxChat::class.java)!!.userFriendName
-                }
-            })
+            override fun onDataChange(data: DataSnapshot) {
+                boxChatName.value = data.getValue(BoxChat::class.java)!!.userFriendName
+            }
+        })
     }
 
     fun getFollowRequestOfUser(id: String) {

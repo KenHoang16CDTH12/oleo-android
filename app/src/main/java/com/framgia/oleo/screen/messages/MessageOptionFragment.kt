@@ -33,12 +33,15 @@ import kotlinx.android.synthetic.main.fragment_option_message.textViewLocationLi
 import kotlinx.android.synthetic.main.fragment_option_message.textViewRemoveBox
 import kotlinx.android.synthetic.main.fragment_option_message.textViewUnFriend
 import kotlinx.android.synthetic.main.fragment_option_message.textViewRename
+import kotlinx.android.synthetic.main.fragment_option_message.textViewUnFriend
 import kotlinx.android.synthetic.main.fragment_option_message.toolbarOption
 import kotlinx.android.synthetic.main.fragment_option_message_header.textViewNameUser
 import kotlinx.android.synthetic.main.fragment_option_message_header.view.textViewNameUser
 import kotlinx.android.synthetic.main.toolbar.view.toolbarCustom
 
-class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOptionListener {
+class MessageOptionFragment : BaseFragment(), View.OnClickListener,
+    OnMessageOptionListener {
+
     private lateinit var viewModel: MessageOptionViewModel
     private var binding by autoCleared<FragmentOptionMessageBinding>()
     private var listener: OnActionBarListener? = null
@@ -120,7 +123,7 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener, OnMessageOpt
     private fun setupActionBar() {
         listener!!.setupActionbar(
             toolbar = toolbarOption.toolbarCustom,
-            title = activity!!.getString(R.string.follow_list)
+            title = activity!!.getString(R.string.option)
         )
     }
 

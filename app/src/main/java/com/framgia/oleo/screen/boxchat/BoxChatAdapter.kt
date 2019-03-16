@@ -1,5 +1,6 @@
 package com.framgia.oleo.screen.boxchat
 
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -93,13 +94,17 @@ class BoxChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             Glide.with(itemView.context).load(image)
                 .apply(RequestOptions().circleCrop().placeholder(R.drawable.ic_user_circle))
                 .into(itemView.imageSendMessage)
-            itemView.textSendTime.text = message.time
+            itemView.textSendTime.text = DateUtils.getRelativeTimeSpanString(
+                message.time!!, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS
+            )
         }
 
         fun bindDataNoImage(message: Message) {
             itemView.textSendMessage.text = message.message
             itemView.imageSendMessage.hide()
-            itemView.textSendTime.text = message.time
+            itemView.textSendTime.text = DateUtils.getRelativeTimeSpanString(
+                message.time!!, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS
+            )
         }
     }
 
@@ -109,13 +114,17 @@ class BoxChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             Glide.with(itemView.context).load(imageUrl)
                 .apply(RequestOptions().circleCrop().placeholder(R.drawable.ic_user_circle))
                 .into(itemView.imageReceiveMessage)
-            itemView.textReceiveTime.text = message.time
+            itemView.textReceiveTime.text = DateUtils.getRelativeTimeSpanString(
+                message.time!!, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS
+            )
         }
 
         fun bindDataNoImage(message: Message) {
             itemView.textReceiveMessage.text = message.message
             itemView.imageReceiveMessage.hide()
-            itemView.textReceiveTime.text = message.time
+            itemView.textReceiveTime.text = DateUtils.getRelativeTimeSpanString(
+                message.time!!, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS
+            )
         }
     }
 

@@ -126,20 +126,13 @@ class MesssagesRemoteDataSource : MesssagesDataSource {
                 override fun onCancelled(p0: DatabaseError) {}
 
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if (!snapshot.exists()) {
-                        snapshot.child(friend.id).ref.setValue(
-                            BoxChat(friend.id, arrayListOf(), friend.userName)
-                        ).addOnSuccessListener {
-                            snapshot.child(friend.id).ref.addListenerForSingleValueEvent(valueEventListener)
+                    if (snapshot.exists()) {
+                        snapshot.children.forEach { dataSnapshot: DataSnapshot? ->
+                            if (dataSnapshot!!.getValue(BoxChat::class.java)!!.id.toString() == friend.id) {
+                                dataSnapshot.ref.addListenerForSingleValueEvent(valueEventListener)
+                                return
+                            }
                         }
-                        return
-                    }
-                    snapshot.children.forEach { dataSnapshot: DataSnapshot? ->
-                        if (dataSnapshot!!.getValue(BoxChat::class.java)!!.id.toString() == friend.id) {
-                            dataSnapshot.ref.addListenerForSingleValueEvent(valueEventListener)
-                            return
-                        }
-
                     }
                     snapshot.child(friend.id).ref.setValue(
                         BoxChat(friend.id, arrayListOf(), friend.userName)

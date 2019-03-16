@@ -14,9 +14,7 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import java.text.DateFormat
 import java.util.ArrayList
-import java.util.Date
 import javax.inject.Inject
 
 class BoxChatViewModel @Inject constructor(
@@ -28,12 +26,12 @@ class BoxChatViewModel @Inject constructor(
         MutableLiveData<String>()
     }
     private val user = userRepository.getUser()
-    private var message = MutableLiveData<Message>()
-    private var messages = MutableLiveData<ArrayList<Message>>()
-    private var imageProfile = MutableLiveData<String>()
+    var newMessageLiveData = MutableLiveData<Message>()
+    var oldMessagesLiveData = MutableLiveData<ArrayList<Message>>()
+    var imageProfileLiveData = MutableLiveData<String>()
     private var oldMessageId = ""
 
-    fun getMessage(roomId: String): MutableLiveData<Message> {
+    fun getMessage(roomId: String) {
         messagesRepository.getMessage(user!!.id, roomId, object : ChildEventListener {
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
 
@@ -45,14 +43,13 @@ class BoxChatViewModel @Inject constructor(
 
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val post = snapshot.getValue(Message::class.java)
-                if (post != null) message.value = post
+                if (post != null) newMessageLiveData.value = post
                 if (previousChildName == null) oldMessageId = snapshot.key.toString()
             }
         })
-        return message
     }
 
-    fun loadOldMessage(roomId: String): MutableLiveData<ArrayList<Message>> {
+    fun loadOldMessage(roomId: String){
         val messageList = arrayListOf<Message>()
         messagesRepository.getOldMessage(user!!.id, roomId, oldMessageId, object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -61,32 +58,30 @@ class BoxChatViewModel @Inject constructor(
                     val post = dataSnapshot.getValue(Message::class.java)
                     if (post != null) messageList.add(post)
                 }
-                if (messageList.size != Index.POSITION_ZERO) messages.value = messageList
+                if (messageList.size != Index.POSITION_ZERO) oldMessagesLiveData.value = messageList
             }
 
             override fun onCancelled(p0: DatabaseError) {}
         })
-        return messages
     }
 
     fun sendMessage(text: String, boxChat: BoxChat) {
         val messageId = messagesRepository.getMessageId(user!!.id, boxChat.id!!)
-        val message = Message(messageId, user.id, text, DateFormat.getDateTimeInstance().format(Date()))
+        val message = Message(messageId, user.id, text, System.currentTimeMillis())
         messagesRepository.sendMessage(user, boxChat, message)
     }
 
-    fun getFriendImageProfile(userId: String): MutableLiveData<String> {
+    fun getFriendImageProfile(userId: String) {
         messagesRepository.getImageProfile(userId, object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {}
 
             override fun onDataChange(dataSnapShot: DataSnapshot) {
                 if (dataSnapShot.exists()) {
                     val user = dataSnapShot.getValue(User::class.java)
-                    imageProfile.value = user!!.image
+                    imageProfileLiveData.value = user!!.image
                 }
             }
         })
-        return imageProfile
     }
 
     fun getBoxChatName(boxChatId : String){

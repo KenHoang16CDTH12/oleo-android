@@ -6,11 +6,11 @@ import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.framgia.oleo.R
+import com.framgia.oleo.base.BaseActivity
 import com.framgia.oleo.base.BaseFragment
 import com.framgia.oleo.data.source.model.BoxChat
 import com.framgia.oleo.databinding.FragmentMessagesBinding
 import com.framgia.oleo.screen.boxchat.BoxChatFragment
-import com.framgia.oleo.screen.main.MainActivity
 import com.framgia.oleo.utils.OnItemRecyclerViewClick
 import com.framgia.oleo.utils.extension.addFragmentToActivity
 import com.framgia.oleo.utils.extension.isCheckMultiClick
@@ -24,6 +24,7 @@ class MessagesFragment : BaseFragment(), OnItemRecyclerViewClick<BoxChat>, View.
     private lateinit var viewModel: MessagesViewModel
     private var binding by autoCleared<FragmentMessagesBinding>()
     private var messagesAdapter by autoCleared<MessagesAdapter>()
+    private var activity: BaseActivity? = null
 
     override fun createView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -37,51 +38,43 @@ class MessagesFragment : BaseFragment(), OnItemRecyclerViewClick<BoxChat>, View.
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        if (context is OnSearchListener) {
-            listener = context
-        }
+        if (context is OnSearchListener) listener = context
+        if (context is BaseActivity) activity = context
     }
 
     override fun onDetach() {
         super.onDetach()
         listener = null
+        activity = null
     }
 
     override fun setUpView() {
         // SetUp View
         setHasOptionsMenu(true)
-        (activity as MainActivity).setSupportActionBar(searchActionBar)
-        (activity as MainActivity).supportActionBar!!.setDisplayShowTitleEnabled(false)
+        activity!!.setSupportActionBar(searchActionBar)
+        activity!!.supportActionBar!!.setDisplayShowTitleEnabled(false)
         messagesAdapter = MessagesAdapter()
         recyclerViewMessages.adapter = messagesAdapter
         viewModel.setAdapter(messagesAdapter)
         messagesAdapter.setListener(this)
         textSearchMessage.setOnClickListener(this)
-        viewModel.getAllBoxChat()
+        registerLiveData()
     }
 
     override fun bindView() {
         // Add Show View
-        viewModel.onBoxChatAdded.observe(this, Observer {
-            messagesAdapter.addData(it)
-        })
-
-        viewModel.onBoxChatRemoved.observe(this, Observer {
-            messagesAdapter.removeData(it)
-        })
+        viewModel.getAllBoxChat()
     }
 
     override fun onItemClickListener(data: BoxChat) {
         //Open Chat Screen
-        if (isCheckMultiClick()) (activity!! as MainActivity).addFragmentToActivity(
-            R.id.containerMain, BoxChatFragment.newInstance(data)
-        )
+        if (isCheckMultiClick())
+            activity!!.addFragmentToActivity(R.id.containerMain, BoxChatFragment.newInstance(data))
     }
 
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.textSearchMessage -> if (isCheckMultiClick()) listener?.onSearchClick()
-
         }
     }
 
@@ -97,6 +90,16 @@ class MessagesFragment : BaseFragment(), OnItemRecyclerViewClick<BoxChat>, View.
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun registerLiveData(){
+        viewModel.onBoxChatAdded.observe(this, Observer {
+            messagesAdapter.addData(it)
+        })
+
+        viewModel.onBoxChatRemoved.observe(this, Observer {
+            messagesAdapter.removeData(it)
+        })
     }
 
     interface OnSearchListener {

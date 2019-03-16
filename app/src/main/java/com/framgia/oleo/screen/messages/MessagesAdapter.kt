@@ -1,5 +1,6 @@
 package com.framgia.oleo.screen.messages
 
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,7 @@ import com.framgia.oleo.databinding.AdapterMessageBinding
 import com.framgia.oleo.utils.Constant
 import com.framgia.oleo.utils.Index
 import com.framgia.oleo.utils.OnItemRecyclerViewClick
-import kotlinx.android.synthetic.main.adapter_message.view.textFriendName
+import kotlinx.android.synthetic.main.adapter_message.view.*
 
 class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.Companion.MessagesHolder>() {
 
@@ -109,17 +110,22 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.Companion.MessagesH
             fun bindData(boxChat: BoxChat) {
                 this.boxChat = boxChat
                 lifecycleRegistry.markState(Lifecycle.State.STARTED)
-                binding.textMessage.text = ""
-                binding.textTime.text = ""
-                binding.viewModel = MessagesAdapterViewModel(messagesRepository)
-                binding.viewModel!!.getBoxChatName(user.id, boxChat.id!!)
-                binding.viewModel!!.setMessage(user.id, boxChat.id!!).observe(this, Observer { message ->
-                    binding.textMessage.text = message.message.toString()
-                    binding.textTime.text = message.time.toString()
-                })
-                binding.viewModel!!.boxChatName.observe(this, Observer { itemView.textFriendName.text = it })
+                binding.viewModel!!.setMessage(user.id, boxChat.id!!)
                 binding.viewModel!!.setImageProfile(boxChat.id!!)
-                itemView.textFriendName.text = boxChat.userFriendName
+                binding.viewModel!!.setBoxChatName(user.id, boxChat.id!!)
+                getLiveData()
+            }
+
+            private fun getLiveData() {
+                binding.viewModel!!.message.observe(this, Observer { message ->
+                    binding.textMessage.text = message.message.toString()
+                    binding.textTime.text = DateUtils.getRelativeTimeSpanString(
+                        message.time!!, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS
+                    )
+                })
+                binding.viewModel!!.boxChatName.observe(this, Observer {
+                    itemView.textFriendName.text = it
+                })
             }
 
             override fun onClick(v: View?) {
