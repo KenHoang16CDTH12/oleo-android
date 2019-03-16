@@ -109,6 +109,10 @@
     <string name="save">Save</string>
     <string name="delete_box_chat_message">Are you sure want to delete this box chat?</string>
     <string name="delete_box_chat_failed">Delete box chat failed !</string>
+    <string name="following">Following</string>
+    <string name="sent_follow_request">Follow request sent</string>
+    <string name="follow_request">Follow %1$s</string>
+    <string name="sent_friend_request">Friend request sent</string>
     <string-array name="tab_titles">
         <item>Followed</item>
         <item>Following</item>

@@ -25,6 +25,7 @@ class MessagesAdapterViewModel(
     }
 
     fun setMessage(userId: String, boxId: String): MutableLiveData<Message> {
+        message.value = null
         messagesRepository.getLastMessage(userId, boxId, object : ChildEventListener {
             override fun onCancelled(dataSnapshot: DatabaseError) {}
 

@@ -29,16 +29,16 @@ class MessageOptionViewModel @Inject constructor(
         MutableLiveData<User>()
     }
 
-    val onNavigateEvent: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
+    val onFollowRequestStatus: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
     }
 
     val onMessageEvent: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
 
-    val isFriendAlready: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
+    val friendRequestStatus: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>()
     }
 
     val onAddFriendRequest: MutableLiveData<String> by lazy {
@@ -53,7 +53,7 @@ class MessageOptionViewModel @Inject constructor(
         MutableLiveData<Boolean>()
     }
 
-    val boxChatName:MutableLiveData<String> by lazy {
+    val boxChatName: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
 
@@ -75,7 +75,8 @@ class MessageOptionViewModel @Inject constructor(
             override fun onCancelled(error: DatabaseError) {}
 
             override fun onDataChange(data: DataSnapshot) {
-                boxChatName.value = data.getValue(BoxChat::class.java)!!.userFriendName
+                if (data.exists())
+                    boxChatName.value = data.getValue(BoxChat::class.java)!!.userFriendName
             }
         })
     }
@@ -90,33 +91,13 @@ class MessageOptionViewModel @Inject constructor(
                 var isFollowed = false
                 if (dataSnapshot.exists()) {
                     val followRequest = dataSnapshot.getValue(FollowRequest::class.java)
-                    isFollowed = followRequest!!.status.equals(Constant.STATUS_FOLLOWING)
-                }
-                when (isFollowed) {
-                    true -> onNavigateEvent.value = true
-                    else -> onMessageEvent.value = application.getString(R.string.msg_do_not_have_permission)
+                    if (followRequest != null)
+                        onFollowRequestStatus.value = followRequest.status
+                } else {
+                    onFollowRequestStatus.value = Constant.STATUS_NOT_EXIST
                 }
             }
         })
-    }
-
-    fun onFollowClick(userFriend: User) {
-        userRepository.getFollowRequestSingleValueEvent(
-            userRepository.getUser()!!,
-            userFriend,
-            object : ValueEventListener {
-                override fun onCancelled(error: DatabaseError) {
-                    onMessageEvent.value = application.getString(R.string.msg_on_database_error)
-                }
-
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val followRequest = dataSnapshot.getValue(FollowRequest::class.java)
-                    when {
-                        !dataSnapshot.exists() -> addFollowRequest(userFriend)
-                        else -> onMessageEvent.value = application.getString(R.string.msg_on_follow_request_exists)
-                    }
-                }
-            })
     }
 
     fun onUpdateNickNameMyFriend(friendId: String, newName: String) {
@@ -146,7 +127,26 @@ class MessageOptionViewModel @Inject constructor(
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                isFriendAlready.value = dataSnapshot.exists()
+                if (dataSnapshot.exists()) {
+                    friendRequestStatus.value = Constant.STATUS_FRIEND_ACCEPT
+                } else {
+                    friendRequestStatus.value = Constant.STATUS_NOT_EXIST.toInt()
+                }
+            }
+        })
+    }
+
+    fun checkFriendRequest(friendId: String) {
+        userRepository.checkFriendRequest(userRepository.getUser()!!.id, friendId, object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    friendRequestStatus.value = Constant.STATUS_FRIEND_WAITING
+                } else if (friendRequestStatus.value != Constant.STATUS_FRIEND_ACCEPT) {
+                    friendRequestStatus.value = Constant.STATUS_NOT_EXIST.toInt()
+                }
             }
         })
     }

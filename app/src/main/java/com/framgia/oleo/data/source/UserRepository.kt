@@ -17,6 +17,10 @@ class UserRepository(
     private val remote: UserDataSource.Remote
 ) : UserDataSource.Local, UserDataSource.Remote {
 
+    override fun checkFriendRequest(userId: String, friendId: String, valueEventListener: ValueEventListener) {
+        remote.checkFriendRequest(userId, friendId, valueEventListener)
+    }
+
     override fun getFollowRequestSingleValueEvent(
         userCurrent: User,
         userFriend: User,
