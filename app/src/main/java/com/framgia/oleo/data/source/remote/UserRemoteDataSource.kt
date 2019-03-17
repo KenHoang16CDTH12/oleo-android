@@ -19,6 +19,13 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class UserRemoteDataSource : UserDataSource.Remote {
+    override fun checkFriendRequest(userId: String, friendId: String, valueEventListener: ValueEventListener) {
+        firebaseDatabase.getReference(Constant.PATH_STRING_FRIEND_REQUEST)
+            .child(friendId)
+            .child(userId)
+            .addValueEventListener(valueEventListener)
+    }
+
     override fun checkFriendByUserId(userId: String, friendId: String, valueEventListener: ValueEventListener) {
         firebaseDatabase.getReference(Constant.PATH_STRING_USER)
             .child(userId)

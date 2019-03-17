@@ -110,6 +110,8 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.Companion.MessagesH
             fun bindData(boxChat: BoxChat) {
                 this.boxChat = boxChat
                 lifecycleRegistry.markState(Lifecycle.State.STARTED)
+                binding.textMessage.text = ""
+                binding.textTime.text = ""
                 binding.viewModel!!.setMessage(user.id, boxChat.id!!)
                 binding.viewModel!!.setImageProfile(boxChat.id!!)
                 binding.viewModel!!.setBoxChatName(user.id, boxChat.id!!)
@@ -118,6 +120,7 @@ class MessagesAdapter : RecyclerView.Adapter<MessagesAdapter.Companion.MessagesH
 
             private fun getLiveData() {
                 binding.viewModel!!.message.observe(this, Observer { message ->
+                    if(message==null) return@Observer
                     binding.textMessage.text = message.message.toString()
                     binding.textTime.text = DateUtils.getRelativeTimeSpanString(
                         message.time!!, System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS

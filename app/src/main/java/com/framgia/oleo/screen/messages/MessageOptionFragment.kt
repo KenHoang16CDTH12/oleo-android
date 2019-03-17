@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.framgia.oleo.R
@@ -20,20 +21,26 @@ import com.framgia.oleo.data.source.model.User
 import com.framgia.oleo.databinding.FragmentOptionMessageBinding
 import com.framgia.oleo.screen.location.LocationFragment
 import com.framgia.oleo.screen.main.MainActivity
+import com.framgia.oleo.utils.Constant
 import com.framgia.oleo.utils.OnActionBarListener
 import com.framgia.oleo.utils.extension.addFragment
 import com.framgia.oleo.utils.extension.clearAllFragment
 import com.framgia.oleo.utils.extension.goBackFragment
+import com.framgia.oleo.utils.extension.gone
+import com.framgia.oleo.utils.extension.isCheckMultiClick
+import com.framgia.oleo.utils.extension.show
 import com.framgia.oleo.utils.extension.showSnackBar
 import com.framgia.oleo.utils.liveData.autoCleared
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.fragment_option_message.layoutHeader
+import kotlinx.android.synthetic.main.fragment_option_message.layoutWatchList
+import kotlinx.android.synthetic.main.fragment_option_message.lineUnderTextViewRename
+import kotlinx.android.synthetic.main.fragment_option_message.textViewFollow
 import kotlinx.android.synthetic.main.fragment_option_message.textViewLocationList
 import kotlinx.android.synthetic.main.fragment_option_message.textViewRemoveBox
 import kotlinx.android.synthetic.main.fragment_option_message.textViewUnFriend
 import kotlinx.android.synthetic.main.fragment_option_message.textViewRename
-import kotlinx.android.synthetic.main.fragment_option_message.textViewUnFriend
 import kotlinx.android.synthetic.main.fragment_option_message.toolbarOption
 import kotlinx.android.synthetic.main.fragment_option_message_header.textViewNameUser
 import kotlinx.android.synthetic.main.fragment_option_message_header.view.textViewNameUser
@@ -46,11 +53,14 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener,
     private var binding by autoCleared<FragmentOptionMessageBinding>()
     private var listener: OnActionBarListener? = null
     private lateinit var dialog: AlertDialog
-    private var isAlreadyFriend: Boolean = false
-    private var userFriend : User? = null
+    private var friendRequestStatus: Int? = null
+    private var userFriend: User? = null
 
     override fun onFollowClick(userFriend: User) {
-        viewModel.onFollowClick(userFriend)
+        if (isCheckMultiClick()) {
+            if (viewModel.onFollowRequestStatus.value == Constant.STATUS_NOT_EXIST)
+                viewModel.addFollowRequest(userFriend)
+        }
     }
 
     override fun createView(
@@ -79,6 +89,8 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener,
         viewModel.checkFriendByUserId(userFriendId!!)
         viewModel.getUserFriend(userFriendId)
         viewModel.getBoxChatName(userFriendId)
+        viewModel.getFollowRequestOfUser(userFriendId)
+        viewModel.checkFriendRequest(userFriendId)
     }
 
     override fun onAttach(context: Context?) {
@@ -94,14 +106,17 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener,
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.textViewLocationList -> {
-                dialog.show()
-                viewModel.getFollowRequestOfUser(arguments?.getString(ARGUMENT_USER_ID)!!)
+                addFragment(
+                    R.id.containerMain, LocationFragment.newInstance(
+                        textViewNameUser.text.toString(),
+                        arguments?.getString(ARGUMENT_USER_ID)!!
+                    ), true
+                )
             }
             R.id.textViewUnFriend ->
-                if (isAlreadyFriend) {
-                    showUnFriendDialog()
-                } else {
-                    viewModel.addFriendRequest(binding.user!!)
+                when (friendRequestStatus) {
+                    Constant.STATUS_NOT_EXIST.toInt() -> viewModel.addFriendRequest(binding.user!!)
+                    Constant.STATUS_FRIEND_ACCEPT -> showUnFriendDialog()
                 }
             R.id.textViewRename -> onShowDiaLogUpdateNameFriend()
             R.id.textViewRemoveBox -> showRemoveBoxChatDialog()
@@ -141,16 +156,6 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener,
             userFriend = it
         })
 
-        viewModel.onNavigateEvent.observe(this, Observer {
-            dialog.dismiss()
-            addFragment(
-                R.id.containerMain, LocationFragment.newInstance(
-                    textViewNameUser.text.toString(),
-                    arguments?.getString(ARGUMENT_USER_ID)!!
-                ), true
-            )
-        })
-
         viewModel.onMessageEvent.observe(this, Observer {
             view!!.showSnackBar(it)
             if (dialog.isShowing) {
@@ -158,12 +163,60 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener,
             }
         })
 
-        viewModel.isFriendAlready.observe(this, Observer {
-            isAlreadyFriend = it
-            if (it) {
-                updateFriendStatus(getString(R.string.unfriend), R.drawable.ic_unfriend)
-            } else {
-                updateFriendStatus(getString(R.string.add_friend), R.drawable.ic_add_friend_message_option)
+        viewModel.onFollowRequestStatus.observe(this, Observer {
+            when (it) {
+                Constant.STATUS_FOLLOWING -> {
+                    lineUnderTextViewRename.show()
+                    textViewFollow.show()
+                    updateRequestStatus(textViewFollow, getString(string.following), R.drawable.ic_follower)
+                    layoutWatchList.show()
+                }
+                Constant.STATUS_WAITING -> {
+                    lineUnderTextViewRename.show()
+                    textViewFollow.show()
+                    updateRequestStatus(
+                        textViewFollow,
+                        getString(string.sent_follow_request),
+                        R.drawable.ic_request_follow
+                    )
+                    layoutWatchList.gone()
+                }
+                Constant.STATUS_BLOCKING -> {
+                    lineUnderTextViewRename.gone()
+                    textViewFollow.gone()
+                    layoutWatchList.gone()
+                }
+                else -> {
+                    updateRequestStatus(
+                        textViewFollow,
+                        getString(string.follow_request, binding.user!!.userName),
+                        R.drawable.ic_request_follow
+                    )
+                    lineUnderTextViewRename.show()
+                    textViewFollow.show()
+                    layoutWatchList.gone()
+                }
+            }
+        })
+
+        viewModel.friendRequestStatus.observe(this, Observer {
+            friendRequestStatus = it
+            when (it) {
+                Constant.STATUS_FRIEND_ACCEPT -> updateRequestStatus(
+                    textViewUnFriend,
+                    getString(R.string.unfriend),
+                    R.drawable.ic_unfriend
+                )
+                Constant.STATUS_FRIEND_WAITING -> updateRequestStatus(
+                    textViewUnFriend,
+                    getString(string.sent_friend_request),
+                    R.drawable.ic_add_friend_message_option
+                )
+                else -> updateRequestStatus(
+                    textViewUnFriend,
+                    getString(R.string.add_friend),
+                    R.drawable.ic_add_friend_message_option
+                )
             }
         })
 
@@ -176,9 +229,9 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener,
         })
 
         viewModel.isBoxChatDeleted.observe(this, Observer {
-            if (it){
+            if (it) {
                 (activity as MainActivity).clearAllFragment()
-            }else{
+            } else {
                 view!!.showSnackBar(getString(R.string.delete_box_chat_failed))
             }
         })
@@ -200,14 +253,15 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener,
         AlertDialog.Builder(context, R.style.alertDialog).apply {
             setMessage(getString(R.string.delete_box_chat_message))
             setPositiveButton(context.getString(R.string.ok)) { dialog, which ->
-                viewModel.deleteBoxChat(binding.user!!.id)}
+                viewModel.deleteBoxChat(binding.user!!.id)
+            }
             setNegativeButton(context.getString(R.string.cancel)) { dialog, which -> dialog.dismiss() }
         }.create().show()
     }
 
-    private fun updateFriendStatus(title: String, drawable: Int) {
-        textViewUnFriend.text = title
-        textViewUnFriend.setCompoundDrawablesWithIntrinsicBounds(
+    private fun updateRequestStatus(textView: TextView, title: String, drawable: Int) {
+        textView.text = title
+        textView.setCompoundDrawablesWithIntrinsicBounds(
             drawable,
             RESOURCE_VALUE,
             RESOURCE_VALUE,
@@ -218,8 +272,10 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener,
     private fun onShowDiaLogUpdateNameFriend() {
         val textNameUser = textViewNameUser.text.toString()
         val inputText = TextInputLayout(context)
-        inputText.setPadding(resources.getDimensionPixelOffset(R.dimen.dp_20),RESOURCE_VALUE,resources
-            .getDimensionPixelOffset(R.dimen.dp_20),RESOURCE_VALUE)
+        inputText.setPadding(
+            resources.getDimensionPixelOffset(R.dimen.dp_20), RESOURCE_VALUE, resources
+                .getDimensionPixelOffset(R.dimen.dp_20), RESOURCE_VALUE
+        )
         val editText = EditText(context)
         editText.text = Editable.Factory.getInstance().newEditable(textNameUser)
         editText.setLines(MAX_LINE_TEXT)
@@ -233,9 +289,11 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener,
             .setMessage(getString(string.enter_a_new_name, textNameUser))
             .setIcon(R.mipmap.ic_launcher_round)
             .setCancelable(false)
-            .setPositiveButton(getString(string.save)) { dialog, which -> viewModel
-                .onUpdateNickNameMyFriend(userFriend!!.id, editText.text.toString())}
-        builder.setNegativeButton(android.R.string.cancel) {dialog, which -> dialog.cancel() }
+            .setPositiveButton(getString(string.save)) { dialog, which ->
+                viewModel
+                    .onUpdateNickNameMyFriend(userFriend!!.id, editText.text.toString())
+            }
+        builder.setNegativeButton(android.R.string.cancel) { dialog, which -> dialog.cancel() }
         builder.create().show()
     }
 

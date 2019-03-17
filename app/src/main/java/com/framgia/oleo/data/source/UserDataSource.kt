@@ -108,5 +108,7 @@ interface UserDataSource {
         fun deleteFriend(userId: String, friendId: String)
 
         fun checkFriendByUserId(userId: String, friendId: String, valueEventListener: ValueEventListener)
+
+        fun checkFriendRequest(userId: String, friendId: String, valueEventListener: ValueEventListener)
     }
 }

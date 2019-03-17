@@ -31,6 +31,7 @@ object Constant {
     const val STATUS_WAITING = "0"
     const val STATUS_FOLLOWING = "1"
     const val STATUS_BLOCKING = "2"
+    const val STATUS_NOT_EXIST = "-1"
 
     const val ACTION_RESTART_SERVICE = "ACTION_RESTART_SERVICE"
 }
