@@ -19,6 +19,30 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class UserRemoteDataSource : UserDataSource.Remote {
+    override fun deleteFriendRequest(
+        userId: String,
+        friendId: String
+    ) {
+        firebaseDatabase.getReference(Constant.PATH_STRING_FRIEND_REQUEST)
+            .child(friendId)
+            .child(userId)
+            .removeValue()
+    }
+
+    override fun deleteFollowRequest(
+        userId: String,
+        friendId: String,
+        onSuccessListener: OnSuccessListener<Void>,
+        onFailureListener: OnFailureListener
+    ) {
+        firebaseDatabase.getReference(Constant.PATH_STRING_FOLLOW)
+            .child(friendId)
+            .child(Constant.PATH_STRING_FOLLOW_REQUEST)
+            .child(userId).removeValue()
+            .addOnSuccessListener(onSuccessListener)
+            .addOnFailureListener(onFailureListener)
+    }
+
     override fun checkFriendRequest(userId: String, friendId: String, valueEventListener: ValueEventListener) {
         firebaseDatabase.getReference(Constant.PATH_STRING_FRIEND_REQUEST)
             .child(friendId)
@@ -166,16 +190,16 @@ class UserRemoteDataSource : UserDataSource.Remote {
         , user: User, friend: User
     ) {
         firebaseDatabase.getReference(Constant.PATH_STRING_USER)
-            .child(userId)
-            .child(Constant.PATH_STRING_FRIEND)
             .child(friendRequestId)
-            .setValue(Friend(friendRequestId, System.currentTimeMillis(), friend))
+            .child(Constant.PATH_STRING_FRIEND)
+            .child(userId)
+            .setValue(Friend(userId, System.currentTimeMillis(), user))
             .addOnSuccessListener {
                 firebaseDatabase.getReference(Constant.PATH_STRING_USER)
-                    .child(friendRequestId)
-                    .child(Constant.PATH_STRING_FRIEND)
                     .child(userId)
-                    .setValue(Friend(userId, System.currentTimeMillis(), user))
+                    .child(Constant.PATH_STRING_FRIEND)
+                    .child(friendRequestId)
+                    .setValue(Friend(friendRequestId, System.currentTimeMillis(), friend))
                 firebaseDatabase.getReference(Constant.PATH_STRING_FRIEND_REQUEST)
                     .child(friendRequestId)
                     .child(userId)

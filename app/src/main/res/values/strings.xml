@@ -113,6 +113,7 @@
     <string name="sent_follow_request">Follow request sent</string>
     <string name="follow_request">Follow %1$s</string>
     <string name="sent_friend_request">Friend request sent</string>
+    <string name="remove_follow_request">Removed follow request !</string>
     <string-array name="tab_titles">
         <item>Followed</item>
         <item>Following</item>

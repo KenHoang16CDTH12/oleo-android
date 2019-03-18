@@ -92,6 +92,13 @@ interface UserDataSource {
             onSuccessListener: OnSuccessListener<Void>
         )
 
+        fun deleteFollowRequest(
+            userId: String,
+            friendId: String,
+            onSuccessListener: OnSuccessListener<Void>,
+            onFailureListener: OnFailureListener
+        )
+
         fun getContactsUser(userId: String, valueEventListener: ValueEventListener)
 
         fun updatePassword(
@@ -110,5 +117,10 @@ interface UserDataSource {
         fun checkFriendByUserId(userId: String, friendId: String, valueEventListener: ValueEventListener)
 
         fun checkFriendRequest(userId: String, friendId: String, valueEventListener: ValueEventListener)
+
+        fun deleteFriendRequest(
+            userId: String,
+            friendId: String
+        )
     }
 }

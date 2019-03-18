@@ -27,6 +27,7 @@ import com.framgia.oleo.utils.extension.addFragment
 import com.framgia.oleo.utils.extension.clearAllFragment
 import com.framgia.oleo.utils.extension.goBackFragment
 import com.framgia.oleo.utils.extension.gone
+import com.framgia.oleo.utils.extension.hide
 import com.framgia.oleo.utils.extension.isCheckMultiClick
 import com.framgia.oleo.utils.extension.show
 import com.framgia.oleo.utils.extension.showSnackBar
@@ -42,6 +43,7 @@ import kotlinx.android.synthetic.main.fragment_option_message.textViewRemoveBox
 import kotlinx.android.synthetic.main.fragment_option_message.textViewUnFriend
 import kotlinx.android.synthetic.main.fragment_option_message.textViewRename
 import kotlinx.android.synthetic.main.fragment_option_message.toolbarOption
+import kotlinx.android.synthetic.main.fragment_option_message.viewUnderLineTextViewUnFriend
 import kotlinx.android.synthetic.main.fragment_option_message_header.textViewNameUser
 import kotlinx.android.synthetic.main.fragment_option_message_header.view.textViewNameUser
 import kotlinx.android.synthetic.main.toolbar.view.toolbarCustom
@@ -60,6 +62,9 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener,
         if (isCheckMultiClick()) {
             if (viewModel.onFollowRequestStatus.value == Constant.STATUS_NOT_EXIST)
                 viewModel.addFollowRequest(userFriend)
+            else if (viewModel.onFollowRequestStatus.value == Constant.STATUS_WAITING) {
+                viewModel.deleteFollowRequest(userFriend.id)
+            }
         }
     }
 
@@ -86,11 +91,19 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener,
         textViewUnFriend.setOnClickListener(this)
         textViewRemoveBox.setOnClickListener(this)
         val userFriendId = arguments?.getString(ARGUMENT_USER_ID)
-        viewModel.checkFriendByUserId(userFriendId!!)
-        viewModel.getUserFriend(userFriendId)
+        viewModel.getUserFriend(userFriendId!!)
         viewModel.getBoxChatName(userFriendId)
-        viewModel.getFollowRequestOfUser(userFriendId)
-        viewModel.checkFriendRequest(userFriendId)
+        if (viewModel.checkIsFriend(userFriendId)){
+            viewModel.checkFriendByUserId(userFriendId)
+            viewModel.getFollowRequestOfUser(userFriendId)
+            viewModel.checkFriendRequest(userFriendId)
+        }else{
+            textViewUnFriend.gone()
+            textViewFollow.gone()
+            layoutWatchList.show()
+            viewUnderLineTextViewUnFriend.gone()
+            lineUnderTextViewRename.gone()
+        }
     }
 
     override fun onAttach(context: Context?) {
@@ -117,6 +130,7 @@ class MessageOptionFragment : BaseFragment(), View.OnClickListener,
                 when (friendRequestStatus) {
                     Constant.STATUS_NOT_EXIST.toInt() -> viewModel.addFriendRequest(binding.user!!)
                     Constant.STATUS_FRIEND_ACCEPT -> showUnFriendDialog()
+                    Constant.STATUS_FRIEND_WAITING -> viewModel.deleteFriendRequest(userFriend!!.id)
                 }
             R.id.textViewRename -> onShowDiaLogUpdateNameFriend()
             R.id.textViewRemoveBox -> showRemoveBoxChatDialog()
