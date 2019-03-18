@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.framgia.oleo.R
+import com.framgia.oleo.R.string
 import com.framgia.oleo.base.BaseViewModel
 import com.framgia.oleo.data.source.MessagesRepository
 import com.framgia.oleo.data.source.UserRepository
@@ -117,6 +118,14 @@ class MessageOptionViewModel @Inject constructor(
             })
     }
 
+    fun deleteFollowRequest(friendId: String) {
+        userRepository.deleteFollowRequest(userRepository.getUser()!!.id, friendId,
+            OnSuccessListener {
+                onMessageEvent.value = application.getString(string.remove_follow_request)
+            }, OnFailureListener {
+            })
+    }
+
     fun deleteFriend(friendId: String) {
         userRepository.deleteFriend(userRepository.getUser()!!.id, friendId)
     }
@@ -166,6 +175,10 @@ class MessageOptionViewModel @Inject constructor(
             })
     }
 
+    fun deleteFriendRequest(friendId: String) {
+        userRepository.deleteFriendRequest(userRepository.getUser()!!.id, friendId)
+    }
+
     fun deleteBoxChat(boxChatId: String) {
         messagesRepository.deleteBoxChat(
             userRepository.getUser()!!.id,
@@ -177,6 +190,8 @@ class MessageOptionViewModel @Inject constructor(
                 isBoxChatDeleted.value = false
             })
     }
+
+    fun checkIsFriend(friendId: String): Boolean = userRepository.getUser()!!.id != friendId
 
     companion object {
         fun create(fragment: Fragment, factory: ViewModelProvider.Factory): MessageOptionViewModel =

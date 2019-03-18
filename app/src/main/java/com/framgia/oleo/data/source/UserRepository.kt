@@ -17,6 +17,19 @@ class UserRepository(
     private val remote: UserDataSource.Remote
 ) : UserDataSource.Local, UserDataSource.Remote {
 
+    override fun deleteFriendRequest(userId: String, friendId: String) {
+        remote.deleteFriendRequest(userId, friendId)
+    }
+
+    override fun deleteFollowRequest(
+        userId: String,
+        friendId: String,
+        onSuccessListener: OnSuccessListener<Void>,
+        onFailureListener: OnFailureListener
+    ) {
+        remote.deleteFollowRequest(userId, friendId, onSuccessListener, onFailureListener)
+    }
+
     override fun checkFriendRequest(userId: String, friendId: String, valueEventListener: ValueEventListener) {
         remote.checkFriendRequest(userId, friendId, valueEventListener)
     }

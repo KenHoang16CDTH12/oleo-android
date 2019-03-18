@@ -114,6 +114,7 @@
     <string name="sent_follow_request">Đã gửi yêu cầu theo dõi</string>
     <string name="follow_request">Theo dõi %1$s</string>
     <string name="sent_friend_request">Đã gửi lời kết bạn</string>
+    <string name="remove_follow_request">Đã xóa yêu cầu theo dõi !</string>
     <string-array name="tab_titles">
         <item>Người theo dõi</item>
         <item>Đang theo dõi</item>
